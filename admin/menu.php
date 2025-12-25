@@ -22,15 +22,8 @@ class Dear_Survey_Menu {
 
 		add_menu_page( 'Dear Survey', 'Dear Survey', 'manage_options', 'dear-survey', array( $this, 'render_dashboard' ), 'dashicons-clipboard', 25 );
 		add_submenu_page( 'dear-survey', 'Surveys', 'Surveys', 'manage_options', 'dear-survey', array( $this, 'render_dashboard' ) );
-		add_submenu_page( 'dear-survey', 'Email Broadcast', 'Email Broadcast', 'manage_options', 'dear-survey-email', array( $this, 'render_email' ) );
 		add_submenu_page( 'dear-survey', 'Add New', 'Add New', 'manage_options', 'dear-survey-builder', array( $this, 'render_builder' ) );
 		add_submenu_page( 'dear-survey', 'Settings', 'Settings', 'manage_options', 'dear-survey-settings', array( $this, 'render_settings' ) );
-	}
-
-	public function render_email() {
-		require_once dirname( __FILE__ ) . '/email.php';
-		$email = new Dear_Survey_Email( $this->db );
-		$email->render_page();
 	}
 
 	public function render_dashboard() {
@@ -40,6 +33,7 @@ class Dear_Survey_Menu {
 		foreach ( $surveys as $s ) {
 			$total_responses += count( $this->db->get_responses( $s['id'] ) );
 		}
+		$avg_responses = $total_surveys > 0 ? round($total_responses / $total_surveys, 1) : 0;
 		?>
 		<div class="ds-app-container ds-animate">
 			<!-- Sidebar -->
@@ -59,12 +53,6 @@ class Dear_Survey_Menu {
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
 						Create New Survey
-					</a>
-					
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Outreach</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-email'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 20 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-						Email Broadcast
 					</a>
 
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
@@ -90,27 +78,28 @@ class Dear_Survey_Menu {
 
 				<!-- Stats Grid -->
 				<div class="ds-stats-grid">
-					<div class="ds-stat-card">
-						<div class="ds-stat-label">Total Surveys</div>
-						<div class="ds-stat-value"><?php echo $total_surveys; ?></div>
-						<div style="margin-top: 12px; font-size: 12px; color: var(--ds-success); font-weight: 600; display: flex; align-items: center; gap: 4px;">
-							Active on site
+					<div class="ds-stat-card" style="border-left: 4px solid #10B981; background: linear-gradient(to right, #F0FDF4, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
+						<div class="ds-stat-label" style="color: #059669;">Total Surveys</div>
+						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $total_surveys; ?></div>
+						<div style="margin-top: 12px; font-size: 12px; color: #059669; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:14px; height:14px;"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4.14-5.7z" clip-rule="evenodd" /></svg>
+							Active projects
 						</div>
 					</div>
-					<div class="ds-stat-card">
-						<div class="ds-stat-label">Total Responses</div>
-						<div class="ds-stat-value"><?php echo $total_responses; ?></div>
-						<div style="margin-top: 12px; font-size: 12px; color: var(--ds-text-light); font-weight: 600;">Captured across all surveys</div>
+					<div class="ds-stat-card" style="border-left: 4px solid #6366F1; background: linear-gradient(to right, #EEF2FF, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
+						<div class="ds-stat-label" style="color: #4F46E5;">Total Responses</div>
+						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $total_responses; ?></div>
+						<div style="margin-top: 12px; font-size: 12px; color: #4F46E5; font-weight: 600;">Lifetime entries captured</div>
 					</div>
-					<div class="ds-stat-card">
-						<div class="ds-stat-label">Success Rate</div>
-						<div class="ds-stat-value">94.2%</div>
-						<div style="margin-top: 12px; font-size: 12px; color: var(--ds-success); font-weight: 600; display: flex; align-items: center; gap: 4px;">
-							High engagement
+					<div class="ds-stat-card" style="border-left: 4px solid #F59E0B; background: linear-gradient(to right, #FFFBEB, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
+						<div class="ds-stat-label" style="color: #D97706;">Avg. Responses</div>
+						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $avg_responses; ?></div>
+						<div style="margin-top: 12px; font-size: 12px; color: #D97706; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:14px; height:14px;"><path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z" /></svg>
+							Per survey efficiency
 						</div>
 					</div>
 				</div>
-
 				<div class="ds-card" style="padding: 0; overflow: hidden;">
 					<div style="padding: 24px 32px; border-bottom: 1px solid var(--ds-border); display: flex; justify-content: space-between; align-items: center;">
 						<h2 style="font-size: 18px; font-weight: 700; color: var(--ds-secondary); margin: 0;">Your Surveys</h2>

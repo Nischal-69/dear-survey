@@ -29,33 +29,32 @@ class Dear_Survey_Submit {
 				$settings = json_decode( $survey['settings'], true );
 				$response_data = json_decode( $response_data_raw, true );
 				
+				// Identify responder email (from dedicated field or scan)
+				$responder_email = '';
+				if ( ! empty( $response_data['ds_responder_email'] ) ) {
+					$responder_email = sanitize_email( $response_data['ds_responder_email'] );
+				}
+
 				// 1. Admin Notification
 				if ( ! empty( $settings['admin_email'] ) ) {
 					$admin_email = sanitize_email( $settings['admin_email'] );
-					$subject = "New Response: " . $survey['title'];
-					$message = "You have received a new response for your survey '{$survey['title']}'.\n\nView details in your dashboard.";
+					$subject = "New Entry: " . $survey['title'];
+					$contact_info = $responder_email ? "from $responder_email" : "(anonymous)";
+					$message = "You have received a new survey entry $contact_info for '{$survey['title']}'.\n\nPlease check your dashboard for full details.";
 					wp_mail( $admin_email, $subject, $message );
 				}
 
-				// 2. Thank You Email to Responder
-				if ( ! empty( $settings['thank_you_body'] ) ) {
-					$responder_email = '';
-					// Scan response data for anything that looks like an email
-					foreach ( $response_data as $val ) {
-						if ( is_string( $val ) && is_email( trim( $val ) ) ) {
-							$responder_email = trim( $val );
-							break;
-						}
-					}
-
-					if ( $responder_email ) {
-						$subject = "Thank you for your response - " . $survey['title'];
-						$message = $settings['thank_you_body'];
-						wp_mail( $responder_email, $subject, $message );
+				// 2. Autoresponder to Participant
+				if ( ! empty( $settings['collect_email'] ) && ! empty( $responder_email ) ) {
+					$auto_subject = ! empty( $settings['auto_subject'] ) ? $settings['auto_subject'] : "Response Received: " . $survey['title'];
+					$auto_body = ! empty( $settings['auto_body'] ) ? $settings['auto_body'] : $settings['thank_you_body'];
+					
+					if ( ! empty( $auto_body ) ) {
+						wp_mail( $responder_email, $auto_subject, $auto_body );
 					}
 				}
 			}
-			wp_send_json_success( array( 'message' => 'Thank you for your response!' ) );
+			wp_send_json_success( array( 'message' => $settings['thank_you_body'] ?: 'Thank you for your response!' ) );
 		} else {
 			wp_send_json_error( array( 'message' => 'Database error' ) );
 		}

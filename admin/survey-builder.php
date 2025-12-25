@@ -34,26 +34,20 @@ class Dear_Survey_Builder {
 					Dear Survey
 				</div>
 				<nav>
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Main Navigation</div>
+					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
-						Analytics Overview
+						Surveys List
 					</a>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item active">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-						Draft Interaction
+						Create New Survey
 					</a>
 					
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Growth & Outreach</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-email'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 20 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-						Email Campaigns
-					</a>
-
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">System Settings</div>
+					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
-						Configuration
+						Global Settings
 					</a>
 				</nav>
 			</div>
@@ -91,25 +85,81 @@ class Dear_Survey_Builder {
 					</div>
 
 					<!-- Settings Card -->
-					<div class="ds-card" style="background: var(--ds-white); border-style: solid;">
-						<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-							<div style="width: 32px; height: 32px; background: var(--ds-primary-soft); color: var(--ds-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:20px; height:20px;"><path d="M10.34 15.84c-.68 0-1.25-.57-1.25-1.25V6.75c0-.68.57-1.25 1.25-1.25h3.32c.68 0 1.25.57 1.25 1.25v7.84c0 .68-.57 1.25-1.25 1.25h-3.32Z"/><path d="M3 6.75A1.75 1.75 0 0 1 4.75 5h14.5A1.75 1.75 0 0 1 21 6.75v10.5A1.75 1.75 0 0 1 19.25 19H4.75A1.75 1.75 0 0 1 3 17.25V6.75Z"/></svg>
+					<div class="ds-card" style="background: var(--ds-white); border-style: solid; margin-bottom: 24px;">
+						<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+							<div style="display: flex; align-items: center; gap: 12px;">
+								<div style="width: 32px; height: 32px; background: var(--ds-primary-soft); color: var(--ds-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:20px; height:20px;"><path d="M10.34 15.84c-.68 0-1.25-.57-1.25-1.25V6.75c0-.68.57-1.25 1.25-1.25h3.32c.68 0 1.25.57 1.25 1.25v7.84c0 .68-.57 1.25-1.25 1.25h-3.32Z"/><path d="M3 6.75A1.75 1.75 0 0 1 4.75 5h14.5A1.75 1.75 0 0 1 21 6.75v10.5A1.75 1.75 0 0 1 19.25 19H4.75A1.75 1.75 0 0 1 3 17.25V6.75Z"/></svg>
+								</div>
+								<h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--ds-secondary);">Survey Configuration</h3>
 							</div>
-							<h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--ds-secondary);">Survey Settings</h3>
+							<div style="display: flex; align-items: center; gap: 12px;">
+								<label class="ds-label" style="margin:0;">Collect Email Address</label>
+								<label class="ds-toggle">
+									<input type="checkbox" id="ds-setting-collect-email" <?php checked($settings['collect_email'] ?? false); ?>>
+									<span class="ds-toggle-slider"></span>
+								</label>
+							</div>
 						</div>
+						
 						<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 32px;">
 							<div>
-								<label class="ds-label">Thank You Message</label>
+								<label class="ds-label">Completion Message</label>
 								<textarea id="ds-setting-thank-you" class="ds-input-field" rows="4" style="font-size: 14px; line-height: 1.6;" placeholder="Message to show after submission..."><?php echo esc_textarea($settings['thank_you_body'] ?? ''); ?></textarea>
 							</div>
 							<div>
 								<label class="ds-label">Admin Notification Email</label>
 								<input type="email" id="ds-setting-admin-email" class="ds-input-field" value="<?php echo esc_attr($settings['admin_email'] ?? ''); ?>" placeholder="admin@example.com">
-								<p style="font-size: 12px; color: var(--ds-text-light); margin-top: 8px;">We will send entry notifications to this email address.</p>
+								<p style="font-size: 12px; color: var(--ds-text-light); margin-top: 8px;">We will send submission alerts to this address.</p>
+							</div>
+						</div>
+
+						<div id="autoresponder-section" style="margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--ds-divider); <?php echo ($settings['collect_email'] ?? false) ? 'display:block' : 'display:none'; ?>">
+							<h4 style="margin: 0 0 20px; font-size: 14px; font-weight: 700; color: var(--ds-secondary);">Autoresponder (Email to Participant)</h4>
+							<div style="display:grid; grid-template-columns: 1fr; gap: 16px;">
+								<div>
+									<label class="ds-label">Email Subject</label>
+									<input type="text" id="ds-setting-auto-subject" class="ds-input-field" value="<?php echo esc_attr($settings['auto_subject'] ?? ''); ?>" placeholder="Thank you for your feedback!">
+								</div>
+								<div>
+									<label class="ds-label">Email Body</label>
+									<textarea id="ds-setting-auto-body" class="ds-input-field" rows="4" placeholder="Hi, thank you for participating in our survey..."><?php echo esc_textarea($settings['auto_body'] ?? ''); ?></textarea>
+								</div>
 							</div>
 						</div>
 					</div>
+
+					<?php if ($survey_id) : ?>
+					<!-- Outreach Card -->
+					<div class="ds-card" style="background: var(--ds-white); border-style: solid; border-color: var(--ds-primary-glow);">
+						<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+							<div style="width: 32px; height: 32px; background: #EEF2FF; color: #4338CA; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:20px; height:20px;"><path d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+							</div>
+							<h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--ds-secondary);">Outreach (Send Survey Link)</h3>
+						</div>
+						<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+							<div>
+								<label class="ds-label">Recipients (Comma separated emails)</label>
+								<textarea id="ds-outreach-emails" class="ds-input-field" rows="3" placeholder="user1@example.com, user2@example.com"></textarea>
+								<p style="font-size: 12px; color: var(--ds-text-light); margin-top: 8px;">The survey link will be automatically appended to your message.</p>
+							</div>
+							<div>
+								<div style="margin-bottom: 16px;">
+									<label class="ds-label">Email Subject</label>
+									<input type="text" id="ds-outreach-subject" class="ds-input-field" value="Check out our new survey: <?php echo esc_attr($title); ?>">
+								</div>
+								<label class="ds-label">Message Template</label>
+								<textarea id="ds-outreach-message" class="ds-input-field" rows="3">Hi, we'd love to hear your thoughts on this survey!</textarea>
+							</div>
+						</div>
+						<div style="margin-top: 24px; text-align: right;">
+							<button type="button" id="ds-send-outreach" class="ds-btn ds-btn-primary" style="background: #4338CA;">
+								Launch Outreach
+							</button>
+						</div>
+					</div>
+					<?php endif; ?>
 				</form>
 			</div>
 		</div>
@@ -261,6 +311,30 @@ class Dear_Survey_Builder {
 				questions[qIndex].options = currentOpts.join(',');
 			});
 
+			$('#ds-setting-collect-email').on('change', function() {
+				if($(this).is(':checked')) { $('#autoresponder-section').slideDown(); }
+				else { $('#autoresponder-section').slideUp(); }
+			});
+
+			$('#ds-send-outreach').on('click', function() {
+				const btn = $(this);
+				const recipients = $('#ds-outreach-emails').val();
+				if(!recipients) { alert('Please enter at least one recipient email.'); return; }
+				btn.prop('disabled', true).text('Sending...');
+				$.post(ajaxurl, {
+					action: 'ds_send_outreach',
+					survey_id: $('#survey_id').val(),
+					recipients: recipients,
+					subject: $('#ds-outreach-subject').val(),
+					message: $('#ds-outreach-message').val(),
+					security: '<?php echo wp_create_nonce("ds_outreach"); ?>'
+				}, function(res) {
+					btn.prop('disabled', false).text('Launch Outreach');
+					if(res.success) { alert('Emails sent successfully!'); $('#ds-outreach-emails').val(''); }
+					else { alert('Error: ' + res.data); }
+				});
+			});
+
 			$('#ds-survey-form').on('submit', function(e) {
 				e.preventDefault();
 				const saveBtn = $('button[form="ds-survey-form"]');
@@ -273,8 +347,11 @@ class Dear_Survey_Builder {
 					title: $('#survey_title').val(),
 					questions: JSON.stringify(questions),
 					settings: JSON.stringify({
+						collect_email: $('#ds-setting-collect-email').is(':checked'),
 						thank_you_body: $('#ds-setting-thank-you').val(),
-						admin_email: $('#ds-setting-admin-email').val()
+						admin_email: $('#ds-setting-admin-email').val(),
+						auto_subject: $('#ds-setting-auto-subject').val(),
+						auto_body: $('#ds-setting-auto-body').val()
 					}),
 					security: '<?php echo wp_create_nonce("ds_save_survey"); ?>'
 				};
@@ -301,14 +378,65 @@ class Dear_Survey_Builder {
 	public function ajax_save_survey() {
 		check_ajax_referer( 'ds_save_survey', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Forbidden' );
+		
 		$id = intval( $_POST['id'] );
 		$title = sanitize_text_field( $_POST['title'] );
 		$questions = wp_unslash( $_POST['questions'] );
+		$settings = wp_unslash( $_POST['settings'] );
+		
+		// Basic validation
 		json_decode( $questions );
-		if ( json_last_error() !== JSON_ERROR_NONE ) wp_send_json_error( 'Invalid JSON' );
-		$data = array( 'id' => $id, 'title' => $title, 'questions' => $questions );
+		if ( json_last_error() !== JSON_ERROR_NONE ) wp_send_json_error( 'Invalid Questions JSON' );
+		json_decode( $settings );
+		if ( json_last_error() !== JSON_ERROR_NONE ) wp_send_json_error( 'Invalid Settings JSON' );
+
+		$data = array( 
+			'id' => $id, 
+			'title' => $title, 
+			'questions' => $questions,
+			'settings' => $settings,
+			'status' => 'active'
+		);
+		
 		$new_id = $this->db->save_survey( $data );
 		if ( $new_id ) wp_send_json_success( array( 'id' => $id ? $id : $new_id ) );
 		else wp_send_json_error( 'DB Error' );
+	}
+
+	public function ajax_send_outreach() {
+		check_ajax_referer( 'ds_outreach', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Forbidden' );
+
+		$survey_id = intval( $_POST['survey_id'] );
+		$recipients_raw = sanitize_text_field( $_POST['recipients'] );
+		$subject = sanitize_text_field( $_POST['subject'] );
+		$message_body = wp_kses_post( wp_unslash( $_POST['message'] ) );
+
+		$survey = $this->db->get_survey( $survey_id );
+		if ( ! $survey ) wp_send_json_error( 'Survey not found' );
+
+		$emails = array_map( 'trim', explode( ',', $recipients_raw ) );
+		$emails = array_filter( $emails, 'is_email' );
+
+		if ( empty( $emails ) ) wp_send_json_error( 'No valid email addresses provided' );
+
+		$survey_link = home_url( '/?ds_survey=' . $survey_id ); // Simple link format
+		// If using shortcodes on a specific page, user should handle it, but we provide a direct access link support via query var if handled.
+		// Alternatively, we just send the link to the site with the survey ID.
+		
+		$full_message = $message_body . "\n\nParticipate here: " . $survey_link;
+		
+		$sent_count = 0;
+		foreach ( $emails as $email ) {
+			if ( wp_mail( $email, $subject, $full_message ) ) {
+				$sent_count++;
+			}
+		}
+
+		if ( $sent_count > 0 ) {
+			wp_send_json_success( $sent_count . ' emails sent' );
+		} else {
+			wp_send_json_error( 'Failed to send emails' );
+		}
 	}
 }

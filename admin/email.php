@@ -24,17 +24,26 @@ class Dear_Survey_Email {
 					Dear Survey
 				</div>
 				<nav>
+					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
-						Home
+						Surveys List
 					</a>
+					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+						Create New Survey
+					</a>
+					
+					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Outreach</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-email'); ?>" class="ds-nav-item active">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 20 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-						Broadcast
+						Email Broadcast
 					</a>
+
+					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
-						Settings
+						Global Settings
 					</a>
 				</nav>
 			</div>
@@ -43,13 +52,13 @@ class Dear_Survey_Email {
 			<div class="ds-main-content">
 				<div class="ds-top-bar" style="margin-bottom:20px;">
 					<div>
-						<div class="ds-breadcrumb">Apps / <span style="font-weight:700; color:var(--ds-primary);">Communications</span></div>
-						<h1 class="ds-title">Email Portal</h1>
+						<div style="font-size: 12px; font-weight: 600; color: var(--ds-primary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Outreach</div>
+						<h1 class="ds-title">Email Broadcast</h1>
 					</div>
 					<div style="display:flex; gap:10px;">
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=subscribers'); ?>" class="ds-btn ds-btn-secondary">Mailing List</a>
+						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=subscribers'); ?>" class="ds-btn ds-btn-secondary">Contacts</a>
 						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=template'); ?>" class="ds-btn ds-btn-secondary">Templates</a>
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast'); ?>" class="ds-btn ds-btn-primary">Send Surveys</a>
+						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast'); ?>" class="ds-btn ds-btn-primary">Send Survey</a>
 					</div>
 				</div>
 
@@ -76,19 +85,19 @@ class Dear_Survey_Email {
 			<table class="ds-table">
 				<thead>
 					<tr>
-						<th>Outreach Subject</th>
+						<th>Subject</th>
 						<th>Recipients</th>
-						<th>Timestamp</th>
+						<th>Date Sent</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty( $broadcasts ) ) : ?>
-						<tr><td colspan="3" style="text-align:center; padding:100px; color:var(--ds-text-light);">No broadcast history found.</td></tr>
+						<tr><td colspan="3" style="text-align:center; padding:100px; color:var(--ds-text-light);">No history found.</td></tr>
 					<?php else : ?>
 						<?php foreach ( $broadcasts as $b ) : ?>
 							<tr>
 								<td style="font-weight:700;"><?php echo esc_html($b['subject']); ?></td>
-								<td><span class="ds-badge ds-badge-indigo"><?php echo count(explode(',', $b['recipients'])); ?> Users</span></td>
+								<td><span class="ds-badge ds-badge-indigo"><?php echo count(explode(',', $b['recipients'])); ?> People</span></td>
 								<td><?php echo date_i18n( 'M j, Y H:i', strtotime($b['sent_at']) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -109,9 +118,9 @@ class Dear_Survey_Email {
 				<div class="ds-card">
 					<form id="ds-broadcast-form">
 						<div class="ds-mb-4" style="margin-bottom:25px;">
-							<label class="ds-label">1. Choose a Survey to Send</label>
+							<label class="ds-label">1. Select Survey</label>
 							<select id="ds-survey-selector" class="ds-input-field">
-								<option value="">Select a survey...</option>
+								<option value="">Choose a survey...</option>
 								<?php foreach($surveys as $s): ?>
 									<option value="<?php echo $s['id']; ?>"><?php echo esc_html($s['title']); ?></option>
 								<?php endforeach; ?>
@@ -133,35 +142,35 @@ class Dear_Survey_Email {
 								<?php endif; ?>
 							</div>
 							<?php $pre_recipients = isset($_GET['recipients']) ? sanitize_text_field($_GET['recipients']) : ''; ?>
-							<textarea id="ds-broadcast-recipients" class="ds-input-field" rows="2" placeholder="Or manually enter emails separated by commas..."><?php echo esc_textarea($pre_recipients); ?></textarea>
+							<textarea id="ds-broadcast-recipients" class="ds-input-field" rows="2" placeholder="Or enter emails manually (comma separated)..."><?php echo esc_textarea($pre_recipients); ?></textarea>
 						</div>
 
 						<div class="ds-mb-4" style="margin-bottom:25px;">
-							<label class="ds-label">3. Message Design</label>
+							<label class="ds-label">3. Message</label>
 							<select id="ds-template-selector" class="ds-input-field" style="margin-bottom:15px;">
-								<option value="">Custom Message</option>
+								<option value="">Write your own</option>
 								<?php 
 								$pre_select_id = isset($_GET['temp_id']) ? intval($_GET['temp_id']) : 0;
 								foreach($templates as $t): ?>
 									<option value="<?php echo $t['id']; ?>" data-content="<?php echo esc_attr($t['content']); ?>" data-subject="<?php echo esc_attr($t['subject']); ?>" <?php selected($pre_select_id, $t['id']); ?>><?php echo esc_html($t['name']); ?> (Template)</option>
 								<?php endforeach; ?>
 							</select>
-							<input type="text" id="ds-broadcast-subject" class="ds-input-field" placeholder="Email Subject Line" required style="margin-bottom:15px;">
-							<textarea id="ds-broadcast-message" class="ds-input-field" rows="8" placeholder="Write your invitation message here..." required></textarea>
+							<input type="text" id="ds-broadcast-subject" class="ds-input-field" placeholder="Email Subject" required style="margin-bottom:15px;">
+							<textarea id="ds-broadcast-message" class="ds-input-field" rows="8" placeholder="Type your email message here..." required></textarea>
 						</div>
 
-						<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Dispatch Survey Link 🚀</button>
+						<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Send Survey Link</button>
 					</form>
 				</div>
 			</div>
 			
 			<div class="ds-column">
 				<div class="ds-card" style="padding:25px;">
-					<h3 style="margin-top:0; font-size:16px; font-weight:800; border-bottom:1px solid var(--ds-border); padding-bottom:15px; margin-bottom:20px;">Broadcast Tips</h3>
+					<h3 style="margin-top:0; font-size:16px; font-weight:800; border-bottom:1px solid var(--ds-border); padding-bottom:15px; margin-bottom:20px;">Quick Tips</h3>
 					<ul style="padding:0; list-style:none; font-size:13px; color:var(--ds-text-light); line-height:1.6;">
-						<li style="margin-bottom:15px;">• Use the <strong>Select Template</strong> dropdown to quickly load pre-written messages.</li>
-						<li style="margin-bottom:15px;">• Your survey link will be automatically appended to the bottom if <strong>{survey_link}</strong> is used in the content.</li>
-						<li>• Always test with a single email before blasting to a large list.</li>
+						<li style="margin-bottom:15px;">• Use **Templates** to save time and keep your messages consistent.</li>
+						<li style="margin-bottom:15px;">• Include **{survey_link}** in your message to show where people should click.</li>
+						<li>• Send a test email to yourself first before sending to everyone.</li>
 					</ul>
 				</div>
 			</div>
@@ -191,7 +200,7 @@ class Dear_Survey_Email {
 			$('#ds-broadcast-form').submit(function(e) {
 				e.preventDefault();
 				const btn = $(this).find('button');
-				btn.prop('disabled', true).text('Dispatching...');
+				btn.prop('disabled', true).text('Sending...');
 				
 				let message = $('#ds-broadcast-message').val();
 				const surveyId = $('#ds-survey-selector').val();
@@ -211,7 +220,7 @@ class Dear_Survey_Email {
 						window.location.href = '<?php echo admin_url("admin.php?page=dear-survey-email"); ?>';
 					} else {
 						alert('Error: ' + res.data);
-						btn.prop('disabled', false).text('Dispatch Survey Link 🚀');
+						btn.prop('disabled', false).text('Send Survey Link');
 					}
 				});
 			});
@@ -227,14 +236,14 @@ class Dear_Survey_Email {
 			<table class="ds-table">
 				<thead>
 					<tr>
-						<th>Friendly Name</th>
+						<th>Template Name</th>
 						<th>Default Subject</th>
 						<th style="text-align:right;">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty($templates) ) : ?>
-						<tr><td colspan="3" style="text-align:center; padding:60px; color:var(--ds-text-light);">No segments saved.</td></tr>
+						<tr><td colspan="3" style="text-align:center; padding:60px; color:var(--ds-text-light);">No templates saved.</td></tr>
 					<?php else : ?>
 						<?php foreach($templates as $t): ?>
 							<tr>
@@ -242,8 +251,8 @@ class Dear_Survey_Email {
 								<td><?php echo esc_html($t['subject']); ?></td>
 								<td style="text-align:right;">
 									<div style="display:flex; justify-content:flex-end; gap:8px;">
-										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast&temp_id=' . $t['id']); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Send Template</a>
-										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=edit_template&id=' . $t['id']); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit Interior</a>
+										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast&temp_id=' . $t['id']); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Use This</a>
+										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=edit_template&id=' . $t['id']); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit</a>
 									</div>
 								</td>
 							</tr>
@@ -253,7 +262,7 @@ class Dear_Survey_Email {
 			</table>
 		</div>
 		<div style="margin-top:20px; text-align:right;">
-			<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_template'); ?>" class="ds-btn ds-btn-secondary">+ Construct Template</a>
+			<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_template'); ?>" class="ds-btn ds-btn-secondary">+ Create Template</a>
 		</div>
 		<?php
 	}
@@ -266,18 +275,18 @@ class Dear_Survey_Email {
 			<form id="ds-template-form">
 				<input type="hidden" id="template_id" value="<?php echo $id; ?>">
 				<div class="ds-mb-4" style="margin-bottom:25px;">
-					<label class="ds-label">Template Persona (Title)</label>
-					<input type="text" id="template_name" class="ds-input-field" value="<?php echo $template ? esc_attr($template['name']) : ''; ?>" placeholder="e.g. Invitation - Customer Feedback" required>
+					<label class="ds-label">Template Name</label>
+					<input type="text" id="template_name" class="ds-input-field" value="<?php echo $template ? esc_attr($template['name']) : ''; ?>" placeholder="e.g. Feedback Invitation" required>
 				</div>
 				<div class="ds-mb-4" style="margin-bottom:25px;">
 					<label class="ds-label">Default Subject</label>
-					<input type="text" id="template_subject" class="ds-input-field" value="<?php echo $template ? esc_attr($template['subject']) : ''; ?>" placeholder="Your feedback is requested" required>
+					<input type="text" id="template_subject" class="ds-input-field" value="<?php echo $template ? esc_attr($template['subject']) : ''; ?>" placeholder="Your feedback is needed" required>
 				</div>
 				<div class="ds-mb-4" style="margin-bottom:35px;">
-					<label class="ds-label">Email Skeleton</label>
-					<textarea id="template_content" class="ds-input-field" rows="12" placeholder="Hi there, please fill out our survey at {survey_link}" required><?php echo $template ? esc_textarea($template['content']) : ''; ?></textarea>
+					<label class="ds-label">Message Body</label>
+					<textarea id="template_content" class="ds-input-field" rows="12" placeholder="Hi, please fill out our survey here: {survey_link}" required><?php echo $template ? esc_textarea($template['content']) : ''; ?></textarea>
 				</div>
-				<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Secure Template Cache</button>
+				<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Save Template</button>
 			</form>
 		</div>
 		<script>
@@ -285,7 +294,7 @@ class Dear_Survey_Email {
 			$('#ds-template-form').submit(function(e) {
 				e.preventDefault();
 				const btn = $(this).find('button');
-				btn.prop('disabled', true).text('Archiving...');
+				btn.prop('disabled', true).text('Saving...');
 				
 				const data = {
 					action: 'ds_save_template',
@@ -301,7 +310,7 @@ class Dear_Survey_Email {
 						window.location.href = '<?php echo admin_url("admin.php?page=dear-survey-email&view=template"); ?>';
 					} else {
 						alert('Save failed.');
-						btn.prop('disabled', false).text('Secure Template Cache');
+						btn.prop('disabled', false).text('Save Template');
 					}
 				});
 			});
@@ -317,21 +326,21 @@ class Dear_Survey_Email {
 			<div class="ds-column">
 				<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
 					<h3 style="margin:0; font-size:18px; font-weight:800;">Contact List</h3>
-					<button type="button" id="ds-bulk-send" class="ds-btn ds-btn-primary" style="font-size:13px; padding:10px 20px;">Compose Message to Selected</button>
+					<button type="button" id="ds-bulk-send" class="ds-btn ds-btn-primary" style="font-size:13px; padding:10px 20px;">Message Selected</button>
 				</div>
 				<div class="ds-card ds-table-card">
 					<table class="ds-table">
 						<thead>
 							<tr>
 								<th style="width:40px;"><input type="checkbox" id="ds-select-all-subs"></th>
-								<th>Contact Details</th>
+								<th>Name & Email</th>
 								<th>Added On</th>
 								<th style="text-align:right;">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if ( empty($subscribers) ) : ?>
-								<tr><td colspan="4" style="text-align:center; padding:60px; color:var(--ds-text-light);">Your list is currently empty.</td></tr>
+								<tr><td colspan="4" style="text-align:center; padding:60px; color:var(--ds-text-light);">Your contact list is empty.</td></tr>
 							<?php else : ?>
 								<?php foreach($subscribers as $s): ?>
 									<tr id="sub-row-<?php echo $s['id']; ?>">
@@ -370,7 +379,7 @@ class Dear_Survey_Email {
 							<label class="ds-label">Email Address</label>
 							<input type="email" id="ds-sub-email" class="ds-input-field" placeholder="john@example.com" required>
 						</div>
-						<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Register Contact</button>
+						<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Add Contact</button>
 					</form>
 				</div>
 			</div>
@@ -388,10 +397,8 @@ class Dear_Survey_Email {
 					security: '<?php echo wp_create_nonce("ds_subscriber"); ?>'
 				}, function(res) {
 					if(res.success) window.location.reload();
-					else { alert(res.data); btn.prop('disabled', false).text('Register Contact'); }
+					else { alert(res.data); btn.prop('disabled', false).text('Add Contact'); }
 				});
-			});
-
 			});
 
 			$('#ds-select-all-subs').change(function() {

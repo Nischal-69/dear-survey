@@ -30,6 +30,15 @@ class Dear_Survey_Shortcode {
 			</div>
 
 			<form class="ds-survey-form" data-id="<?php echo $survey_id; ?>">
+				<?php 
+				$settings = json_decode( $survey['settings'], true );
+				if ( ! empty( $settings['collect_email'] ) ) : ?>
+					<div class="ds-question-field">
+						<label class="ds-question-label">Email Address</label>
+						<input type="email" name="ds_responder_email" class="ds-input-field" placeholder="Enter your email to receive a copy..." required>
+					</div>
+				<?php endif; ?>
+
 				<?php foreach ( $questions as $index => $q ) : ?>
 					<div class="ds-question-field">
 						<label class="ds-question-label">
