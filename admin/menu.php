@@ -1,7 +1,6 @@
 <?php
 /**
- * Admin Dashboard View
- * Markup Overhaul for Premium UI/UX
+ * Admin Dashboard & Navigation
  */
 
 class Dear_Survey_Menu {
@@ -16,138 +15,307 @@ class Dear_Survey_Menu {
 		// Handle Delete Action
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['id'] ) ) {
 			$this->db->delete_survey( intval( $_GET['id'] ) );
-			wp_redirect( admin_url( 'admin.php?page=dear-survey&deleted=true' ) );
+			wp_redirect( admin_url( 'admin.php?page=dear-survey-list&deleted=true' ) );
 			exit;
 		}
 
-		add_menu_page( 'Dear Survey', 'Dear Survey', 'manage_options', 'dear-survey', array( $this, 'render_dashboard' ), 'dashicons-clipboard', 25 );
-		add_submenu_page( 'dear-survey', 'Surveys', 'Surveys', 'manage_options', 'dear-survey', array( $this, 'render_dashboard' ) );
+		// Root: Homepage
+		add_menu_page( 'Dear Survey', 'Dear Survey', 'manage_options', 'dear-survey', array( $this, 'render_homepage' ), 'dashicons-clipboard', 25 );
+		
+		// Submenus
+		add_submenu_page( 'dear-survey', 'Home', 'Home', 'manage_options', 'dear-survey', array( $this, 'render_homepage' ) );
+		add_submenu_page( 'dear-survey', 'Surveys', 'Surveys List', 'manage_options', 'dear-survey-list', array( $this, 'render_dashboard' ) );
+		add_submenu_page( 'dear-survey', 'Entries', 'Survey Entries', 'manage_options', 'dear-survey-entries', array( $this, 'render_entries' ) );
+		add_submenu_page( 'dear-survey', 'Contact List', 'Contact List', 'manage_options', 'dear-survey-contacts', array( $this, 'render_contacts' ) );
 		add_submenu_page( 'dear-survey', 'Add New', 'Add New', 'manage_options', 'dear-survey-builder', array( $this, 'render_builder' ) );
 		add_submenu_page( 'dear-survey', 'Settings', 'Settings', 'manage_options', 'dear-survey-settings', array( $this, 'render_settings' ) );
 	}
 
-	public function render_dashboard() {
+	public function get_sidebar( $active_page = 'home' ) {
+		?>
+		<div class="ds-sidebar">
+			<div class="ds-sidebar-logo">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:28px; height:28px;">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.745 3.745 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+				</svg>
+				Dear Survey
+			</div>
+			<nav>
+				<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
+				<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item <?php echo $active_page == 'home' ? 'active' : ''; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+					Home
+				</a>
+				<a href="<?php echo admin_url('admin.php?page=dear-survey-list'); ?>" class="ds-nav-item <?php echo $active_page == 'surveys' ? 'active' : ''; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
+					Surveys List
+				</a>
+				<a href="<?php echo admin_url('admin.php?page=dear-survey-entries'); ?>" class="ds-nav-item <?php echo $active_page == 'entries' ? 'active' : ''; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" /></svg>
+					Survey Entries
+				</a>
+				<a href="<?php echo admin_url('admin.php?page=dear-survey-contacts'); ?>" class="ds-nav-item <?php echo $active_page == 'contacts' ? 'active' : ''; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+					Contact List
+				</a>
+				
+				<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
+				<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item <?php echo $active_page == 'settings' ? 'active' : ''; ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
+					Global Settings
+				</a>
+			</nav>
+		</div>
+		<?php
+	}
+
+	public function render_homepage() {
 		$surveys = $this->db->get_surveys();
 		$total_surveys = count( $surveys );
-		$total_responses = 0;
-		foreach ( $surveys as $s ) {
-			$total_responses += count( $this->db->get_responses( $s['id'] ) );
-		}
-		$avg_responses = $total_surveys > 0 ? round($total_responses / $total_surveys, 1) : 0;
+		$all_responses = $this->db->get_all_responses();
+		$total_responses = count( $all_responses );
+		$recent_entries = array_slice( $all_responses, 0, 5 );
 		?>
 		<div class="ds-app-container ds-animate">
-			<!-- Sidebar -->
-			<div class="ds-sidebar">
-				<div class="ds-sidebar-logo">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:28px; height:28px;">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.745 3.745 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-					</svg>
-					Dear Survey
-				</div>
-				<nav>
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item active">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
-						Surveys List
-					</a>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-						Create New Survey
-					</a>
-
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
-						Global Settings
-					</a>
-				</nav>
-			</div>
-
-			<!-- Main Content -->
+			<?php $this->get_sidebar('home'); ?>
 			<div class="ds-main-content">
 				<div class="ds-top-bar">
 					<div>
-						<div style="font-size: 12px; font-weight: 600; color: var(--ds-primary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Overview</div>
-						<h1 class="ds-title">Dashboard</h1>
+						<div style="font-size: 12px; font-weight: 600; color: var(--ds-primary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Welcome Back</div>
+						<h1 class="ds-title">Dear Survey</h1>
 					</div>
 					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:18px; height:18px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
-						Create New Survey
+						Quick Build
 					</a>
 				</div>
 
-				<!-- Stats Grid -->
 				<div class="ds-stats-grid">
 					<div class="ds-stat-card" style="border-left: 4px solid #10B981; background: linear-gradient(to right, #F0FDF4, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
 						<div class="ds-stat-label" style="color: #059669;">Total Surveys</div>
 						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $total_surveys; ?></div>
-						<div style="margin-top: 12px; font-size: 12px; color: #059669; font-weight: 600; display: flex; align-items: center; gap: 4px;">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:14px; height:14px;"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4.14-5.7z" clip-rule="evenodd" /></svg>
-							Active projects
-						</div>
+						<div style="margin-top: 12px; font-size: 12px; color: #059669; font-weight: 600;">Managed surveys</div>
 					</div>
 					<div class="ds-stat-card" style="border-left: 4px solid #6366F1; background: linear-gradient(to right, #EEF2FF, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
 						<div class="ds-stat-label" style="color: #4F46E5;">Total Responses</div>
 						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $total_responses; ?></div>
-						<div style="margin-top: 12px; font-size: 12px; color: #4F46E5; font-weight: 600;">Lifetime entries captured</div>
+						<div style="margin-top: 12px; font-size: 12px; color: #4F46E5; font-weight: 600;">Collective feedback</div>
 					</div>
-					<div class="ds-stat-card" style="border-left: 4px solid #F59E0B; background: linear-gradient(to right, #FFFBEB, #FFFFFF); box-shadow: var(--ds-shadow-sm);">
-						<div class="ds-stat-label" style="color: #D97706;">Avg. Responses</div>
-						<div class="ds-stat-value" style="color: var(--ds-secondary);"><?php echo $avg_responses; ?></div>
-						<div style="margin-top: 12px; font-size: 12px; color: #D97706; font-weight: 600; display: flex; align-items: center; gap: 4px;">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:14px; height:14px;"><path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z" /></svg>
-							Per survey efficiency
+				</div>
+
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+					<!-- Recent Activity -->
+					<div class="ds-card">
+						<h3 style="margin: 0 0 20px; font-size: 16px; font-weight: 700; color: var(--ds-secondary);">Recent Entries</h3>
+						<div class="ds-table-container">
+							<?php if ( empty( $recent_entries ) ) : ?>
+								<p style="text-align:center; padding: 40px; color: var(--ds-text-light);">No entries yet.</p>
+							<?php else : ?>
+								<table class="ds-table">
+									<tbody>
+										<?php foreach ( $recent_entries as $entry ) : 
+											$s = $this->db->get_survey( $entry['survey_id'] ); ?>
+										<tr>
+											<td>
+												<div style="font-weight:600; font-size:14px;"><?php echo $s ? esc_html($s['title']) : 'Deleted Survey'; ?></div>
+												<div style="font-size:11px; color:var(--ds-text-light);"><?php echo date_i18n( 'M j, H:i', strtotime($entry['created_at']) ); ?></div>
+											</td>
+											<td style="text-align:right;">
+												<a href="<?php echo admin_url('admin.php?page=dear-survey-entries'); ?>" style="color: var(--ds-primary); font-size: 12px; font-weight: 700; text-decoration:none;">View All</a>
+											</td>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							<?php endif; ?>
+						</div>
+					</div>
+
+					<!-- Quick Actions -->
+					<div class="ds-card" style="background: var(--ds-primary-soft); border-color: var(--ds-primary-glow);">
+						<h3 style="margin: 0 0 20px; font-size: 16px; font-weight: 700; color: var(--ds-primary);">Quick Actions</h3>
+						<div style="display: flex; flex-direction: column; gap: 12px;">
+							<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary" style="justify-content: center;">Create New Survey</a>
+							<a href="<?php echo admin_url('admin.php?page=dear-survey-contacts'); ?>" class="ds-btn ds-btn-secondary" style="justify-content: center; background: white;">Manage Contacts</a>
+							<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-btn ds-btn-secondary" style="justify-content: center; background: white;">Configure Settings</a>
 						</div>
 					</div>
 				</div>
-				<div class="ds-card" style="padding: 0; overflow: hidden;">
-					<div style="padding: 24px 32px; border-bottom: 1px solid var(--ds-border); display: flex; justify-content: space-between; align-items: center;">
-						<h2 style="font-size: 18px; font-weight: 700; color: var(--ds-secondary); margin: 0;">Your Surveys</h2>
-						<span style="font-size: 12px; font-weight: 600; color: var(--ds-text-light); text-transform: uppercase;">List of all surveys</span>
-					</div>
+			</div>
+		</div>
+		<?php
+	}
 
+	public function render_dashboard() {
+		$surveys = $this->db->get_surveys();
+		?>
+		<div class="ds-app-container ds-animate">
+			<?php $this->get_sidebar('surveys'); ?>
+			<div class="ds-main-content">
+				<div class="ds-top-bar">
+					<h1 class="ds-title">Surveys List</h1>
+					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary">Add New Survey</a>
+				</div>
+				<div class="ds-card" style="padding:0;">
 					<div class="ds-table-container">
 						<table class="ds-table">
 							<thead>
 								<tr>
 									<th>Survey Name</th>
 									<th>Shortcode</th>
-									<th>Responses</th>
 									<th style="text-align:right;">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								<?php if ( empty( $surveys ) ) : ?>
-									<tr><td colspan="4" style="text-align:center; padding:100px; color:var(--ds-text-light);">
-										<div style="margin-bottom: 16px; opacity: 0.1;"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:64px; height:64px; margin: 0 auto;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg></div>
-										No surveys found. Create your first one!
-									</td></tr>
+								<?php foreach ( $surveys as $survey ) : ?>
+									<tr>
+										<td>
+											<div style="font-weight:700; color:var(--ds-secondary);"><?php echo esc_html( $survey['title'] ); ?></div>
+											<div style="font-size:12px; color:var(--ds-text-light);"><?php echo date_i18n( 'M j, Y', strtotime($survey['created_at']) ); ?></div>
+										</td>
+										<td><code>[dear_survey id="<?php echo $survey['id']; ?>"]</code></td>
+										<td style="text-align:right;">
+											<a href="<?php echo admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ); ?>" class="ds-btn ds-btn-secondary" style="padding: 6px 12px;">Edit</a>
+											<button class="ds-btn ds-btn-secondary ds-delete-trigger" data-href="<?php echo admin_url( 'admin.php?page=dear-survey&action=delete&id=' . $survey['id'] ); ?>" style="padding: 6px 12px; color: var(--ds-error);">Delete</button>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- Delete Confirmation -->
+			<div id="ds-delete-modal" class="ds-modal">
+				<div class="ds-modal-content ds-animate">
+					<h3 style="margin:0 0 12px;">Delete Survey?</h3>
+					<p style="color:var(--ds-text-light); font-size: 14px; margin-bottom:24px;">This will remove the survey and all its responses.</p>
+					<div style="display:flex; gap:12px;">
+						<button id="ds-cancel-delete-btn" class="ds-btn ds-btn-secondary" style="flex:1;">Cancel</button>
+						<button id="ds-confirm-delete-btn" class="ds-btn ds-btn-danger-solid" style="flex:1;">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+		jQuery(document).ready(function($) {
+			$(document).on('click', '.ds-delete-trigger', function() {
+				const href = $(this).data('href');
+				$('#ds-confirm-delete-btn').data('href', href);
+				$('#ds-delete-modal').css('display', 'flex');
+			});
+			$('#ds-cancel-delete-btn').on('click', function() { $('#ds-delete-modal').hide(); });
+			$('#ds-confirm-delete-btn').on('click', function() { window.location.href = $(this).data('href'); });
+		});
+		</script>
+		<?php
+	}
+
+	public function render_entries() {
+		$all_responses = $this->db->get_all_responses();
+		?>
+		<div class="ds-app-container ds-animate">
+			<?php $this->get_sidebar('entries'); ?>
+			<div class="ds-main-content">
+				<div class="ds-top-bar">
+					<h1 class="ds-title">All Survey Entries</h1>
+				</div>
+				<div class="ds-card" style="padding:0;">
+					<div class="ds-table-container">
+						<table class="ds-table">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Survey</th>
+									<th>User/IP</th>
+									<th>Response Summary</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($all_responses as $resp) : 
+									$s = $this->db->get_survey($resp['survey_id']);
+									$data = json_decode($resp['response_data'], true);
+									$email = $data['ds_responder_email'] ?? 'Anonymous';
+									?>
+									<tr>
+										<td><?php echo date_i18n('M j, Y H:i', strtotime($resp['created_at'])); ?></td>
+										<td><strong><?php echo $s ? esc_html($s['title']) : 'Deleted'; ?></strong></td>
+										<td>
+											<div style="font-size:13px;"><?php echo esc_html($email); ?></div>
+											<div style="font-size:11px; color:var(--ds-text-light);"><?php echo esc_html($resp['ip_address']); ?></div>
+										</td>
+										<td>
+											<div style="font-size:12px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+												<?php foreach($data as $k => $v) {
+													if($k == 'ds_responder_email') continue;
+													echo esc_html($v) . " | ";
+												} ?>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	public function render_contacts() {
+		$all_responses = $this->db->get_all_responses();
+		$contacts = [];
+		foreach ($all_responses as $resp) {
+			$data = json_decode($resp['response_data'], true);
+			if (!empty($data['ds_responder_email'])) {
+				$email = strtolower(trim($data['ds_responder_email']));
+				if (!isset($contacts[$email])) {
+					$contacts[$email] = [
+						'email' => $email,
+						'surveys' => [],
+						'last_activity' => $resp['created_at']
+					];
+				}
+				$s = $this->db->get_survey($resp['survey_id']);
+				if ($s) $contacts[$email]['surveys'][$s['id']] = $s['title'];
+				if (strtotime($resp['created_at']) > strtotime($contacts[$email]['last_activity'])) {
+					$contacts[$email]['last_activity'] = $resp['created_at'];
+				}
+			}
+		}
+		?>
+		<div class="ds-app-container ds-animate">
+			<?php $this->get_sidebar('contacts'); ?>
+			<div class="ds-main-content">
+				<div class="ds-top-bar">
+					<h1 class="ds-title">Collected Contact List</h1>
+				</div>
+				<div class="ds-card" style="padding:0;">
+					<div class="ds-table-container">
+						<table class="ds-table">
+							<thead>
+								<tr>
+									<th>Email Address</th>
+									<th>Surveys Taken</th>
+									<th>Last Activity</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php if (empty($contacts)) : ?>
+									<tr><td colspan="3" style="text-align:center; padding: 50px;">No contacts collected yet.</td></tr>
 								<?php else : ?>
-									<?php foreach ( $surveys as $survey ) : ?>
-										<?php $resp_count = (int) count( $this->db->get_responses( $survey['id'] ) ); ?>
+									<?php foreach ($contacts as $contact) : ?>
 										<tr>
+											<td><div style="font-weight:600;"><?php echo esc_html($contact['email']); ?></div></td>
 											<td>
-												<div style="font-weight:700; font-size:15px; color:var(--ds-secondary); margin-bottom: 2px;"><?php echo esc_html( $survey['title'] ); ?></div>
-												<div style="font-size:12px; color:var(--ds-text-light);">Created on <?php echo date_i18n( 'M j, Y', strtotime( $survey['created_at'] ) ); ?></div>
-											</td>
-											<td>
-												<code style="background:var(--ds-primary-soft); color:var(--ds-primary); padding:6px 10px; border-radius:6px; font-size:12px; font-weight: 600; font-family: 'JetBrains Mono', monospace;">[dear_survey id="<?php echo $survey['id']; ?>"]</code>
-											</td>
-											<td>
-												<a href="<?php echo admin_url( 'admin-ajax.php?action=ds_view_results&id=' . $survey['id'] ); ?>" style="text-decoration:none;">
-													<span class="ds-badge" style="background: #E0F2FE; color: #0369A1;">
-														<?php echo $resp_count; ?> entries
+												<?php foreach($contact['surveys'] as $id => $title) : ?>
+													<span class="ds-badge" style="background:var(--ds-primary-soft); color:var(--ds-primary); margin-right:4px;">
+														<?php echo esc_html($title); ?>
 													</span>
-												</a>
+												<?php endforeach; ?>
 											</td>
-											<td>
-												<div class="ds-row-actions" style="display:flex; justify-content:flex-end; gap:8px;">
-													<a href="<?php echo admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ); ?>" class="ds-btn ds-btn-secondary" style="padding: 8px 14px; font-size: 13px;">Edit</a>
-													<button class="ds-btn ds-delete-trigger" data-href="<?php echo admin_url( 'admin.php?page=dear-survey&action=delete&id=' . $survey['id'] ); ?>" style="padding: 8px 12px; background: transparent; border-color: transparent; color: var(--ds-error);">
-														<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;"><path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
-													</button>
-												</div>
-											</td>
+											<td><?php echo date_i18n('M j, Y', strtotime($contact['last_activity'])); ?></td>
 										</tr>
 									<?php endforeach; ?>
 								<?php endif; ?>
@@ -156,40 +324,7 @@ class Dear_Survey_Menu {
 					</div>
 				</div>
 			</div>
-
-			<!-- Delete Confirmation Modal -->
-			<div id="ds-delete-modal" class="ds-modal">
-				<div class="ds-modal-content ds-animate">
-					<div class="ds-modal-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:28px; height:28px;"><path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
-					</div>
-					<h3 style="font-size:20px; font-weight:800; color:var(--ds-secondary); margin: 0 0 8px;">Delete Survey?</h3>
-					<p style="color:var(--ds-text-light); font-size: 14px; margin-bottom:32px;">Are you sure? This will permanently delete the survey and all its responses.</p>
-					<div style="display:flex; gap:12px;">
-						<button id="ds-cancel-delete-btn" class="ds-btn ds-btn-secondary" style="flex:1;">Cancel</button>
-						<button id="ds-confirm-delete-btn" class="ds-btn ds-btn-danger-solid" style="flex:1;">Delete Now</button>
-					</div>
-				</div>
-			</div>
 		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('.ds-delete-trigger').on('click', function() {
-				const href = $(this).data('href');
-				$('#ds-confirm-delete-btn').data('href', href);
-				$('#ds-delete-modal').css('display', 'flex');
-			});
-
-			$('#ds-cancel-delete-btn').on('click', function() {
-				$('#ds-delete-modal').hide();
-			});
-
-			$('#ds-confirm-delete-btn').on('click', function() {
-				window.location.href = $(this).data('href');
-			});
-		});
-		</script>
 		<?php
 	}
 

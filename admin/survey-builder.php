@@ -11,46 +11,17 @@ class Dear_Survey_Builder {
 	public function __construct( $db ) { $this->db = $db; }
 
 	public function render() {
-		if ( isset( $_GET['view'] ) && $_GET['view'] === 'results' && isset( $_GET['id'] ) ) {
-			require_once dirname( __FILE__ ) . '/results.php';
-			$results = new Dear_Survey_Results( $this->db );
-			$results->render( intval( $_GET['id'] ) );
-			return;
-		}
-
 		$survey_id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
 		$survey = $survey_id ? $this->db->get_survey( $survey_id ) : null;
 		$title = $survey ? $survey['title'] : '';
 		$questions = $survey ? json_decode( $survey['questions'], true ) : [];
 		$settings = $survey ? json_decode( $survey['settings'], true ) : [];
+
+		require_once dirname( __FILE__ ) . '/menu.php';
+		$menu = new Dear_Survey_Menu( $this->db );
 		?>
 		<div class="ds-app-container ds-animate">
-			<!-- Sidebar -->
-			<div class="ds-sidebar">
-				<div class="ds-sidebar-logo">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:28px; height:28px;">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.745 3.745 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-					</svg>
-					Dear Survey
-				</div>
-				<nav>
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
-						Surveys List
-					</a>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item active">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-						Create New Survey
-					</a>
-					
-					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
-						Global Settings
-					</a>
-				</nav>
-			</div>
+			<?php $menu->get_sidebar('surveys'); ?>
 
 			<!-- Main Content -->
 			<div class="ds-main-content">
@@ -263,10 +234,8 @@ class Dear_Survey_Builder {
 			}
 
 			window.deleteQuestion = function(index) {
-				if(confirm('Are you sure you want to delete this question?')) { 
-					questions.splice(index, 1); 
-					renderQuestions(); 
-				}
+				questions.splice(index, 1); 
+				renderQuestions(); 
 			};
 
 			window.addOption = function(qIndex) {
@@ -360,7 +329,7 @@ class Dear_Survey_Builder {
 					saveBtn.prop('disabled', false).html(originalHtml);
 					if (response.success) {
 						if (!data.id || data.id == 0) { 
-							window.location.href = 'admin.php?page=dear-survey-builder&id=' + response.data.id; 
+							window.location.href = 'admin.php?page=dear-survey-list&id=' + response.data.id; 
 						} else {
 							saveBtn.css('background', 'var(--ds-success)').text('Saved');
 							setTimeout(() => { saveBtn.css('background', '').html(originalHtml); }, 2000);
@@ -421,8 +390,6 @@ class Dear_Survey_Builder {
 		if ( empty( $emails ) ) wp_send_json_error( 'No valid email addresses provided' );
 
 		$survey_link = home_url( '/?ds_survey=' . $survey_id ); // Simple link format
-		// If using shortcodes on a specific page, user should handle it, but we provide a direct access link support via query var if handled.
-		// Alternatively, we just send the link to the site with the survey ID.
 		
 		$full_message = $message_body . "\n\nParticipate here: " . $survey_link;
 		

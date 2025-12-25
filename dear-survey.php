@@ -13,12 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Global DB variable for usage in other classes
+global $dear_survey_db;
+
 // Define constants
 define( 'DEAR_SURVEY_VERSION', '1.0.0' );
 define( 'DEAR_SURVEY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DEAR_SURVEY_URL', plugin_dir_url( __FILE__ ) );
-define( 'DEAR_SURVEY_DB_VERSION', '1.0' );
-define( 'DEAR_SURVEY_DEBUG', true ); // Added for debugging
+define( 'DEAR_SURVEY_DB_VERSION', '1.1' ); // Bumped version for new schema cleanup
+define( 'DEAR_SURVEY_DEBUG', true );
 
 // Include core classes
 require_once DEAR_SURVEY_PATH . 'includes/class-dear-survey-db.php';
@@ -34,8 +37,10 @@ class Dear_Survey {
 	protected $db;
 
 	public function __construct() {
+		global $dear_survey_db;
 		$this->check_version();
 		$this->db = new Dear_Survey_DB();
+		$dear_survey_db = $this->db;
 		$this->load_dependencies();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -70,9 +75,6 @@ class Dear_Survey {
 			$builder = new Dear_Survey_Builder( $this->db );
 			add_action( 'wp_ajax_ds_save_survey', array( $builder, 'ajax_save_survey' ) );
 			add_action( 'wp_ajax_ds_send_outreach', array( $builder, 'ajax_send_outreach' ) );
-			
-			// CSV Export
-			add_action( 'wp_ajax_ds_export_csv', array( $this, 'handle_export_csv' ) );
 			
 			// Enqueue Admin CSS & JS
 			add_action( 'admin_enqueue_scripts', function() {
