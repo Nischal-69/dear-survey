@@ -1,127 +1,82 @@
 /**
- * Dear Survey Public Styles
- * UI/UX Refactor: Clean, Modern, SaaS-style Form
- * Accent Color: #FF8C42 (Orange)
+ * Dear Survey Public Styles - Minimalist MVP
+ * Clean, Traditional Q&A Layout
  */
 
 :root {
-    --ds-p-primary: #FF8C42;
-    --ds-p-primary-hover: #E87A30;
-    --ds-p-bg: #FFFFFF;
-    --ds-p-text: #2D3748;
-    --ds-p-text-light: #718096;
+    --ds-p-primary: #6366F1;
+    --ds-p-text: #1E293B;
+    --ds-p-text-light: #64748B;
     --ds-p-border: #E2E8F0;
-    --ds-p-radius: 12px;
-    --ds-p-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    --ds-p-bg: #FFFFFF;
 }
 
 .ds-survey-container {
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
-    color: var(--ds-p-text);
-    background: var(--ds-p-bg);
-    border-radius: var(--ds-p-radius);
-    box-shadow: var(--ds-p-shadow);
-    padding: 40px;
     max-width: 650px;
     margin: 40px auto;
+    padding: 40px;
+    background: var(--ds-p-bg);
     border: 1px solid var(--ds-p-border);
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
+    border-radius: 12px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ds-p-text);
+    line-height: 1.5;
 }
 
-/* Accent Top Bar */
-.ds-survey-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--ds-p-primary);
-}
-
-.ds-survey-container h3 {
-    font-size: 28px;
+.ds-survey-title {
+    font-size: 24px;
     font-weight: 800;
-    margin: 0 0 10px 0;
-    letter-spacing: -0.5px;
+    margin: 0 0 30px 0;
+    color: var(--ds-p-text);
 }
 
-.ds-survey-desc {
-    font-size: 16px;
-    color: var(--ds-p-text-light);
-    margin-bottom: 40px;
-    line-height: 1.6;
-}
-
-/* Question Fields */
 .ds-question-field {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .ds-question-label {
     display: block;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-/* Input Fields */
 .ds-input-field {
     width: 100%;
-    padding: 14px 18px;
-    font-size: 16px;
-    border: 2px solid var(--ds-p-border);
-    border-radius: 10px;
-    transition: all 0.2s;
+    padding: 12px 14px;
+    border: 1px solid var(--ds-p-border);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
     box-sizing: border-box;
-    background: #FAFAFA;
+    background: #fff;
 }
 
 .ds-input-field:focus {
     outline: none;
     border-color: var(--ds-p-primary);
-    background: #FFF;
-    box-shadow: 0 0 0 4px rgba(255, 140, 66, 0.1);
 }
 
-/* Radio & Checkbox Custom Styling */
-.ds-option-label {
+.ds-inline-option {
     display: flex;
     align-items: center;
-    padding: 14px 18px;
-    border: 2px solid var(--ds-p-border);
-    border-radius: 10px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 8px;
     cursor: pointer;
-    transition: all 0.2s;
-    background: #FAFAFA;
+    font-size: 14px;
     font-weight: 500;
 }
 
-.ds-option-label:hover {
-    border-color: #FBD38D;
-    background: #FFF;
-}
-
-.ds-option-label input {
-    margin-right: 15px;
-    transform: scale(1.2);
+.ds-inline-option input {
+    margin: 0;
+    width: 16px;
+    height: 16px;
     accent-color: var(--ds-p-primary);
 }
 
-/* Focus & Active State */
-.ds-option-label:has(input:checked) {
-    border-color: var(--ds-p-primary);
-    background: #FFF5EF;
-    color: var(--ds-p-primary);
-}
-
-/* Submit Footer */
 .ds-form-footer {
-    margin-top: 40px;
-    padding-top: 25px;
+    margin-top: 30px;
+    padding-top: 20px;
     border-top: 1px solid var(--ds-p-border);
     display: flex;
     justify-content: space-between;
@@ -130,61 +85,36 @@
 
 .ds-submit-btn {
     background: var(--ds-p-primary);
-    color: #FFF;
+    color: #fff;
     border: none;
-    padding: 14px 35px;
-    font-size: 16px;
+    padding: 12px 28px;
+    font-size: 14px;
     font-weight: 700;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.2);
+    transition: opacity 0.2s;
 }
 
 .ds-submit-btn:hover {
-    background: var(--ds-p-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 140, 66, 0.3);
+    opacity: 0.9;
 }
 
-.ds-submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Success/Error Messages */
 .ds-message {
+    font-size: 14px;
     font-weight: 600;
-    font-size: 15px;
 }
 
 .ds-message.success {
-    color: #38A169;
-    animation: dsPulse 0.5s ease;
+    color: #10B981;
 }
 
 .ds-message.error {
-    color: #E53E3E;
-}
-
-@keyframes dsPulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+    color: #EF4444;
 }
 
 @media (max-width: 600px) {
     .ds-survey-container {
-        padding: 25px;
+        padding: 30px 20px;
         margin: 20px 10px;
     }
 }

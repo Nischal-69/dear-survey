@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Dear Survey
  * Plugin URI:  https://example.com/dear-survey
- * Description: A complete, production-ready Survey Maker with Free and Pro features.
+ * Description: An advanced, high-performance Survey Maker with a premium SaaS-style interface.
  * Version:     1.0.0
  * Author:      Your Name
  * Text Domain: dear-survey
@@ -54,6 +54,7 @@ class Dear_Survey {
 			require_once DEAR_SURVEY_PATH . 'admin/survey-builder.php';
 			require_once DEAR_SURVEY_PATH . 'admin/results.php';
 			require_once DEAR_SURVEY_PATH . 'admin/settings.php';
+			require_once DEAR_SURVEY_PATH . 'admin/email.php';
 		}
 
 		// Public
@@ -69,6 +70,16 @@ class Dear_Survey {
 			// AJAX for builder
 			$builder = new Dear_Survey_Builder( $this->db );
 			add_action( 'wp_ajax_ds_save_survey', array( $builder, 'ajax_save_survey' ) );
+			
+			// AJAX for Email Broadcast
+			$email = new Dear_Survey_Email( $this->db );
+			add_action( 'wp_ajax_ds_send_broadcast', array( $email, 'ajax_send_broadcast' ) );
+			add_action( 'wp_ajax_ds_save_template', array( $email, 'ajax_save_template' ) );
+			add_action( 'wp_ajax_ds_add_subscriber', array( $email, 'ajax_add_subscriber' ) );
+			add_action( 'wp_ajax_ds_remove_subscriber', array( $email, 'ajax_remove_subscriber' ) );
+			
+			// CSV Export
+			add_action( 'wp_ajax_ds_export_csv', array( $this, 'handle_export_csv' ) );
 			
 			// Enqueue Admin CSS & JS
 			add_action( 'admin_enqueue_scripts', function() {

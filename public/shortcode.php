@@ -24,10 +24,9 @@ class Dear_Survey_Shortcode {
 
 		ob_start();
 		?>
-		<div class="ds-survey-container" id="ds-survey-<?php echo $survey_id; ?>">
+		<div class="ds-survey-container ds-animate" id="ds-survey-<?php echo $survey_id; ?>">
 			<div class="ds-survey-header">
-				<h3><?php echo esc_html( $survey['title'] ); ?></h3>
-				<p class="ds-survey-desc">Please provide your feedback by answering the questions below.</p>
+				<h1 class="ds-survey-title"><?php echo esc_html( $survey['title'] ); ?></h1>
 			</div>
 
 			<form class="ds-survey-form" data-id="<?php echo $survey_id; ?>">
@@ -47,7 +46,7 @@ class Dear_Survey_Shortcode {
 							<div class="ds-radio-group">
 								<?php $options = explode( ',', $q['options'] ); ?>
 								<?php foreach ( $options as $opt ) : $opt = trim($opt); if(!$opt) continue; ?>
-									<label class="ds-option-label">
+									<label class="ds-inline-option">
 										<input type="radio" name="q_<?php echo $index; ?>" value="<?php echo esc_attr( $opt ); ?>" required>
 										<span><?php echo esc_html( $opt ); ?></span>
 									</label>
@@ -58,7 +57,7 @@ class Dear_Survey_Shortcode {
 							<div class="ds-checkbox-group">
 								<?php $options = explode( ',', $q['options'] ); ?>
 								<?php foreach ( $options as $opt ) : $opt = trim($opt); if(!$opt) continue; ?>
-									<label class="ds-option-label">
+									<label class="ds-inline-option">
 										<input type="checkbox" name="q_<?php echo $index; ?>[]" value="<?php echo esc_attr( $opt ); ?>">
 										<span><?php echo esc_html( $opt ); ?></span>
 									</label>
