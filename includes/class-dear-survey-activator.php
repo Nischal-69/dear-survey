@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Dear_Survey_Activator {
 
 	public static function activate() {
@@ -68,7 +72,8 @@ class Dear_Survey_Activator {
 		dbDelta( $sql_subscribers );
 
 		// Seed initial templates if empty
-		$count = $wpdb->get_var( "SELECT count(*) FROM $table_templates" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names cannot be prepared
+		$count = $wpdb->get_var( $wpdb->prepare( 'SELECT count(*) FROM %i', $table_templates ) );
 		if ( ! $count ) {
 			$wpdb->insert( $table_templates, [
 				'name'    => 'Invitation - Customer Mood',

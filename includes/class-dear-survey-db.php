@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Dear_Survey_DB {
 	private $wpdb;
 	private $table_surveys;
@@ -21,8 +25,20 @@ class Dear_Survey_DB {
 		);
 		$args = wp_parse_args( $args, $defaults );
 		
-		$sql = "SELECT * FROM {$this->table_surveys} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d";
-		return $this->wpdb->get_results( $this->wpdb->prepare( $sql, $args['limit'], $args['offset'] ), ARRAY_A );
+		// Whitelist allowed orderby columns to prevent SQL injection
+		$allowed_orderby = array( 'id', 'title', 'created_at', 'status' );
+		$orderby = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'created_at';
+		
+		// Whitelist allowed order directions
+		$order = in_array( strtoupper( $args['order'] ), array( 'ASC', 'DESC' ), true ) ? strtoupper( $args['order'] ) : 'DESC';
+		
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $orderby and $order are whitelisted above
+		$sql = $this->wpdb->prepare(
+			"SELECT * FROM {$this->table_surveys} ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d",
+			$args['limit'],
+			$args['offset']
+		);
+		return $this->wpdb->get_results( $sql, ARRAY_A );
 	}
 
 	public function get_survey( $id ) {
@@ -75,12 +91,18 @@ class Dear_Survey_DB {
 	}
 
 	public function save_response( $data ) {
+		// Get IP address safely
+		$ip_address = '';
+		if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+		}
+
 		$result = $this->wpdb->insert(
 			$this->table_responses,
 			array(
 				'survey_id'     => $data['survey_id'],
 				'user_id'       => get_current_user_id(),
-				'ip_address'    => $_SERVER['REMOTE_ADDR'],
+				'ip_address'    => $ip_address,
 				'response_data' => $data['response_data'],
 				'created_at'    => current_time( 'mysql' ),
 			),

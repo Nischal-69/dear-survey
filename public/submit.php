@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Dear_Survey_Submit {
 
 	private $db;
@@ -9,11 +13,16 @@ class Dear_Survey_Submit {
 	}
 
 	public function ajax_handle_submit() {
+		// Verify nonce for security
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'ds_submit_survey_nonce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'dear survey' ) ) );
+		}
+
 		$survey_id = isset( $_POST['survey_id'] ) ? intval( $_POST['survey_id'] ) : 0;
-		$response_data_raw = isset( $_POST['response_data'] ) ? wp_unslash( $_POST['response_data'] ) : '';
+		$response_data_raw = isset( $_POST['response_data'] ) ? sanitize_text_field( wp_unslash( $_POST['response_data'] ) ) : '';
 
 		if ( ! $survey_id || ! $response_data_raw ) {
-			wp_send_json_error( array( 'message' => 'Invalid data' ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid data', 'dear survey' ) ) );
 		}
 
 		$data = array(
@@ -42,16 +51,6 @@ class Dear_Survey_Submit {
 					$contact_info = $responder_email ? "from $responder_email" : "(anonymous)";
 					$message = "You have received a new survey entry $contact_info for '{$survey['title']}'.\n\nPlease check your dashboard for full details.";
 					wp_mail( $admin_email, $subject, $message );
-				}
-
-				// 2. Autoresponder to Participant
-				if ( ! empty( $settings['collect_email'] ) && ! empty( $responder_email ) ) {
-					$auto_subject = ! empty( $settings['auto_subject'] ) ? $settings['auto_subject'] : "Response Received: " . $survey['title'];
-					$auto_body = ! empty( $settings['auto_body'] ) ? $settings['auto_body'] : $settings['thank_you_body'];
-					
-					if ( ! empty( $auto_body ) ) {
-						wp_mail( $responder_email, $auto_subject, $auto_body );
-					}
 				}
 			}
 			wp_send_json_success( array( 'message' => $settings['thank_you_body'] ?: 'Thank you for your response!' ) );

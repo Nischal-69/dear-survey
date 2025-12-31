@@ -1,274 +1,654 @@
 /**
- * Dear Survey Public Styles - Modern Minimalist Design
- * Clean, Contemporary Q&A Layout with Enhanced Visuals
+ * Dear Survey Public Styles
+ * Google Forms-Inspired Design System
  */
 
+/* ========================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ======================================== */
 :root {
-    --ds-p-primary: #10B981;
-    --ds-p-primary-hover: #059669;
-    --ds-p-primary-glow: rgba(16, 185, 129, 0.15);
-    --ds-p-primary-soft: #ECFDF5;
-    --ds-p-text: #1E293B;
-    --ds-p-text-light: #64748B;
-    --ds-p-text-lighter: #94A3B8;
-    --ds-p-border: #E2E8F0;
-    --ds-p-divider: #F1F5F9;
-    --ds-p-bg: #FFFFFF;
-    --ds-p-bg-alt: #F8FAFC;
-    --ds-p-success: #10B981;
-    --ds-p-error: #EF4444;
+    /* Primary Purple (Google Forms) */
+    --gf-primary: #673ab7;
+    --gf-primary-hover: #5e35b1;
+    --gf-primary-dark: #512da8;
+    --gf-primary-light: #ede7f6;
+    --gf-primary-rgb: 103, 58, 183;
+    
+    /* Neutrals */
+    --gf-text: #202124;
+    --gf-text-secondary: #5f6368;
+    --gf-text-disabled: #80868b;
+    --gf-border: #dadce0;
+    --gf-border-hover: #bdc1c6;
+    --gf-bg: #f0ebf8;
+    --gf-white: #ffffff;
+    --gf-surface: #ffffff;
+    
+    /* Functional */
+    --gf-error: #d93025;
+    --gf-error-light: #fce8e6;
+    --gf-success: #1e8e3e;
+    --gf-success-light: #e6f4ea;
+    
+    /* Spacing */
+    --gf-space-xs: 4px;
+    --gf-space-sm: 8px;
+    --gf-space-md: 16px;
+    --gf-space-lg: 24px;
+    --gf-space-xl: 32px;
+    
+    /* Typography */
+    --gf-font: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    --gf-font-size-sm: 12px;
+    --gf-font-size-base: 14px;
+    --gf-font-size-md: 16px;
+    --gf-font-size-lg: 24px;
+    --gf-font-size-xl: 32px;
+    
+    /* Border Radius */
+    --gf-radius: 8px;
+    --gf-radius-sm: 4px;
+    
+    /* Shadows */
+    --gf-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+    --gf-shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    
+    /* Animation */
+    --gf-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ds-survey-container {
-    max-width: 700px;
-    margin: 60px auto;
-    padding: 48px;
-    background: linear-gradient(135deg, var(--ds-p-bg) 0%, var(--ds-p-bg-alt) 100%);
-    border: 1px solid var(--ds-p-border);
-    border-radius: 16px;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ds-p-text);
-    line-height: 1.6;
-    box-shadow: 0 8px 24px -5px rgba(0, 0, 0, 0.08);
-    animation: dsSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+/* ========================================
+   BASE & RESET
+   ======================================== */
+.gf-survey-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--gf-space-lg) var(--gf-space-md);
+    font-family: var(--gf-font);
+    color: var(--gf-text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes dsSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.ds-survey-header {
-    margin-bottom: 40px;
-    padding-bottom: 32px;
-    border-bottom: 2px solid var(--ds-p-divider);
-}
-
-.ds-survey-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0;
-    color: var(--ds-p-text);
-    letter-spacing: -0.5px;
-}
-
-.ds-survey-form {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-}
-
-.ds-question-field {
-    animation: dsFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-}
-
-.ds-question-field:nth-child(1) { animation-delay: 0.1s; }
-.ds-question-field:nth-child(2) { animation-delay: 0.15s; }
-.ds-question-field:nth-child(3) { animation-delay: 0.2s; }
-.ds-question-field:nth-child(4) { animation-delay: 0.25s; }
-.ds-question-field:nth-child(5) { animation-delay: 0.3s; }
-.ds-question-field:nth-child(6) { animation-delay: 0.35s; }
-.ds-question-field:nth-child(7) { animation-delay: 0.4s; }
-.ds-question-field:nth-child(8) { animation-delay: 0.45s; }
-.ds-question-field:nth-child(n+9) { animation-delay: 0.5s; }
-
-@keyframes dsFadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.ds-question-label {
-    display: block;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--ds-p-text);
-    letter-spacing: -0.3px;
-}
-
-.ds-input-field {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--ds-p-border);
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.2s ease;
+.gf-survey-wrap *,
+.gf-survey-wrap *::before,
+.gf-survey-wrap *::after {
     box-sizing: border-box;
-    background: linear-gradient(135deg, var(--ds-p-bg) 0%, rgba(248, 250, 252, 0.3) 100%);
-    color: var(--ds-p-text);
-    font-family: inherit;
 }
 
-.ds-input-field::placeholder {
-    color: var(--ds-p-text-lighter);
+/* Error Messages */
+.ds-error-msg {
+    text-align: center;
+    color: var(--gf-error);
+    padding: var(--gf-space-lg);
+    background: var(--gf-error-light);
+    border-radius: var(--gf-radius);
+    font-family: var(--gf-font);
 }
 
-.ds-input-field:focus {
+/* ========================================
+   HEADER CARD
+   ======================================== */
+.gf-header-card {
+    background: var(--gf-white);
+    border-radius: var(--gf-radius);
+    overflow: hidden;
+    margin-bottom: var(--gf-space-md);
+    box-shadow: var(--gf-shadow-sm);
+    border: 1px solid var(--gf-border);
+}
+
+.gf-header-accent {
+    height: 10px;
+    background: var(--gf-primary);
+}
+
+.gf-header-content {
+    padding: var(--gf-space-lg);
+}
+
+.gf-survey-title {
+    margin: 0 0 var(--gf-space-sm);
+    font-size: var(--gf-font-size-xl);
+    font-weight: 400;
+    color: var(--gf-text);
+    line-height: 1.25;
+}
+
+.gf-survey-desc {
+    margin: 0;
+    font-size: var(--gf-font-size-base);
+    color: var(--gf-text-secondary);
+    line-height: 1.5;
+}
+
+/* ========================================
+   QUESTION CARDS
+   ======================================== */
+.gf-question-card {
+    background: var(--gf-white);
+    border-radius: var(--gf-radius);
+    margin-bottom: var(--gf-space-md);
+    box-shadow: var(--gf-shadow-sm);
+    border: 1px solid var(--gf-border);
+    transition: border-color var(--gf-transition), box-shadow var(--gf-transition);
+    animation: gfCardAppear 0.3s ease-out backwards;
+}
+
+.gf-question-card:nth-child(1) { animation-delay: 0.05s; }
+.gf-question-card:nth-child(2) { animation-delay: 0.1s; }
+.gf-question-card:nth-child(3) { animation-delay: 0.15s; }
+.gf-question-card:nth-child(4) { animation-delay: 0.2s; }
+.gf-question-card:nth-child(5) { animation-delay: 0.25s; }
+.gf-question-card:nth-child(n+6) { animation-delay: 0.3s; }
+
+@keyframes gfCardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gf-question-card:focus-within {
+    border-color: var(--gf-primary);
+    box-shadow: var(--gf-shadow);
+}
+
+.gf-q-content {
+    padding: var(--gf-space-lg);
+}
+
+/* Question Label */
+.gf-q-label {
+    display: block;
+    font-size: var(--gf-font-size-md);
+    font-weight: 400;
+    color: var(--gf-text);
+    margin-bottom: var(--gf-space-md);
+    line-height: 1.5;
+}
+
+.gf-required {
+    color: var(--gf-error);
+    margin-left: 2px;
+}
+
+/* Helper Text */
+.gf-helper-text {
+    margin: var(--gf-space-sm) 0 0;
+    font-size: var(--gf-font-size-sm);
+    color: var(--gf-text-secondary);
+}
+
+/* ========================================
+   TEXT INPUTS
+   ======================================== */
+.gf-text-input,
+.gf-textarea-input {
+    width: 100%;
+    padding: var(--gf-space-sm) 0;
+    border: none;
+    border-bottom: 1px solid var(--gf-border);
+    background: transparent;
+    font-size: var(--gf-font-size-base);
+    font-family: var(--gf-font);
+    color: var(--gf-text);
+    transition: border-color var(--gf-transition);
     outline: none;
-    border-color: var(--ds-p-primary);
-    box-shadow: 0 0 0 3px var(--ds-p-primary-glow), 0 0 0 1px var(--ds-p-primary);
-    background: var(--ds-p-bg);
 }
 
-.ds-radio-group,
-.ds-checkbox-group {
+.gf-text-input::placeholder,
+.gf-textarea-input::placeholder {
+    color: var(--gf-text-disabled);
+}
+
+.gf-text-input:hover,
+.gf-textarea-input:hover {
+    border-bottom-color: var(--gf-border-hover);
+}
+
+.gf-text-input:focus,
+.gf-textarea-input:focus {
+    border-bottom: 2px solid var(--gf-primary);
+    margin-bottom: -1px;
+}
+
+.gf-textarea-input {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ========================================
+   RADIO & CHECKBOX OPTIONS
+   ======================================== */
+.gf-options-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
 }
 
-.ds-inline-option {
+.gf-option-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
+    gap: var(--gf-space-md);
+    padding: var(--gf-space-md) var(--gf-space-sm);
+    margin: 0 calc(-1 * var(--gf-space-sm));
+    border-radius: var(--gf-radius-sm);
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ds-p-text);
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: background var(--gf-transition);
     user-select: none;
 }
 
-.ds-inline-option:hover {
-    background: var(--ds-p-primary-soft);
+.gf-option-item:hover {
+    background: rgba(var(--gf-primary-rgb), 0.04);
 }
 
-.ds-inline-option input {
-    margin: 0;
-    width: 16px;
-    height: 16px;
-    accent-color: var(--ds-p-primary);
-    cursor: pointer;
+.gf-option-item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gf-option-text {
+    font-size: var(--gf-font-size-base);
+    color: var(--gf-text);
+    flex: 1;
+}
+
+/* Radio Circle */
+.gf-radio-circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--gf-text-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    transition: border-color var(--gf-transition);
 }
 
-.ds-form-footer {
-    margin-top: 40px;
-    padding-top: 32px;
-    border-top: 1px solid var(--ds-p-divider);
+.gf-radio-inner {
+    width: 10px;
+    height: 10px;
+    background: var(--gf-primary);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform var(--gf-transition);
+}
+
+.gf-radio-option input:checked + .gf-radio-circle {
+    border-color: var(--gf-primary);
+}
+
+.gf-radio-option input:checked ~ .gf-radio-circle .gf-radio-inner,
+.gf-radio-option input:checked + .gf-radio-circle .gf-radio-inner {
+    transform: scale(1);
+}
+
+/* Fix for radio - inner is inside circle */
+.gf-radio-option input:checked + .gf-radio-circle .gf-radio-inner {
+    transform: scale(1);
+}
+
+.gf-option-item:has(input:checked) .gf-radio-circle {
+    border-color: var(--gf-primary);
+}
+
+.gf-option-item:has(input:checked) .gf-radio-inner {
+    transform: scale(1);
+}
+
+/* Checkbox Box */
+.gf-checkbox-box {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gf-text-secondary);
+    border-radius: 2px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--gf-transition);
+    background: transparent;
+}
+
+.gf-check-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--gf-white);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all var(--gf-transition);
+}
+
+.gf-option-item:has(input:checked) .gf-checkbox-box {
+    background: var(--gf-primary);
+    border-color: var(--gf-primary);
+}
+
+.gf-option-item:has(input:checked) .gf-check-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Fallback for browsers without :has() */
+.gf-checkbox-option input:checked ~ .gf-checkbox-box,
+.gf-checkbox-option input:checked + .gf-checkbox-box {
+    background: var(--gf-primary);
+    border-color: var(--gf-primary);
+}
+
+/* ========================================
+   FORM FOOTER & BUTTONS
+   ======================================== */
+.gf-form-footer {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
+    padding: var(--gf-space-md) 0;
+    gap: var(--gf-space-md);
 }
 
-.ds-message {
-    font-size: 14px;
-    font-weight: 600;
-    min-height: 24px;
-    display: flex;
-    align-items: center;
-    animation: dsFadeUp 0.3s ease-out;
-}
-
-.ds-message.success {
-    color: var(--ds-p-success);
-}
-
-.ds-message.error {
-    color: var(--ds-p-error);
-}
-
-.ds-submit-btn {
-    background: linear-gradient(135deg, var(--ds-p-primary) 0%, #059669 100%);
-    color: #fff;
+.gf-submit-btn {
+    background: var(--gf-primary);
+    color: var(--gf-white);
     border: none;
-    padding: 12px 28px;
-    font-size: 14px;
-    font-weight: 700;
-    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: var(--gf-font-size-base);
+    font-weight: 500;
+    font-family: var(--gf-font);
+    border-radius: var(--gf-radius-sm);
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    position: relative;
-    overflow: hidden;
-    text-decoration: none !important;
+    transition: all var(--gf-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--gf-space-sm);
+    min-width: 90px;
+    height: 36px;
 }
 
-.ds-submit-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
+.gf-submit-btn:hover {
+    background: var(--gf-primary-hover);
+    box-shadow: 0 1px 3px rgba(var(--gf-primary-rgb), 0.3);
+}
+
+.gf-submit-btn:active {
+    background: var(--gf-primary-dark);
+}
+
+.gf-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.gf-btn-loading {
+    display: none;
+}
+
+.gf-submit-btn.is-loading .gf-btn-text {
+    display: none;
+}
+
+.gf-submit-btn.is-loading .gf-btn-loading {
+    display: flex;
+}
+
+.gf-spinner {
+    width: 20px;
+    height: 20px;
+    animation: gfSpin 1s linear infinite;
+}
+
+@keyframes gfSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.gf-clear-btn {
+    background: transparent;
+    color: var(--gf-primary);
+    border: none;
+    padding: 10px 16px;
+    font-size: var(--gf-font-size-base);
+    font-weight: 500;
+    font-family: var(--gf-font);
+    border-radius: var(--gf-radius-sm);
+    cursor: pointer;
+    transition: background var(--gf-transition);
+}
+
+.gf-clear-btn:hover {
+    background: var(--gf-primary-light);
+}
+
+/* ========================================
+   MESSAGES
+   ======================================== */
+.gf-message-wrap {
+    min-height: 40px;
+    margin-top: var(--gf-space-sm);
+}
+
+.gf-message {
+    padding: var(--gf-space-md);
+    border-radius: var(--gf-radius-sm);
+    font-size: var(--gf-font-size-base);
+    display: none;
+    animation: gfFadeIn 0.3s ease-out;
+}
+
+@keyframes gfFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.gf-message.is-visible {
+    display: block;
+}
+
+.gf-message.is-error {
+    background: var(--gf-error-light);
+    color: var(--gf-error);
+}
+
+.gf-message.is-success {
+    background: var(--gf-success-light);
+    color: var(--gf-success);
+}
+
+/* ========================================
+   SUCCESS SCREEN
+   ======================================== */
+.gf-success-screen {
+    animation: gfFadeIn 0.4s ease-out;
+}
+
+.gf-success-card {
+    background: var(--gf-white);
+    border-radius: var(--gf-radius);
+    padding: var(--gf-space-xl);
+    text-align: center;
+    box-shadow: var(--gf-shadow-sm);
+    border: 1px solid var(--gf-border);
+}
+
+.gf-success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--gf-space-lg);
+    background: var(--gf-success-light);
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gf-success);
 }
 
-.ds-submit-btn:hover {
-    background: linear-gradient(135deg, var(--ds-p-primary-hover) 0%, #047857 100%);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-    transform: translateY(-2px);
+.gf-success-icon svg {
+    width: 32px;
+    height: 32px;
 }
 
-.ds-submit-btn:active::before {
-    width: 300px;
-    height: 300px;
+.gf-success-title {
+    margin: 0 0 var(--gf-space-sm);
+    font-size: var(--gf-font-size-lg);
+    font-weight: 400;
+    color: var(--gf-text);
 }
 
-@media (max-width: 600px) {
-    .ds-survey-container {
-        padding: 32px 20px;
-        margin: 40px 16px;
-        border-radius: 12px;
+.gf-success-text {
+    margin: 0 0 var(--gf-space-lg);
+    font-size: var(--gf-font-size-base);
+    color: var(--gf-text-secondary);
+}
+
+.gf-submit-another {
+    background: transparent;
+    color: var(--gf-primary);
+    border: none;
+    padding: 10px 24px;
+    font-size: var(--gf-font-size-base);
+    font-weight: 500;
+    font-family: var(--gf-font);
+    border-radius: var(--gf-radius-sm);
+    cursor: pointer;
+    transition: background var(--gf-transition);
+}
+
+.gf-submit-another:hover {
+    background: var(--gf-primary-light);
+}
+
+/* ========================================
+   VALIDATION STATES
+   ======================================== */
+.gf-question-card.has-error {
+    border-color: var(--gf-error);
+}
+
+.gf-question-card.has-error .gf-text-input,
+.gf-question-card.has-error .gf-textarea-input {
+    border-bottom-color: var(--gf-error);
+}
+
+.gf-question-card.has-error .gf-q-label {
+    color: var(--gf-error);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+    .gf-survey-wrap {
+        padding: var(--gf-space-md) var(--gf-space-sm);
     }
-
-    .ds-survey-title {
-        font-size: 24px;
+    
+    .gf-header-content,
+    .gf-q-content {
+        padding: var(--gf-space-md);
     }
-
-    .ds-form-footer {
-        flex-direction: column;
+    
+    .gf-survey-title {
+        font-size: var(--gf-font-size-lg);
+    }
+    
+    .gf-form-footer {
+        flex-direction: column-reverse;
         align-items: stretch;
     }
-
-    .ds-submit-btn {
+    
+    .gf-submit-btn {
         width: 100%;
+        justify-content: center;
     }
-
-    .ds-message {
-        order: -1;
+    
+    .gf-clear-btn {
         width: 100%;
+        text-align: center;
     }
 }
 
-.ds-message {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.ds-message.success {
-    color: #10B981;
-}
-
-.ds-message.error {
-    color: #EF4444;
-}
-
-@media (max-width: 600px) {
-    .ds-survey-container {
-        padding: 30px 20px;
-        margin: 20px 10px;
+@media (max-width: 480px) {
+    .gf-survey-wrap {
+        padding: var(--gf-space-sm);
     }
+    
+    .gf-question-card {
+        border-radius: var(--gf-radius-sm);
+    }
+    
+    .gf-header-card {
+        border-radius: var(--gf-radius-sm);
+    }
+    
+    .gf-option-item {
+        padding: var(--gf-space-md) var(--gf-space-xs);
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+    .gf-survey-wrap {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .gf-question-card,
+    .gf-header-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+    
+    .gf-form-footer,
+    .gf-clear-btn {
+        display: none;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    .gf-question-card,
+    .gf-submit-btn,
+    .gf-option-item,
+    .gf-radio-inner,
+    .gf-check-icon {
+        transition: none;
+        animation: none;
+    }
+}
+
+.gf-option-item:focus-visible {
+    outline: 2px solid var(--gf-primary);
+    outline-offset: 2px;
+}
+
+.gf-submit-btn:focus-visible,
+.gf-clear-btn:focus-visible {
+    outline: 2px solid var(--gf-primary);
+    outline-offset: 2px;
+}
+
+/* Screen reader only */
+.gf-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

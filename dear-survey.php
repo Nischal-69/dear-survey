@@ -1,12 +1,13 @@
 <?php
-/**
+/*
  * Plugin Name: Dear Survey
- * Plugin URI:  https://example.com/dear-survey
+ * Plugin URI:  https://wordpress.org/plugins/dear-survey
  * Description: An advanced, high-performance Survey Maker with a premium SaaS-style interface.
  * Version:     1.0.0
  * Author:      Your Name
+ * License:     GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: dear-survey
- * Domain Path: /languages
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +22,7 @@ define( 'DEAR_SURVEY_VERSION', '1.0.0' );
 define( 'DEAR_SURVEY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'DEAR_SURVEY_URL', plugin_dir_url( __FILE__ ) );
 define( 'DEAR_SURVEY_DB_VERSION', '1.1' ); // Bumped version for new schema cleanup
-define( 'DEAR_SURVEY_DEBUG', true );
+define( 'DEAR_SURVEY_DEBUG', false ); // Set to false for production
 
 // Include core classes
 require_once DEAR_SURVEY_PATH . 'includes/class-dear-survey-db.php';
@@ -95,7 +96,10 @@ class Dear_Survey {
 		add_action( 'wp_enqueue_scripts', function() {
 			wp_enqueue_style( 'dear-survey-front-css', DEAR_SURVEY_URL . 'public/css/dear-survey-public.css', array(), DEAR_SURVEY_VERSION );
 			wp_enqueue_script( 'dear-survey-front', DEAR_SURVEY_URL . 'public/js/dear-survey-public.js', array( 'jquery' ), DEAR_SURVEY_VERSION, true );
-			wp_localize_script( 'dear-survey-front', 'dear_survey_obj', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+			wp_localize_script( 'dear-survey-front', 'dear_survey_obj', array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'ds_submit_survey_nonce' ),
+			) );
 		} );
 	}
 }
