@@ -4,13 +4,17 @@
  * Google Forms-inspired UI/UX (Visual Only)
  */
 
-class Dear_Survey_Builder {
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+class DearSurvey_Builder {
 
 	private $db;
 
 	public function __construct( $db ) { $this->db = $db; }
 
 	public function render() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- ID parameter is only used for loading survey data
 		$survey_id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
 		$survey = $survey_id ? $this->db->get_survey( $survey_id ) : null;
 		$title = $survey ? $survey['title'] : '';
@@ -18,7 +22,7 @@ class Dear_Survey_Builder {
 		$settings = $survey ? json_decode( $survey['settings'], true ) : [];
 
 		require_once dirname( __FILE__ ) . '/menu.php';
-		$menu = new Dear_Survey_Menu( $this->db );
+		$menu = new DearSurvey_Menu( $this->db );
 		?>
 		<!-- Google Forms Inspired Styles -->
 		<style>
@@ -578,6 +582,10 @@ class Dear_Survey_Builder {
 		.gf-icon-btn.gf-delete:hover {
 			color: #d93025;
 			background: #fce8e6;
+		}
+		.gf-icon-btn.gf-add-q-btn:hover {
+			color: #673AB7;
+			background: #f0ebf8;
 		}
 		/* Vertical Divider */
 		.gf-divider-v { 
@@ -1279,7 +1287,7 @@ class Dear_Survey_Builder {
 						<span style="color: var(--gf-primary); font-weight: 600;">Dear Survey</span>
 					</div>
 					<div style="display:flex; gap:12px; align-items:center;">
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-list'); ?>" style="padding:10px 16px; color:#5F6368; text-decoration:none; font-size:14px;">Cancel</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-list') ); ?>" style="padding:10px 16px; color:#5F6368; text-decoration:none; font-size:14px;">Cancel</a>
 						<button type="submit" form="ds-survey-form" class="gf-btn-primary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:18px; height:18px;"><path d="M4.5 12.75l6 6 9-13.5"/></svg>
 							<?php echo $survey_id ? 'Save' : 'Create'; ?>
@@ -1288,7 +1296,7 @@ class Dear_Survey_Builder {
 				</div>
 				
 				<form id="ds-survey-form">
-					<input type="hidden" id="survey_id" value="<?php echo $survey_id; ?>">
+					<input type="hidden" id="survey_id" value="<?php echo esc_attr( $survey_id ); ?>">
 					
 					<!-- Header Card -->
 					<div class="gf-card gf-card-header gf-animate">
@@ -1461,13 +1469,13 @@ class Dear_Survey_Builder {
 					
 					let optionsHtml = '';
 					if (q.type === 'radio' || q.type === 'checkbox') {
-						const opts = q.options ? q.options.split(',') : ['Option 1'];
+						const opts = q.options ? q.options.split(',') : [''];
 						optionsHtml = `
 							<div class="gf-options-container">
 								${opts.map((opt, oIdx) => `
 									<div class="gf-option-row">
 										<div class="gf-option-icon ${optionIconClass}"></div>
-										<input type="text" class="gf-option-input option-input" data-qindex="${index}" data-oindex="${oIdx}" value="${opt.trim()}" placeholder="Option ${oIdx + 1}" autocomplete="off">
+										<input type="text" class="gf-option-input option-input" data-qindex="${index}" data-oindex="${oIdx}" value="${opt.trim()}" placeholder="Enter option ${oIdx + 1}" autocomplete="off">
 										<button type="button" class="gf-option-delete" onclick="event.stopPropagation(); removeOption(${index}, ${oIdx})" title="Remove">
 											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
 										</button>
@@ -1570,6 +1578,30 @@ class Dear_Survey_Builder {
 				}
 			};
 			
+			window.addQuestionAfter = function(index) {
+				const newQuestion = { title: '', type: 'radio', options: '', required: false };
+				questions.splice(index + 1, 0, newQuestion);
+				activeQuestionIndex = index + 1;
+				renderQuestions();
+				
+				// Animate the new card
+				const newCard = document.getElementById(`q-item-${activeQuestionIndex}`);
+				if (newCard) {
+					newCard.classList.add('gf-new');
+					setTimeout(() => {
+						newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}, 50);
+					setTimeout(() => {
+						const titleInput = newCard.querySelector('.q-title');
+						if (titleInput) titleInput.focus();
+						newCard.classList.add('gf-pulse');
+					}, 400);
+					setTimeout(() => {
+						newCard.classList.remove('gf-new', 'gf-pulse');
+					}, 1000);
+				}
+			};
+			
 			window.toggleRequired = function(index) {
 				questions[index].required = !questions[index].required;
 				// Animate just the toggle, not full re-render
@@ -1611,7 +1643,7 @@ class Dear_Survey_Builder {
 			window.addOption = function(qIndex) {
 				const q = questions[qIndex];
 				let currentOpts = q.options ? q.options.split(',') : [];
-				currentOpts.push('Option ' + (currentOpts.length + 1));
+				currentOpts.push('');
 				questions[qIndex].options = currentOpts.join(',');
 				renderQuestions();
 			};
@@ -1626,7 +1658,7 @@ class Dear_Survey_Builder {
 			};
 
 			$('#add-question').on('click', function() {
-				questions.push({ title: '', type: 'radio', options: 'Option 1', required: false });
+				questions.push({ title: '', type: 'radio', options: '', required: false });
 				activeQuestionIndex = questions.length - 1;
 				renderQuestions();
 				
@@ -1671,7 +1703,7 @@ class Dear_Survey_Builder {
 				const newType = $(this).val();
 				questions[index].type = newType;
 				if ((newType === 'radio' || newType === 'checkbox') && !questions[index].options) {
-					questions[index].options = 'Option 1';
+					questions[index].options = '';
 				}
 				renderQuestions();
 			});
@@ -1739,7 +1771,7 @@ class Dear_Survey_Builder {
 					recipients: recipients,
 					subject: $('#ds-outreach-subject').val(),
 					message: $('#ds-outreach-message').val(),
-					security: '<?php echo wp_create_nonce("ds_outreach"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_outreach") ); ?>'
 				}, function(res) {
 					btn.prop('disabled', false).html('<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg> Send Invitations');
 					if(res.success) { alert('Emails sent successfully!'); $('#ds-outreach-emails').val(''); }
@@ -1765,7 +1797,7 @@ class Dear_Survey_Builder {
 						auto_subject: $('#ds-setting-auto-subject').val(),
 						auto_body: $('#ds-setting-auto-body').val()
 					}),
-					security: '<?php echo wp_create_nonce("ds_save_survey"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_save_survey") ); ?>'
 				};
 
 				$.post(ajaxurl, data, function(response) {
@@ -1798,12 +1830,14 @@ class Dear_Survey_Builder {
 
 	public function ajax_save_survey() {
 		check_ajax_referer( 'ds_save_survey', 'security' );
-		if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Forbidden' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
 		
-		$id = intval( $_POST['id'] );
-		$title = sanitize_text_field( $_POST['title'] );
-		$questions = wp_unslash( $_POST['questions'] );
-		$settings = wp_unslash( $_POST['settings'] );
+		$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
+		$title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
+		$questions = isset( $_POST['questions'] ) ? sanitize_text_field( wp_unslash( $_POST['questions'] ) ) : '[]';
+		$settings = isset( $_POST['settings'] ) ? sanitize_text_field( wp_unslash( $_POST['settings'] ) ) : '{}';
 		
 		// Basic validation
 		json_decode( $questions );
@@ -1826,12 +1860,14 @@ class Dear_Survey_Builder {
 
 	public function ajax_send_outreach() {
 		check_ajax_referer( 'ds_outreach', 'security' );
-		if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Forbidden' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
 
-		$survey_id = intval( $_POST['survey_id'] );
-		$recipients_raw = sanitize_text_field( $_POST['recipients'] );
-		$subject = sanitize_text_field( $_POST['subject'] );
-		$message_body = wp_kses_post( wp_unslash( $_POST['message'] ) );
+		$survey_id = isset( $_POST['survey_id'] ) ? intval( $_POST['survey_id'] ) : 0;
+		$recipients_raw = isset( $_POST['recipients'] ) ? sanitize_text_field( wp_unslash( $_POST['recipients'] ) ) : '';
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		$message_body = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : '';
 
 		$survey = $this->db->get_survey( $survey_id );
 		if ( ! $survey ) wp_send_json_error( 'Survey not found' );

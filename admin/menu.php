@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Dear_Survey_Menu {
+class DearSurvey_Menu {
 
 	private $db;
 
@@ -19,13 +19,13 @@ class Dear_Survey_Menu {
 		// Handle Delete Action with nonce verification
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['id'] ) ) {
 			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'ds_delete_survey_' . intval( $_GET['id'] ) ) ) {
-				wp_die( esc_html__( 'Security check failed.', 'dear survey' ) );
+				wp_die( esc_html__( 'Security check failed.', 'dear-survey' ) );
 			}
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( esc_html__( 'Unauthorized access.', 'dear survey' ) );
+				wp_die( esc_html__( 'Unauthorized access.', 'dear-survey' ) );
 			}
 			$this->db->delete_survey( intval( $_GET['id'] ) );
-			wp_redirect( admin_url( 'admin.php?page=dear-survey-list&deleted=true' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=dear-survey-list&deleted=true' ) );
 			exit;
 		}
 
@@ -52,19 +52,19 @@ class Dear_Survey_Menu {
 				Dear Survey
 			</div>
 			<nav>
-				<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item <?php echo $active_page == 'home' ? 'active' : ''; ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'home' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
 					Home
 				</a>
-				<a href="<?php echo admin_url('admin.php?page=dear-survey-list'); ?>" class="ds-nav-item <?php echo $active_page == 'surveys' ? 'active' : ''; ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-list') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'surveys' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
 					Surveys
 				</a>
-				<a href="<?php echo admin_url('admin.php?page=dear-survey-contacts'); ?>" class="ds-nav-item <?php echo $active_page == 'contacts' ? 'active' : ''; ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-contacts') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'contacts' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
 					Contacts
 				</a>
-				<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item" style="margin-top: 16px; background: var(--ds-primary); color: white; border-radius: 4px; margin-left: 0; padding-left: 16px;">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-nav-item" style="margin-top: 16px; background: var(--ds-primary); color: white; border-radius: 4px; margin-left: 0; padding-left: 16px;">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 					New Survey
 				</a>
@@ -87,7 +87,7 @@ class Dear_Survey_Menu {
 						<div style="font-size: 12px; font-weight: 500; color: var(--ds-primary); margin-bottom: 4px; letter-spacing: 0.5px;">DASHBOARD</div>
 						<h1 class="ds-title">Dear Survey</h1>
 					</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px; height:18px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 						Create Survey
 					</a>
@@ -96,12 +96,12 @@ class Dear_Survey_Menu {
 				<div class="ds-stats-grid">
 					<div class="ds-stat-card" style="border-top: 4px solid var(--ds-primary);">
 						<div class="ds-stat-label">Total Surveys</div>
-						<div class="ds-stat-value"><?php echo $total_surveys; ?></div>
+						<div class="ds-stat-value"><?php echo esc_html( $total_surveys ); ?></div>
 						<div style="margin-top: 12px; font-size: 13px; color: var(--ds-text-light);">Active forms in your workspace</div>
 					</div>
 					<div class="ds-stat-card" style="border-top: 4px solid var(--ds-info);">
 						<div class="ds-stat-label">Total Responses</div>
-						<div class="ds-stat-value"><?php echo $total_responses; ?></div>
+						<div class="ds-stat-value"><?php echo esc_html( $total_responses ); ?></div>
 						<div style="margin-top: 12px; font-size: 13px; color: var(--ds-text-light);">Collected submissions</div>
 					</div>
 				</div>
@@ -110,15 +110,15 @@ class Dear_Survey_Menu {
 				<div class="ds-card" style="border-top: 4px solid var(--ds-primary);">
 					<h3 style="margin: 0 0 20px; font-size: 16px; font-weight: 500; color: var(--ds-secondary);">Quick Actions</h3>
 					<div style="display: flex; gap: 12px; flex-wrap: wrap;">
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 							New Survey
 						</a>
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-contacts'); ?>" class="ds-btn ds-btn-secondary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-contacts') ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
 							Contacts
 						</a>
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-list'); ?>" class="ds-btn ds-btn-secondary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-list') ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
 							All Surveys
 						</a>
@@ -150,13 +150,13 @@ class Dear_Survey_Menu {
 									<tr>
 										<td>
 											<div style="font-weight: 500; color: var(--ds-secondary);"><?php echo esc_html( $survey['title'] ); ?></div>
-											<div style="font-size: 12px; color: var(--ds-text-light); margin-top: 2px;"><?php echo date_i18n( 'M j, Y', strtotime($survey['created_at']) ); ?></div>
+											<div style="font-size: 12px; color: var(--ds-text-light); margin-top: 2px;"><?php echo esc_html( date_i18n( 'M j, Y', strtotime($survey['created_at']) ) ); ?></div>
 										</td>
 										<td>
-											<span class="ds-badge ds-badge-indigo"><?php echo $response_count; ?> responses</span>
+											<span class="ds-badge ds-badge-indigo"><?php echo esc_html( $response_count ); ?> responses</span>
 										</td>
 										<td style="text-align: right;">
-											<a href="<?php echo admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ); ?>" class="ds-btn ds-btn-secondary" style="padding: 6px 16px;">Edit</a>
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 6px 16px;">Edit</a>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -178,7 +178,7 @@ class Dear_Survey_Menu {
 			<div class="ds-main-content">
 				<div class="ds-top-bar">
 					<h1 class="ds-title">Surveys</h1>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 						New Survey
 					</a>
@@ -191,7 +191,7 @@ class Dear_Survey_Menu {
 							</svg>
 							<h3>No surveys yet</h3>
 							<p>Create your first survey to start collecting responses.</p>
-							<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-btn ds-btn-primary" style="margin-top: 16px;">Create Survey</a>
+							<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary" style="margin-top: 16px;">Create Survey</a>
 						</div>
 					</div>
 				<?php else : ?>
@@ -214,22 +214,22 @@ class Dear_Survey_Menu {
 									<tr>
 										<td>
 											<div style="font-weight: 500; color: var(--ds-secondary);"><?php echo esc_html( $survey['title'] ); ?></div>
-											<div style="font-size: 12px; color: var(--ds-text-light); margin-top: 2px;"><?php echo date_i18n( 'M j, Y', strtotime($survey['created_at']) ); ?></div>
+											<div style="font-size: 12px; color: var(--ds-text-light); margin-top: 2px;"><?php echo esc_html( date_i18n( 'M j, Y', strtotime($survey['created_at']) ) ); ?></div>
 										</td>
 										<td>
-											<a href="<?php echo admin_url( 'admin.php?page=dear-survey-results&id=' . $survey['id'] ); ?>" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ds-primary); font-weight: 500;">
-												<span class="ds-badge ds-badge-indigo"><?php echo $response_count; ?></span>
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-results&id=' . $survey['id'] ) ); ?>" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ds-primary); font-weight: 500;">
+												<span class="ds-badge ds-badge-indigo"><?php echo esc_html( $response_count ); ?></span>
 												View
 											</a>
 										</td>
 										<td>
 											<div class="ds-shortcode">
-												<code style="font-size: 13px;">[dear_survey id="<?php echo $survey['id']; ?>"]</code>
+												<code style="font-size: 13px;">[dearsurvey id="<?php echo esc_attr( $survey['id'] ); ?>"]</code>
 											</div>
 										</td>
 										<td style="text-align:right;">
 											<div style="display: flex; gap: 8px; justify-content: flex-end;">
-												<a href="<?php echo admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ); ?>" class="ds-btn ds-btn-secondary" style="padding: 8px 16px;">Edit</a>
+												<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 8px 16px;">Edit</a>
 												<button class="ds-btn ds-btn-outlined ds-delete-trigger" data-href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dear-survey&action=delete&id=' . $survey['id'] ), 'ds_delete_survey_' . $survey['id'] ) ); ?>" style="padding: 8px 16px; color: var(--ds-error); border-color: var(--ds-error);">Delete</button>
 											</div>
 										</td>
@@ -299,7 +299,7 @@ class Dear_Survey_Menu {
 			<div class="ds-main-content">
 				<div class="ds-top-bar">
 					<h1 class="ds-title">Contacts</h1>
-					<span class="ds-badge ds-badge-indigo" style="padding: 8px 16px; font-size: 13px;"><?php echo count($contacts); ?> contacts</span>
+					<span class="ds-badge ds-badge-indigo" style="padding: 8px 16px; font-size: 13px;"><?php echo esc_html( count($contacts) ); ?> contacts</span>
 				</div>
 				<?php if (empty($contacts)) : ?>
 					<div class="ds-card">
@@ -328,7 +328,7 @@ class Dear_Survey_Menu {
 										<td>
 											<div style="display: flex; align-items: center; gap: 12px;">
 												<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--ds-primary-soft); color: var(--ds-primary); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 14px;">
-													<?php echo strtoupper(substr($contact['email'], 0, 1)); ?>
+													<?php echo esc_html( strtoupper( substr( $contact['email'], 0, 1 ) ) ); ?>
 												</div>
 												<span style="font-weight: 500;"><?php echo esc_html($contact['email']); ?></span>
 											</div>
@@ -340,7 +340,7 @@ class Dear_Survey_Menu {
 											<?php endforeach; ?>
 											</div>
 										</td>
-										<td style="color: var(--ds-text-light);"><?php echo date_i18n('M j, Y', strtotime($contact['last_activity'])); ?></td>
+										<td style="color: var(--ds-text-light);"><?php echo esc_html( date_i18n('M j, Y', strtotime($contact['last_activity'])) ); ?></td>
 									</tr>
 								<?php endforeach; ?>
 							</tbody>
@@ -355,13 +355,13 @@ class Dear_Survey_Menu {
 
 	public function render_builder() {
 		require_once dirname( __FILE__ ) . '/survey-builder.php';
-		$builder = new Dear_Survey_Builder( $this->db );
+		$builder = new DearSurvey_Builder( $this->db );
 		$builder->render();
 	}
 
 	public function render_survey_results() {
 		require_once dirname( __FILE__ ) . '/results.php';
-		$results = new Dear_Survey_Results( $this->db );
+		$results = new DearSurvey_Results( $this->db );
 		$results->render_results();
 	}
 }

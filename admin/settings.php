@@ -4,12 +4,12 @@
  * Markup Overhaul for Premium UI/UX Refactor
  */
 
-class Dear_Survey_Settings {
+class DearSurvey_Settings {
 
 	public function render_settings() {
 		require_once dirname( __FILE__ ) . '/menu.php';
-		global $dear_survey_db;
-		$menu = new Dear_Survey_Menu( $dear_survey_db );
+		global $dearsurvey_db;
+		$menu = new DearSurvey_Menu( $dearsurvey_db );
 		?>
 		<div class="ds-app-container ds-animate">
 			<?php $menu->get_sidebar('settings'); ?>

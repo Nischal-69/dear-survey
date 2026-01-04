@@ -3,7 +3,7 @@
  * Email Management Class for Broadcasts, Templates, and Mailing Lists
  */
 
-class Dear_Survey_Email {
+class DearSurvey_Email {
 
 	private $db;
 
@@ -12,7 +12,8 @@ class Dear_Survey_Email {
 	}
 
 	public function render_page() {
-		$view = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : 'broadcast';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- View parameter is only used for display routing
+		$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'broadcast';
 		?>
 		<div class="ds-app-container ds-animate">
 			<!-- Sidebar -->
@@ -25,23 +26,23 @@ class Dear_Survey_Email {
 				</div>
 				<nav>
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey'); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
 						Surveys List
 					</a>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-builder'); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
 						Create New Survey
 					</a>
 					
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Outreach</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-email'); ?>" class="ds-nav-item active">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email') ); ?>" class="ds-nav-item active">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 20 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
 						Email Broadcast
 					</a>
 
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
-					<a href="<?php echo admin_url('admin.php?page=dear-survey-settings'); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-settings') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
 						Global Settings
 					</a>
@@ -56,9 +57,9 @@ class Dear_Survey_Email {
 						<h1 class="ds-title">Email Broadcast</h1>
 					</div>
 					<div style="display:flex; gap:10px;">
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=subscribers'); ?>" class="ds-btn ds-btn-secondary">Contacts</a>
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=template'); ?>" class="ds-btn ds-btn-secondary">Templates</a>
-						<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast'); ?>" class="ds-btn ds-btn-primary">Send Survey</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=subscribers') ); ?>" class="ds-btn ds-btn-secondary">Contacts</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=template') ); ?>" class="ds-btn ds-btn-secondary">Templates</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast') ); ?>" class="ds-btn ds-btn-primary">Send Survey</a>
 					</div>
 				</div>
 
@@ -97,8 +98,8 @@ class Dear_Survey_Email {
 						<?php foreach ( $broadcasts as $b ) : ?>
 							<tr>
 								<td style="font-weight:700;"><?php echo esc_html($b['subject']); ?></td>
-								<td><span class="ds-badge ds-badge-indigo"><?php echo count(explode(',', $b['recipients'])); ?> People</span></td>
-								<td><?php echo date_i18n( 'M j, Y H:i', strtotime($b['sent_at']) ); ?></td>
+								<td><span class="ds-badge ds-badge-indigo"><?php echo esc_html( count(explode(',', $b['recipients'])) ); ?> People</span></td>
+								<td><?php echo esc_html( date_i18n( 'M j, Y H:i', strtotime($b['sent_at']) ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					<?php endif; ?>
@@ -122,37 +123,42 @@ class Dear_Survey_Email {
 							<select id="ds-survey-selector" class="ds-input-field">
 								<option value="">Choose a survey...</option>
 								<?php foreach($surveys as $s): ?>
-									<option value="<?php echo $s['id']; ?>"><?php echo esc_html($s['title']); ?></option>
+									<option value="<?php echo esc_attr( $s['id'] ); ?>"><?php echo esc_html($s['title']); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
 
 						<div class="ds-mb-4" style="margin-bottom:25px;">
 							<label class="ds-label">2. Select Recipients</label>
+							<?php
+							// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Recipients parameter is only used for pre-filling form
+							$url_recipients = isset( $_GET['recipients'] ) ? sanitize_text_field( wp_unslash( $_GET['recipients'] ) ) : '';
+							$url_recipients_array = $url_recipients ? explode( ',', $url_recipients ) : array();
+							?>
 							<div style="max-height:150px; overflow-y:auto; border:1px solid var(--ds-border); border-radius:10px; padding:15px; margin-bottom:10px;">
 								<?php if(empty($subscribers)): ?>
 									<p style="font-size:13px; color:var(--ds-text-light);">No contacts in your mailing list yet.</p>
 								<?php else: ?>
 									<?php foreach($subscribers as $sub): ?>
 										<label style="display:flex; align-items:center; gap:10px; margin-bottom:10px; cursor:pointer; font-size:14px;">
-											<input type="checkbox" class="ds-sub-checkbox" value="<?php echo esc_attr($sub['email']); ?>" <?php if(isset($_GET['recipients']) && in_array($sub['email'], explode(',', $_GET['recipients']))) echo 'checked'; ?>>
+											<input type="checkbox" class="ds-sub-checkbox" value="<?php echo esc_attr($sub['email']); ?>" <?php if( in_array( $sub['email'], $url_recipients_array, true ) ) echo 'checked'; ?>>
 											<?php echo esc_html($sub['name'] ?: $sub['email']); ?>
 										</label>
 									<?php endforeach; ?>
 								<?php endif; ?>
 							</div>
-							<?php $pre_recipients = isset($_GET['recipients']) ? sanitize_text_field($_GET['recipients']) : ''; ?>
-							<textarea id="ds-broadcast-recipients" class="ds-input-field" rows="2" placeholder="Or enter emails manually (comma separated)..."><?php echo esc_textarea($pre_recipients); ?></textarea>
+							<textarea id="ds-broadcast-recipients" class="ds-input-field" rows="2" placeholder="Or enter emails manually (comma separated)..."><?php echo esc_textarea($url_recipients); ?></textarea>
 						</div>
 
 						<div class="ds-mb-4" style="margin-bottom:25px;">
 							<label class="ds-label">3. Message</label>
 							<select id="ds-template-selector" class="ds-input-field" style="margin-bottom:15px;">
 								<option value="">Write your own</option>
-								<?php 
-								$pre_select_id = isset($_GET['temp_id']) ? intval($_GET['temp_id']) : 0;
+							<?php
+							// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- temp_id parameter is only used for pre-selecting template
+							$pre_select_id = isset( $_GET['temp_id'] ) ? intval( $_GET['temp_id'] ) : 0;
 								foreach($templates as $t): ?>
-									<option value="<?php echo $t['id']; ?>" data-content="<?php echo esc_attr($t['content']); ?>" data-subject="<?php echo esc_attr($t['subject']); ?>" <?php selected($pre_select_id, $t['id']); ?>><?php echo esc_html($t['name']); ?> (Template)</option>
+									<option value="<?php echo esc_attr( $t['id'] ); ?>" data-content="<?php echo esc_attr($t['content']); ?>" data-subject="<?php echo esc_attr($t['subject']); ?>" <?php selected($pre_select_id, $t['id']); ?>><?php echo esc_html($t['name']); ?> (Template)</option>
 								<?php endforeach; ?>
 							</select>
 							<input type="text" id="ds-broadcast-subject" class="ds-input-field" placeholder="Email Subject" required style="margin-bottom:15px;">
@@ -211,13 +217,13 @@ class Dear_Survey_Email {
 					subject: $('#ds-broadcast-subject').val(),
 					message: message,
 					survey_id: surveyId,
-					security: '<?php echo wp_create_nonce("ds_broadcast"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_broadcast") ); ?>'
 				};
 
 				$.post(ajaxurl, data, function(res) {
 					if(res.success) {
 						alert('Broadcast sent successfully!');
-						window.location.href = '<?php echo admin_url("admin.php?page=dear-survey-email"); ?>';
+						window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email") ); ?>';
 					} else {
 						alert('Error: ' + res.data);
 						btn.prop('disabled', false).text('Send Survey Link');
@@ -251,8 +257,8 @@ class Dear_Survey_Email {
 								<td><?php echo esc_html($t['subject']); ?></td>
 								<td style="text-align:right;">
 									<div style="display:flex; justify-content:flex-end; gap:8px;">
-										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast&temp_id=' . $t['id']); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Use This</a>
-										<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=edit_template&id=' . $t['id']); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit</a>
+											<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast&temp_id=' . $t['id']) ); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Use This</a>
+											<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=edit_template&id=' . $t['id']) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit</a>
 									</div>
 								</td>
 							</tr>
@@ -262,18 +268,19 @@ class Dear_Survey_Email {
 			</table>
 		</div>
 		<div style="margin-top:20px; text-align:right;">
-			<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_template'); ?>" class="ds-btn ds-btn-secondary">+ Create Template</a>
+			<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_template') ); ?>" class="ds-btn ds-btn-secondary">+ Create Template</a>
 		</div>
 		<?php
 	}
 
 	private function render_template_form() {
-		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-		$template = $id ? $this->db->get_template($id) : null;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- ID parameter is only used for loading template data
+		$id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
+		$template = $id ? $this->db->get_template( $id ) : null;
 		?>
 		<div class="ds-card">
 			<form id="ds-template-form">
-				<input type="hidden" id="template_id" value="<?php echo $id; ?>">
+				<input type="hidden" id="template_id" value="<?php echo esc_attr( $id ); ?>">
 				<div class="ds-mb-4" style="margin-bottom:25px;">
 					<label class="ds-label">Template Name</label>
 					<input type="text" id="template_name" class="ds-input-field" value="<?php echo $template ? esc_attr($template['name']) : ''; ?>" placeholder="e.g. Feedback Invitation" required>
@@ -302,12 +309,12 @@ class Dear_Survey_Email {
 					name: $('#template_name').val(),
 					subject: $('#template_subject').val(),
 					content: $('#template_content').val(),
-					security: '<?php echo wp_create_nonce("ds_template"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_template") ); ?>'
 				};
 
 				$.post(ajaxurl, data, function(res) {
 					if(res.success) {
-						window.location.href = '<?php echo admin_url("admin.php?page=dear-survey-email&view=template"); ?>';
+						window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email&view=template") ); ?>';
 					} else {
 						alert('Save failed.');
 						btn.prop('disabled', false).text('Save Template');
@@ -343,19 +350,19 @@ class Dear_Survey_Email {
 								<tr><td colspan="4" style="text-align:center; padding:60px; color:var(--ds-text-light);">Your contact list is empty.</td></tr>
 							<?php else : ?>
 								<?php foreach($subscribers as $s): ?>
-									<tr id="sub-row-<?php echo $s['id']; ?>">
+									<tr id="sub-row-<?php echo esc_attr( $s['id'] ); ?>">
 										<td><input type="checkbox" class="ds-sub-item-check" value="<?php echo esc_attr($s['email']); ?>"></td>
 										<td>
 											<div style="font-weight:700; color:var(--ds-secondary);"><?php echo esc_html($s['name'] ?: 'No Name'); ?></div>
 											<div style="font-size:13px; color:var(--ds-text-light);"><?php echo esc_html($s['email']); ?></div>
 										</td>
-										<td><?php echo date_i18n( 'M j, Y', strtotime($s['created_at']) ); ?></td>
+										<td><?php echo esc_html( date_i18n( 'M j, Y', strtotime($s['created_at']) ) ); ?></td>
 										<td style="text-align:right;">
 											<div style="display:flex; justify-content:flex-end; gap:8px;">
-												<a href="<?php echo admin_url('admin.php?page=dear-survey-email&view=new_broadcast&recipients=' . urlencode($s['email'])); ?>" class="ds-btn ds-btn-secondary" style="padding:8px; border:none;" title="Send Message">
+												<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast&recipients=' . urlencode($s['email'])) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px; border:none;" title="Send Message">
 													<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
 												</a>
-												<button type="button" class="ds-btn ds-btn-secondary ds-delete-sub" data-id="<?php echo $s['id']; ?>" style="padding:8px; color:#EF4444; border:none;">
+												<button type="button" class="ds-btn ds-btn-secondary ds-delete-sub" data-id="<?php echo esc_attr( $s['id'] ); ?>" style="padding:8px; color:#EF4444; border:none;">
 													<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;"><path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
 												</button>
 											</div>
@@ -394,7 +401,7 @@ class Dear_Survey_Email {
 					action: 'ds_add_subscriber',
 					name: $('#ds-sub-name').val(),
 					email: $('#ds-sub-email').val(),
-					security: '<?php echo wp_create_nonce("ds_subscriber"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_subscriber") ); ?>'
 				}, function(res) {
 					if(res.success) window.location.reload();
 					else { alert(res.data); btn.prop('disabled', false).text('Add Contact'); }
@@ -409,7 +416,7 @@ class Dear_Survey_Email {
 				const selected = [];
 				$('.ds-sub-item-check:checked').each(function() { selected.push($(this).val()); });
 				if(selected.length === 0) { alert('Select contacts first.'); return; }
-				window.location.href = '<?php echo admin_url("admin.php?page=dear-survey-email&view=new_broadcast&recipients="); ?>' + encodeURIComponent(selected.join(','));
+				window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email&view=new_broadcast&recipients=") ); ?>' + encodeURIComponent(selected.join(','));
 			});
 
 			$('.ds-delete-sub').click(function() {
@@ -418,7 +425,7 @@ class Dear_Survey_Email {
 				$.post(ajaxurl, {
 					action: 'ds_remove_subscriber',
 					id: id,
-					security: '<?php echo wp_create_nonce("ds_subscriber"); ?>'
+					security: '<?php echo esc_js( wp_create_nonce("ds_subscriber") ); ?>'
 				}, function() { $('#sub-row-'+id).fadeOut(); });
 			});
 		});
@@ -427,30 +434,43 @@ class Dear_Survey_Email {
 	}
 
 	public function ajax_add_subscriber() {
-		check_ajax_referer('ds_subscriber', 'security');
-		if(!current_user_can('manage_options')) wp_send_json_error('Forbidden');
-		$email = sanitize_email($_POST['email']);
-		$name = sanitize_text_field($_POST['name']);
-		if(!$email) wp_send_json_error('Email required.');
-		$this->db->add_subscriber($email, $name);
+		check_ajax_referer( 'ds_subscriber', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
+		$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		if ( ! $email ) {
+			wp_send_json_error( 'Email required.' );
+		}
+		$this->db->add_subscriber( $email, $name );
 		wp_send_json_success();
 	}
 
 	public function ajax_remove_subscriber() {
-		check_ajax_referer('ds_subscriber', 'security');
-		if(!current_user_can('manage_options')) wp_send_json_error('Forbidden');
-		$this->db->delete_subscriber(intval($_POST['id']));
+		check_ajax_referer( 'ds_subscriber', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
+		$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
+		if ( ! $id ) {
+			wp_send_json_error( 'Invalid ID' );
+		}
+		$this->db->delete_subscriber( $id );
 		wp_send_json_success();
 	}
 
 	public function ajax_send_broadcast() {
-		check_ajax_referer('ds_broadcast', 'security');
-		if(!current_user_can('manage_options')) wp_send_json_error('Forbidden');
+		check_ajax_referer( 'ds_broadcast', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
 
-		$recipients = explode(',', $_POST['recipients']);
-		$subject = sanitize_text_field($_POST['subject']);
-		$message = wp_kses_post(wp_unslash($_POST['message']));
-		$survey_id = intval($_POST['survey_id']);
+		$recipients_raw = isset( $_POST['recipients'] ) ? sanitize_text_field( wp_unslash( $_POST['recipients'] ) ) : '';
+		$recipients = explode( ',', $recipients_raw );
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		$message = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : '';
+		$survey_id = isset( $_POST['survey_id'] ) ? intval( $_POST['survey_id'] ) : 0;
 
 		// Auto-append survey link if survey_id is provided
 		if ($survey_id) {
@@ -486,15 +506,17 @@ class Dear_Survey_Email {
 	}
 
 	public function ajax_save_template() {
-		check_ajax_referer('ds_template', 'security');
-		if(!current_user_can('manage_options')) wp_send_json_error('Forbidden');
+		check_ajax_referer( 'ds_template', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Forbidden' );
+		}
 
-		$this->db->save_template([
-			'id' => intval($_POST['id']),
-			'name' => sanitize_text_field($_POST['name']),
-			'subject' => sanitize_text_field($_POST['subject']),
-			'content' => wp_kses_post(wp_unslash($_POST['content']))
-		]);
+		$this->db->save_template( array(
+			'id'      => isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0,
+			'name'    => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+			'subject' => isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '',
+			'content' => isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : '',
+		) );
 
 		wp_send_json_success();
 	}

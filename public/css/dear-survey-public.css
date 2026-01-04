@@ -1,74 +1,90 @@
 /**
  * Dear Survey Public Styles
- * Google Forms-Inspired Design System
+ * Clean Glassmorphism Design with Teal Theme
  */
 
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 /* ========================================
-   CSS CUSTOM PROPERTIES (Design Tokens)
+   CSS CUSTOM PROPERTIES
    ======================================== */
 :root {
-    /* Primary Purple (Google Forms) */
-    --gf-primary: #673ab7;
-    --gf-primary-hover: #5e35b1;
-    --gf-primary-dark: #512da8;
-    --gf-primary-light: #ede7f6;
-    --gf-primary-rgb: 103, 58, 183;
+    /* Primary - Teal/Cyan Theme */
+    --ds-primary: #0d9488;
+    --ds-primary-hover: #0f766e;
+    --ds-primary-dark: #115e59;
+    --ds-primary-light: #ccfbf1;
+    --ds-primary-rgb: 13, 148, 136;
+    --ds-gradient: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+    --ds-gradient-bg: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #f0f9ff 100%);
     
     /* Neutrals */
-    --gf-text: #202124;
-    --gf-text-secondary: #5f6368;
-    --gf-text-disabled: #80868b;
-    --gf-border: #dadce0;
-    --gf-border-hover: #bdc1c6;
-    --gf-bg: #f0ebf8;
-    --gf-white: #ffffff;
-    --gf-surface: #ffffff;
+    --ds-text: #0f172a;
+    --ds-text-secondary: #475569;
+    --ds-text-muted: #94a3b8;
+    --ds-border: #e2e8f0;
+    --ds-border-light: #f1f5f9;
+    --ds-bg: #f8fafc;
+    --ds-white: #ffffff;
     
     /* Functional */
-    --gf-error: #d93025;
-    --gf-error-light: #fce8e6;
-    --gf-success: #1e8e3e;
-    --gf-success-light: #e6f4ea;
+    --ds-error: #dc2626;
+    --ds-error-light: #fef2f2;
+    --ds-success: #059669;
+    --ds-success-light: #ecfdf5;
     
     /* Spacing */
-    --gf-space-xs: 4px;
-    --gf-space-sm: 8px;
-    --gf-space-md: 16px;
-    --gf-space-lg: 24px;
-    --gf-space-xl: 32px;
+    --ds-space-xs: 4px;
+    --ds-space-sm: 8px;
+    --ds-space-md: 16px;
+    --ds-space-lg: 24px;
+    --ds-space-xl: 32px;
+    --ds-space-2xl: 48px;
     
     /* Typography */
-    --gf-font: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-    --gf-font-size-sm: 12px;
-    --gf-font-size-base: 14px;
-    --gf-font-size-md: 16px;
-    --gf-font-size-lg: 24px;
-    --gf-font-size-xl: 32px;
+    --ds-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --ds-text-xs: 12px;
+    --ds-text-sm: 14px;
+    --ds-text-base: 16px;
+    --ds-text-lg: 18px;
+    --ds-text-xl: 24px;
+    --ds-text-2xl: 32px;
     
     /* Border Radius */
-    --gf-radius: 8px;
-    --gf-radius-sm: 4px;
+    --ds-radius: 20px;
+    --ds-radius-md: 14px;
+    --ds-radius-sm: 10px;
+    --ds-radius-full: 9999px;
     
     /* Shadows */
-    --gf-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
-    --gf-shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    --ds-shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --ds-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --ds-shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+    --ds-shadow-glow: 0 0 30px rgba(13, 148, 136, 0.2);
+    
+    /* Glass Effect */
+    --ds-glass: rgba(255, 255, 255, 0.7);
+    --ds-glass-border: rgba(255, 255, 255, 0.5);
     
     /* Animation */
-    --gf-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-transition-fast: 0.15s ease;
 }
 
 /* ========================================
-   BASE & RESET
+   BASE STYLES
    ======================================== */
 .gf-survey-wrap {
     max-width: 640px;
     margin: 0 auto;
-    padding: var(--gf-space-lg) var(--gf-space-md);
-    font-family: var(--gf-font);
-    color: var(--gf-text);
-    line-height: 1.5;
+    padding: var(--ds-space-xl) var(--ds-space-md);
+    font-family: var(--ds-font);
+    color: var(--ds-text);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background: var(--ds-gradient-bg);
+    min-height: 100vh;
 }
 
 .gf-survey-wrap *,
@@ -77,63 +93,111 @@
     box-sizing: border-box;
 }
 
-/* Error Messages */
+/* Error Message */
 .ds-error-msg {
     text-align: center;
-    color: var(--gf-error);
-    padding: var(--gf-space-lg);
-    background: var(--gf-error-light);
-    border-radius: var(--gf-radius);
-    font-family: var(--gf-font);
+    color: var(--ds-error);
+    padding: var(--ds-space-xl);
+    background: var(--ds-error-light);
+    border-radius: var(--ds-radius);
+    font-weight: 500;
+    border: 1px solid rgba(220, 38, 38, 0.15);
 }
 
 /* ========================================
-   HEADER CARD
+   HEADER CARD - Glass Style
    ======================================== */
 .gf-header-card {
-    background: var(--gf-white);
-    border-radius: var(--gf-radius);
+    background: var(--ds-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--ds-radius);
     overflow: hidden;
-    margin-bottom: var(--gf-space-md);
-    box-shadow: var(--gf-shadow-sm);
-    border: 1px solid var(--gf-border);
+    margin-bottom: var(--ds-space-lg);
+    border: 1px solid var(--ds-glass-border);
+    box-shadow: var(--ds-shadow);
 }
 
 .gf-header-accent {
-    height: 10px;
-    background: var(--gf-primary);
+    height: 5px;
+    background: var(--ds-gradient);
 }
 
 .gf-header-content {
-    padding: var(--gf-space-lg);
+    padding: var(--ds-space-xl) var(--ds-space-lg);
 }
 
 .gf-survey-title {
-    margin: 0 0 var(--gf-space-sm);
-    font-size: var(--gf-font-size-xl);
-    font-weight: 400;
-    color: var(--gf-text);
-    line-height: 1.25;
+    margin: 0 0 var(--ds-space-sm);
+    font-size: var(--ds-text-2xl);
+    font-weight: 700;
+    color: var(--ds-text);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
 }
 
 .gf-survey-desc {
     margin: 0;
-    font-size: var(--gf-font-size-base);
-    color: var(--gf-text-secondary);
-    line-height: 1.5;
+    font-size: var(--ds-text-base);
+    color: var(--ds-text-secondary);
+    line-height: 1.7;
+}
+
+/* Progress Bar */
+.gf-progress-wrap {
+    padding: 0 var(--ds-space-lg) var(--ds-space-lg);
+}
+
+.gf-progress-bar {
+    height: 6px;
+    background: rgba(13, 148, 136, 0.15);
+    border-radius: var(--ds-radius-full);
+    overflow: hidden;
+}
+
+.gf-progress-fill {
+    height: 100%;
+    background: var(--ds-gradient);
+    border-radius: var(--ds-radius-full);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+    position: relative;
+}
+
+.gf-progress-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+    border-radius: var(--ds-radius-full);
+}
+
+.gf-progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--ds-space-sm);
+    font-size: var(--ds-text-xs);
+    color: var(--ds-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 /* ========================================
-   QUESTION CARDS
+   QUESTION CARDS - Floating Style
    ======================================== */
 .gf-question-card {
-    background: var(--gf-white);
-    border-radius: var(--gf-radius);
-    margin-bottom: var(--gf-space-md);
-    box-shadow: var(--gf-shadow-sm);
-    border: 1px solid var(--gf-border);
-    transition: border-color var(--gf-transition), box-shadow var(--gf-transition);
-    animation: gfCardAppear 0.3s ease-out backwards;
+    background: var(--ds-white);
+    border-radius: var(--ds-radius);
+    margin-bottom: var(--ds-space-md);
+    border: 1px solid var(--ds-border-light);
+    box-shadow: var(--ds-shadow-sm);
+    transition: all var(--ds-transition);
+    animation: dsSlideUp 0.5s ease-out backwards;
+    position: relative;
 }
 
 .gf-question-card:nth-child(1) { animation-delay: 0.05s; }
@@ -143,10 +207,10 @@
 .gf-question-card:nth-child(5) { animation-delay: 0.25s; }
 .gf-question-card:nth-child(n+6) { animation-delay: 0.3s; }
 
-@keyframes gfCardAppear {
+@keyframes dsSlideUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -154,35 +218,65 @@
     }
 }
 
+.gf-question-card:hover {
+    box-shadow: var(--ds-shadow);
+    transform: translateY(-2px);
+}
+
 .gf-question-card:focus-within {
-    border-color: var(--gf-primary);
-    box-shadow: var(--gf-shadow);
+    border-color: var(--ds-primary);
+    box-shadow: var(--ds-shadow), 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 
 .gf-q-content {
-    padding: var(--gf-space-lg);
+    padding: var(--ds-space-lg);
+}
+
+/* Question Number */
+.gf-q-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--ds-gradient);
+    color: white;
+    font-size: var(--ds-text-sm);
+    font-weight: 700;
+    border-radius: var(--ds-radius-sm);
+    margin-bottom: var(--ds-space-md);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
 }
 
 /* Question Label */
 .gf-q-label {
     display: block;
-    font-size: var(--gf-font-size-md);
-    font-weight: 400;
-    color: var(--gf-text);
-    margin-bottom: var(--gf-space-md);
-    line-height: 1.5;
+    font-size: var(--ds-text-lg);
+    font-weight: 600;
+    color: var(--ds-text);
+    margin-bottom: var(--ds-space-lg);
+    line-height: 1.4;
 }
 
 .gf-required {
-    color: var(--gf-error);
-    margin-left: 2px;
+    color: var(--ds-error);
+    margin-left: 3px;
 }
 
 /* Helper Text */
 .gf-helper-text {
-    margin: var(--gf-space-sm) 0 0;
-    font-size: var(--gf-font-size-sm);
-    color: var(--gf-text-secondary);
+    margin: var(--ds-space-md) 0 0;
+    font-size: var(--ds-text-sm);
+    color: var(--ds-text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-xs);
+}
+
+.gf-helper-text svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
 }
 
 /* ========================================
@@ -191,61 +285,68 @@
 .gf-text-input,
 .gf-textarea-input {
     width: 100%;
-    padding: var(--gf-space-sm) 0;
-    border: none;
-    border-bottom: 1px solid var(--gf-border);
-    background: transparent;
-    font-size: var(--gf-font-size-base);
-    font-family: var(--gf-font);
-    color: var(--gf-text);
-    transition: border-color var(--gf-transition);
+    padding: var(--ds-space-md) var(--ds-space-lg);
+    border: 2px solid var(--ds-border);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-bg);
+    font-size: var(--ds-text-base);
+    font-family: var(--ds-font);
+    color: var(--ds-text);
+    transition: all var(--ds-transition);
     outline: none;
 }
 
 .gf-text-input::placeholder,
 .gf-textarea-input::placeholder {
-    color: var(--gf-text-disabled);
+    color: var(--ds-text-muted);
 }
 
 .gf-text-input:hover,
 .gf-textarea-input:hover {
-    border-bottom-color: var(--gf-border-hover);
+    border-color: var(--ds-primary-light);
+    background: var(--ds-white);
 }
 
 .gf-text-input:focus,
 .gf-textarea-input:focus {
-    border-bottom: 2px solid var(--gf-primary);
-    margin-bottom: -1px;
+    border-color: var(--ds-primary);
+    background: var(--ds-white);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
 }
 
 .gf-textarea-input {
     resize: vertical;
-    min-height: 80px;
+    min-height: 130px;
+    line-height: 1.6;
 }
 
 /* ========================================
-   RADIO & CHECKBOX OPTIONS
+   RADIO & CHECKBOX - Card Style
    ======================================== */
 .gf-options-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: var(--ds-space-sm);
 }
 
 .gf-option-item {
     display: flex;
     align-items: center;
-    gap: var(--gf-space-md);
-    padding: var(--gf-space-md) var(--gf-space-sm);
-    margin: 0 calc(-1 * var(--gf-space-sm));
-    border-radius: var(--gf-radius-sm);
+    gap: var(--ds-space-md);
+    padding: var(--ds-space-md) var(--ds-space-lg);
+    border: 2px solid var(--ds-border);
+    border-radius: var(--ds-radius-md);
     cursor: pointer;
-    transition: background var(--gf-transition);
+    transition: all var(--ds-transition);
     user-select: none;
+    background: var(--ds-white);
+    position: relative;
+    overflow: hidden;
 }
 
 .gf-option-item:hover {
-    background: rgba(var(--gf-primary-rgb), 0.04);
+    border-color: var(--ds-primary-light);
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(6, 182, 212, 0.03) 100%);
 }
 
 .gf-option-item input {
@@ -255,81 +356,82 @@
 }
 
 .gf-option-text {
-    font-size: var(--gf-font-size-base);
-    color: var(--gf-text);
+    font-size: var(--ds-text-base);
+    color: var(--ds-text);
     flex: 1;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+    transition: color var(--ds-transition);
 }
 
 /* Radio Circle */
 .gf-radio-circle {
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--gf-text-secondary);
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--ds-border);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: border-color var(--gf-transition);
+    transition: all var(--ds-transition);
+    background: var(--ds-white);
+    position: relative;
+    z-index: 1;
 }
 
 .gf-radio-inner {
-    width: 10px;
-    height: 10px;
-    background: var(--gf-primary);
+    width: 12px;
+    height: 12px;
+    background: var(--ds-gradient);
     border-radius: 50%;
     transform: scale(0);
-    transition: transform var(--gf-transition);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gf-radio-option input:checked + .gf-radio-circle {
-    border-color: var(--gf-primary);
+/* Checkbox Box */
+.gf-checkbox-box {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--ds-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--ds-transition);
+    background: var(--ds-white);
+    position: relative;
+    z-index: 1;
 }
 
-.gf-radio-option input:checked ~ .gf-radio-circle .gf-radio-inner,
-.gf-radio-option input:checked + .gf-radio-circle .gf-radio-inner {
-    transform: scale(1);
+.gf-check-icon {
+    width: 14px;
+    height: 14px;
+    color: white;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Fix for radio - inner is inside circle */
-.gf-radio-option input:checked + .gf-radio-circle .gf-radio-inner {
-    transform: scale(1);
+/* Selected States */
+.gf-option-item:has(input:checked) {
+    border-color: var(--ds-primary);
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
 }
 
 .gf-option-item:has(input:checked) .gf-radio-circle {
-    border-color: var(--gf-primary);
+    border-color: var(--ds-primary);
 }
 
 .gf-option-item:has(input:checked) .gf-radio-inner {
     transform: scale(1);
 }
 
-/* Checkbox Box */
-.gf-checkbox-box {
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--gf-text-secondary);
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all var(--gf-transition);
-    background: transparent;
-}
-
-.gf-check-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--gf-white);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all var(--gf-transition);
-}
-
 .gf-option-item:has(input:checked) .gf-checkbox-box {
-    background: var(--gf-primary);
-    border-color: var(--gf-primary);
+    background: var(--ds-gradient);
+    border-color: var(--ds-primary);
 }
 
 .gf-option-item:has(input:checked) .gf-check-icon {
@@ -337,11 +439,9 @@
     transform: scale(1);
 }
 
-/* Fallback for browsers without :has() */
-.gf-checkbox-option input:checked ~ .gf-checkbox-box,
-.gf-checkbox-option input:checked + .gf-checkbox-box {
-    background: var(--gf-primary);
-    border-color: var(--gf-primary);
+.gf-option-item:has(input:checked) .gf-option-text {
+    color: var(--ds-primary-dark);
+    font-weight: 600;
 }
 
 /* ========================================
@@ -351,41 +451,53 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--gf-space-md) 0;
-    gap: var(--gf-space-md);
+    padding: var(--ds-space-lg) 0;
+    gap: var(--ds-space-md);
+    margin-top: var(--ds-space-sm);
 }
 
 .gf-submit-btn {
-    background: var(--gf-primary);
-    color: var(--gf-white);
+    background: var(--ds-gradient);
+    color: white;
     border: none;
-    padding: 10px 24px;
-    font-size: var(--gf-font-size-base);
-    font-weight: 500;
-    font-family: var(--gf-font);
-    border-radius: var(--gf-radius-sm);
+    padding: 16px 36px;
+    font-size: var(--ds-text-base);
+    font-weight: 600;
+    font-family: var(--ds-font);
+    border-radius: var(--ds-radius-md);
     cursor: pointer;
-    transition: all var(--gf-transition);
+    transition: all var(--ds-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--gf-space-sm);
-    min-width: 90px;
-    height: 36px;
+    gap: var(--ds-space-sm);
+    min-width: 160px;
+    height: 54px;
+    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.gf-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
 }
 
 .gf-submit-btn:hover {
-    background: var(--gf-primary-hover);
-    box-shadow: 0 1px 3px rgba(var(--gf-primary-rgb), 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(13, 148, 136, 0.4);
 }
 
 .gf-submit-btn:active {
-    background: var(--gf-primary-dark);
+    transform: translateY(-1px);
 }
 
 .gf-submit-btn:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
 }
 
 .gf-btn-loading {
@@ -401,145 +513,205 @@
 }
 
 .gf-spinner {
-    width: 20px;
-    height: 20px;
-    animation: gfSpin 1s linear infinite;
+    width: 24px;
+    height: 24px;
+    animation: dsSpin 0.7s linear infinite;
 }
 
-@keyframes gfSpin {
+@keyframes dsSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
 
 .gf-clear-btn {
     background: transparent;
-    color: var(--gf-primary);
-    border: none;
-    padding: 10px 16px;
-    font-size: var(--gf-font-size-base);
-    font-weight: 500;
-    font-family: var(--gf-font);
-    border-radius: var(--gf-radius-sm);
+    color: var(--ds-text-secondary);
+    border: 2px solid var(--ds-border);
+    padding: 14px 28px;
+    font-size: var(--ds-text-base);
+    font-weight: 600;
+    font-family: var(--ds-font);
+    border-radius: var(--ds-radius-md);
     cursor: pointer;
-    transition: background var(--gf-transition);
+    transition: all var(--ds-transition);
+    height: 54px;
 }
 
 .gf-clear-btn:hover {
-    background: var(--gf-primary-light);
+    border-color: var(--ds-primary);
+    color: var(--ds-primary);
+    background: rgba(13, 148, 136, 0.05);
 }
 
 /* ========================================
    MESSAGES
    ======================================== */
 .gf-message-wrap {
-    min-height: 40px;
-    margin-top: var(--gf-space-sm);
+    min-height: 0;
+    margin-top: var(--ds-space-md);
 }
 
 .gf-message {
-    padding: var(--gf-space-md);
-    border-radius: var(--gf-radius-sm);
-    font-size: var(--gf-font-size-base);
+    padding: var(--ds-space-md) var(--ds-space-lg);
+    border-radius: var(--ds-radius-md);
+    font-size: var(--ds-text-base);
+    font-weight: 500;
     display: none;
-    animation: gfFadeIn 0.3s ease-out;
-}
-
-@keyframes gfFadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    animation: dsSlideUp 0.4s ease-out;
 }
 
 .gf-message.is-visible {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-sm);
 }
 
 .gf-message.is-error {
-    background: var(--gf-error-light);
-    color: var(--gf-error);
+    background: var(--ds-error-light);
+    color: var(--ds-error);
+    border: 1px solid rgba(220, 38, 38, 0.2);
 }
 
 .gf-message.is-success {
-    background: var(--gf-success-light);
-    color: var(--gf-success);
+    background: var(--ds-success-light);
+    color: var(--ds-success);
+    border: 1px solid rgba(5, 150, 105, 0.2);
 }
 
 /* ========================================
    SUCCESS SCREEN
    ======================================== */
 .gf-success-screen {
-    animation: gfFadeIn 0.4s ease-out;
+    animation: dsFadeIn 0.6s ease-out;
+}
+
+@keyframes dsFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .gf-success-card {
-    background: var(--gf-white);
-    border-radius: var(--gf-radius);
-    padding: var(--gf-space-xl);
+    background: var(--ds-white);
+    border-radius: var(--ds-radius);
+    padding: var(--ds-space-2xl) var(--ds-space-xl);
     text-align: center;
-    box-shadow: var(--gf-shadow-sm);
-    border: 1px solid var(--gf-border);
+    box-shadow: var(--ds-shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.gf-success-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--ds-gradient);
 }
 
 .gf-success-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto var(--gf-space-lg);
-    background: var(--gf-success-light);
+    width: 90px;
+    height: 90px;
+    margin: 0 auto var(--ds-space-lg);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(13, 148, 136, 0.15) 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gf-success);
+    color: var(--ds-success);
+    animation: dsSuccessBounce 0.6s ease-out 0.3s backwards;
+}
+
+@keyframes dsSuccessBounce {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
 }
 
 .gf-success-icon svg {
-    width: 32px;
-    height: 32px;
+    width: 45px;
+    height: 45px;
+    stroke-width: 2.5;
 }
 
 .gf-success-title {
-    margin: 0 0 var(--gf-space-sm);
-    font-size: var(--gf-font-size-lg);
-    font-weight: 400;
-    color: var(--gf-text);
+    margin: 0 0 var(--ds-space-sm);
+    font-size: var(--ds-text-xl);
+    font-weight: 700;
+    color: var(--ds-text);
+    letter-spacing: -0.02em;
 }
 
 .gf-success-text {
-    margin: 0 0 var(--gf-space-lg);
-    font-size: var(--gf-font-size-base);
-    color: var(--gf-text-secondary);
+    margin: 0 0 var(--ds-space-xl);
+    font-size: var(--ds-text-base);
+    color: var(--ds-text-secondary);
+    line-height: 1.7;
 }
 
 .gf-submit-another {
-    background: transparent;
-    color: var(--gf-primary);
-    border: none;
-    padding: 10px 24px;
-    font-size: var(--gf-font-size-base);
-    font-weight: 500;
-    font-family: var(--gf-font);
-    border-radius: var(--gf-radius-sm);
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+    color: var(--ds-primary);
+    border: 2px solid var(--ds-primary);
+    padding: 14px 32px;
+    font-size: var(--ds-text-base);
+    font-weight: 600;
+    font-family: var(--ds-font);
+    border-radius: var(--ds-radius-md);
     cursor: pointer;
-    transition: background var(--gf-transition);
+    transition: all var(--ds-transition);
 }
 
 .gf-submit-another:hover {
-    background: var(--gf-primary-light);
+    background: var(--ds-gradient);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
+}
+
+/* Success Decoration */
+.gf-success-card::after {
+    content: '✨';
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 32px;
+    animation: dsSparkle 2s ease-in-out infinite;
+}
+
+@keyframes dsSparkle {
+    0%, 100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(15deg); }
 }
 
 /* ========================================
    VALIDATION STATES
    ======================================== */
 .gf-question-card.has-error {
-    border-color: var(--gf-error);
+    border-color: var(--ds-error);
+    animation: dsShake 0.5s ease-in-out;
+}
+
+@keyframes dsShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
 }
 
 .gf-question-card.has-error .gf-text-input,
 .gf-question-card.has-error .gf-textarea-input {
-    border-bottom-color: var(--gf-error);
+    border-color: var(--ds-error);
 }
 
 .gf-question-card.has-error .gf-q-label {
-    color: var(--gf-error);
+    color: var(--ds-error);
+}
+
+/* Email Card Special */
+.gf-email-card {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.03) 0%, rgba(6, 182, 212, 0.03) 100%);
+    border-color: rgba(13, 148, 136, 0.2);
 }
 
 /* ========================================
@@ -547,16 +719,16 @@
    ======================================== */
 @media (max-width: 768px) {
     .gf-survey-wrap {
-        padding: var(--gf-space-md) var(--gf-space-sm);
+        padding: var(--ds-space-lg) var(--ds-space-md);
     }
     
     .gf-header-content,
     .gf-q-content {
-        padding: var(--gf-space-md);
+        padding: var(--ds-space-lg);
     }
     
     .gf-survey-title {
-        font-size: var(--gf-font-size-lg);
+        font-size: var(--ds-text-xl);
     }
     
     .gf-form-footer {
@@ -564,54 +736,42 @@
         align-items: stretch;
     }
     
-    .gf-submit-btn {
+    .gf-submit-btn,
+    .gf-clear-btn {
         width: 100%;
         justify-content: center;
     }
     
-    .gf-clear-btn {
-        width: 100%;
-        text-align: center;
+    .gf-success-card {
+        padding: var(--ds-space-xl);
     }
 }
 
 @media (max-width: 480px) {
     .gf-survey-wrap {
-        padding: var(--gf-space-sm);
-    }
-    
-    .gf-question-card {
-        border-radius: var(--gf-radius-sm);
-    }
-    
-    .gf-header-card {
-        border-radius: var(--gf-radius-sm);
-    }
-    
-    .gf-option-item {
-        padding: var(--gf-space-md) var(--gf-space-xs);
-    }
-}
-
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-@media print {
-    .gf-survey-wrap {
-        max-width: 100%;
-        padding: 0;
+        padding: var(--ds-space-md) var(--ds-space-sm);
     }
     
     .gf-question-card,
     .gf-header-card {
-        box-shadow: none;
-        border: 1px solid #ccc;
-        break-inside: avoid;
+        border-radius: var(--ds-radius-md);
     }
     
-    .gf-form-footer,
-    .gf-clear-btn {
-        display: none;
+    .gf-option-item {
+        padding: var(--ds-space-md);
+    }
+    
+    .gf-q-content,
+    .gf-header-content {
+        padding: var(--ds-space-md);
+    }
+    
+    .gf-survey-title {
+        font-size: var(--ds-text-lg);
+    }
+    
+    .gf-q-label {
+        font-size: var(--ds-text-base);
     }
 }
 
@@ -619,28 +779,27 @@
    ACCESSIBILITY
    ======================================== */
 @media (prefers-reduced-motion: reduce) {
-    .gf-question-card,
-    .gf-submit-btn,
-    .gf-option-item,
-    .gf-radio-inner,
-    .gf-check-icon {
-        transition: none;
-        animation: none;
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
 .gf-option-item:focus-visible {
-    outline: 2px solid var(--gf-primary);
-    outline-offset: 2px;
+    outline: none;
+    border-color: var(--ds-primary);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
 }
 
 .gf-submit-btn:focus-visible,
-.gf-clear-btn:focus-visible {
-    outline: 2px solid var(--gf-primary);
-    outline-offset: 2px;
+.gf-clear-btn:focus-visible,
+.gf-submit-another:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.3);
 }
 
-/* Screen reader only */
 .gf-sr-only {
     position: absolute;
     width: 1px;
@@ -651,4 +810,25 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+    .gf-survey-wrap {
+        background: white;
+        padding: 0;
+    }
+    
+    .gf-question-card,
+    .gf-header-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+    
+    .gf-form-footer {
+        display: none;
+    }
 }
