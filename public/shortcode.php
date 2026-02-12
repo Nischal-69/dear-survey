@@ -18,13 +18,13 @@ class Formera_Shortcode {
 		$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'formera' );
 		$survey_id = intval( $atts['id'] );
 
-		if ( ! $survey_id ) return '<p class="ds-error-msg">Survey ID is missing.</p>';
+		if ( ! $survey_id ) return '<p class="ds-error-msg">Form ID is missing.</p>';
 
 		$survey = $this->db->get_survey( $survey_id );
-		if ( ! $survey ) return '<p class="ds-error-msg">Survey not found.</p>';
+		if ( ! $survey ) return '<p class="ds-error-msg">Form not found.</p>';
 
 		$questions = json_decode( $survey['questions'], true );
-		if ( ! is_array( $questions ) || empty( $questions ) ) return '<p class="ds-error-msg">This survey has no questions.</p>';
+		if ( ! is_array( $questions ) || empty( $questions ) ) return '<p class="ds-error-msg">This form has no questions.</p>';
 
 		$settings = json_decode( $survey['settings'], true );
 		$total_questions = count( $questions );

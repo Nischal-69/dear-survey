@@ -54,10 +54,10 @@ class Formera_Submit {
 				// 1. Admin Notification
 				if ( ! empty( $settings['admin_email'] ) ) {
 					$admin_email = sanitize_email( $settings['admin_email'] );
-					$survey_title = ! empty( $survey['title'] ) ? (string) $survey['title'] : 'Untitled Survey';
+					$survey_title = ! empty( $survey['title'] ) ? (string) $survey['title'] : 'Untitled Form';
 					$subject = "New Entry: " . $survey_title;
 					$contact_info = $responder_email ? "from $responder_email" : "(anonymous)";
-					$message = "You have received a new survey entry $contact_info for '{$survey_title}'.\n\nPlease check your dashboard for full details.";
+					$message = "You have received a new form entry $contact_info for '{$survey_title}'.\n\nPlease check your dashboard for full details.";
 					wp_mail( $admin_email, $subject, $message );
 				}
 			}

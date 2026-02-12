@@ -586,18 +586,60 @@
 .ds-shortcode {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
+    gap: 6px;
+    padding: 4px 8px;
     background: var(--ds-bg);
     border-radius: 4px;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 13px;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 12px;
     color: var(--ds-text);
     border: 1px solid var(--ds-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .ds-shortcode:hover {
     background: var(--ds-divider);
+    border-color: var(--ds-primary);
+}
+
+.ds-shortcode code {
+    background: none;
+    padding: 0;
+    font-size: 12px;
+    color: inherit;
+}
+
+.ds-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: var(--ds-text-light);
+    border-radius: 3px;
+    transition: color 0.2s ease;
+}
+
+.ds-copy-btn:hover {
+    color: var(--ds-primary);
+}
+
+.ds-copy-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.ds-shortcode.ds-copied {
+    border-color: var(--ds-success);
+    background: #e6f4ea;
+}
+
+.ds-shortcode.ds-copied .ds-copy-btn {
+    color: var(--ds-success);
 }
 
 /* Responsive */

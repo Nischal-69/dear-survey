@@ -46,7 +46,7 @@ class Formera_Builder {
 							<rect x="3" y="3" width="18" height="18" rx="2" fill="var(--gf-primary, #673AB7)"/>
 							<path d="M7 12l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 						</svg>
-						<span style="color: var(--gf-primary); font-weight: 600;">Dear Survey</span>
+						<span style="color: var(--gf-primary); font-weight: 600;">Formera</span>
 					</div>
 					<div style="display:flex; gap:12px; align-items:center;">
 						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-list') ); ?>" style="padding:10px 16px; color:#5F6368; text-decoration:none; font-size:14px;">Cancel</a>
@@ -63,14 +63,14 @@ class Formera_Builder {
 					<!-- Header Card -->
 					<div class="gf-card gf-card-header gf-animate">
 						<div class="gf-card-body">
-							<label for="survey_title" class="gf-sr-only">Survey Title</label>
-							<input type="text" id="survey_title" class="gf-title-input" value="<?php echo esc_attr( $title ); ?>" placeholder="Untitled form" required autocomplete="off" spellcheck="false" aria-label="Survey title">
-							<label for="survey_description" class="gf-sr-only">Survey Description</label>
-							<textarea id="survey_description" class="gf-desc-input" placeholder="Form description" rows="1" autocomplete="off" aria-label="Survey description"></textarea>
+							<label for="survey_title" class="gf-sr-only">Form Title</label>
+							<input type="text" id="survey_title" class="gf-title-input" value="<?php echo esc_attr( $title ); ?>" placeholder="Untitled form" required autocomplete="off" spellcheck="false" aria-label="Form title">
+							<label for="survey_description" class="gf-sr-only">Form Description</label>
+							<textarea id="survey_description" class="gf-desc-input" placeholder="Form description" rows="1" autocomplete="off" aria-label="Form description"></textarea>
 						</div>
 					</div>
 
-					<div id="questions-container" role="list" aria-label="Survey questions">
+					<div id="questions-container" role="list" aria-label="Form questions">
 						<!-- JavaScript dynamic render -->
 					</div>
 
@@ -136,11 +136,11 @@ class Formera_Builder {
 							</div>
 							<div style="margin-bottom:16px;">
 								<label class="gf-label">Subject</label>
-								<input type="text" id="ds-outreach-subject" class="gf-input" value="Check out our new survey: <?php echo esc_attr($title); ?>">
+								<input type="text" id="ds-outreach-subject" class="gf-input" value="Check out our new form: <?php echo esc_attr($title); ?>">
 							</div>
 							<div style="margin-bottom:16px;">
 								<label class="gf-label">Message</label>
-								<textarea id="ds-outreach-message" class="gf-input gf-textarea">Hi, we'd love to hear your thoughts on this survey!</textarea>
+								<textarea id="ds-outreach-message" class="gf-input gf-textarea">Hi, we'd love to hear your thoughts on this form!</textarea>
 							</div>
 							<button type="button" id="ds-send-outreach" class="gf-btn-primary" style="width:100%;">
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>

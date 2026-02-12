@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formera
  * Plugin URI:  https://wordpress.org/plugins/formera
- * Description: An advanced, high-performance Survey Maker with a premium SaaS-style interface.
+ * Description: An advanced, high-performance Form Maker with a premium SaaS-style interface.
  * Version:     1.0.1
  * Author:      nischal01
  * Author URI: https://profiles.wordpress.org/nischal01/
@@ -104,6 +104,7 @@ class Formera {
 			// Enqueue Admin CSS & JS only on Formera plugin pages
 			add_action( 'admin_enqueue_scripts', function( $hook ) {
 				// Only load on Formera admin pages
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of admin page slug, no data processing.
 				if ( ! isset( $_GET['page'] ) || strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'formera' ) !== 0 ) {
 					return;
 				}
@@ -175,7 +176,8 @@ class Formera {
 			'formera-block',
 			FORMERA_URL . 'admin/js/formera-block.js',
 			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-data', 'wp-block-editor' ),
-			FORMERA_VERSION
+			FORMERA_VERSION,
+			true
 		);
 		
 		wp_enqueue_style(
@@ -191,7 +193,7 @@ class Formera {
 	 */
 	public function render_survey_block( $attributes ) {
 		if ( empty( $attributes['surveyId'] ) ) {
-			return '<div class="formera-block-error"><p>' . __( 'Please select a survey to display.', 'formera' ) . '</p></div>';
+			return '<div class="formera-block-error"><p>' . __( 'Please select a form to display.', 'formera' ) . '</p></div>';
 		}
 		
 		// Build wrapper classes
