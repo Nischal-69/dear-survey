@@ -1,6 +1,6 @@
 <?php
 /**
- * Dear Survey Database Class
+ * Formera Database Class
  * Uses WordPress Custom Post Types instead of raw SQL queries
  */
 
@@ -8,16 +8,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_DB {
+class Formera_DB {
 
 	/**
 	 * Custom Post Type names
 	 */
-	const CPT_SURVEY     = 'ds_survey';
-	const CPT_RESPONSE   = 'ds_response';
-	const CPT_BROADCAST  = 'ds_broadcast';
-	const CPT_TEMPLATE   = 'ds_template';
-	const CPT_SUBSCRIBER = 'ds_subscriber';
+	const CPT_SURVEY     = 'formera_survey';
+	const CPT_RESPONSE   = 'formera_response';
+	const CPT_BROADCAST  = 'formera_broadcast';
+	const CPT_TEMPLATE   = 'formera_template';
+	const CPT_SUBSCRIBER = 'formera_subscriber';
 
 	/**
 	 * Track if CPTs have been registered
@@ -40,8 +40,8 @@ class DearSurvey_DB {
 		// Survey CPT
 		register_post_type( self::CPT_SURVEY, array(
 			'labels' => array(
-				'name'          => __( 'Surveys', 'dear-survey' ),
-				'singular_name' => __( 'Survey', 'dear-survey' ),
+				'name'          => __( 'Surveys', 'formera' ),
+				'singular_name' => __( 'Survey', 'formera' ),
 			),
 			'public'              => false,
 			'show_ui'             => false,
@@ -57,8 +57,8 @@ class DearSurvey_DB {
 		// Response CPT
 		register_post_type( self::CPT_RESPONSE, array(
 			'labels' => array(
-				'name'          => __( 'Survey Responses', 'dear-survey' ),
-				'singular_name' => __( 'Response', 'dear-survey' ),
+				'name'          => __( 'Survey Responses', 'formera' ),
+				'singular_name' => __( 'Response', 'formera' ),
 			),
 			'public'              => false,
 			'show_ui'             => false,
@@ -74,8 +74,8 @@ class DearSurvey_DB {
 		// Broadcast CPT
 		register_post_type( self::CPT_BROADCAST, array(
 			'labels' => array(
-				'name'          => __( 'Broadcasts', 'dear-survey' ),
-				'singular_name' => __( 'Broadcast', 'dear-survey' ),
+				'name'          => __( 'Broadcasts', 'formera' ),
+				'singular_name' => __( 'Broadcast', 'formera' ),
 			),
 			'public'              => false,
 			'show_ui'             => false,
@@ -91,8 +91,8 @@ class DearSurvey_DB {
 		// Template CPT
 		register_post_type( self::CPT_TEMPLATE, array(
 			'labels' => array(
-				'name'          => __( 'Email Templates', 'dear-survey' ),
-				'singular_name' => __( 'Template', 'dear-survey' ),
+				'name'          => __( 'Email Templates', 'formera' ),
+				'singular_name' => __( 'Template', 'formera' ),
 			),
 			'public'              => false,
 			'show_ui'             => false,
@@ -108,8 +108,8 @@ class DearSurvey_DB {
 		// Subscriber CPT
 		register_post_type( self::CPT_SUBSCRIBER, array(
 			'labels' => array(
-				'name'          => __( 'Subscribers', 'dear-survey' ),
-				'singular_name' => __( 'Subscriber', 'dear-survey' ),
+				'name'          => __( 'Subscribers', 'formera' ),
+				'singular_name' => __( 'Subscriber', 'formera' ),
 			),
 			'public'              => false,
 			'show_ui'             => false,
@@ -161,7 +161,7 @@ class DearSurvey_DB {
 
 		if ( $args['orderby'] === 'status' ) {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Required for sorting by survey status.
-			$query_args['meta_key'] = '_ds_status';
+			$query_args['meta_key'] = '_formera_status';
 		}
 
 		$query = new WP_Query( $query_args );
@@ -231,9 +231,9 @@ class DearSurvey_DB {
 		}
 
 		// Save meta data
-		update_post_meta( $post_id, '_ds_questions', $data['questions'] );
-		update_post_meta( $post_id, '_ds_settings', $data['settings'] );
-		update_post_meta( $post_id, '_ds_status', $data['status'] );
+		update_post_meta( $post_id, '_formera_questions', $data['questions'] );
+		update_post_meta( $post_id, '_formera_settings', $data['settings'] );
+		update_post_meta( $post_id, '_formera_status', $data['status'] );
 
 		return $post_id;
 	}
@@ -252,7 +252,7 @@ class DearSurvey_DB {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required to find all responses for deletion.
 			'meta_query'     => array(
 				array(
-					'key'   => '_ds_survey_id',
+					'key'   => '_formera_survey_id',
 					'value' => $id,
 				),
 			),
@@ -276,9 +276,9 @@ class DearSurvey_DB {
 	 * @return array Survey data array.
 	 */
 	private function format_survey_from_post( $post ) {
-		$questions = get_post_meta( $post->ID, '_ds_questions', true );
-		$settings  = get_post_meta( $post->ID, '_ds_settings', true );
-		$status    = get_post_meta( $post->ID, '_ds_status', true );
+		$questions = get_post_meta( $post->ID, '_formera_questions', true );
+		$settings  = get_post_meta( $post->ID, '_formera_settings', true );
+		$status    = get_post_meta( $post->ID, '_formera_status', true );
 		
 		return array(
 			'id'         => $post->ID,
@@ -318,16 +318,16 @@ class DearSurvey_DB {
 		if ( is_wp_error( $post_id ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging when WP_DEBUG is enabled
-				error_log( 'Dear Survey Response Error: ' . $post_id->get_error_message() );
+				error_log( 'Formera Response Error: ' . $post_id->get_error_message() );
 			}
 			return false;
 		}
 
 		// Save meta data
-		update_post_meta( $post_id, '_ds_survey_id', $data['survey_id'] );
-		update_post_meta( $post_id, '_ds_user_id', get_current_user_id() );
-		update_post_meta( $post_id, '_ds_ip_address', $ip_address );
-		update_post_meta( $post_id, '_ds_response_data', $data['response_data'] );
+		update_post_meta( $post_id, '_formera_survey_id', $data['survey_id'] );
+		update_post_meta( $post_id, '_formera_user_id', get_current_user_id() );
+		update_post_meta( $post_id, '_formera_ip_address', $ip_address );
+		update_post_meta( $post_id, '_formera_response_data', $data['response_data'] );
 
 		return $post_id;
 	}
@@ -347,7 +347,7 @@ class DearSurvey_DB {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required to filter responses by survey ID.
 			'meta_query'     => array(
 				array(
-					'key'   => '_ds_survey_id',
+					'key'   => '_formera_survey_id',
 					'value' => $survey_id,
 				),
 			),
@@ -389,10 +389,10 @@ class DearSurvey_DB {
 	 * @return array Response data array.
 	 */
 	private function format_response_from_post( $post ) {
-		$survey_id     = get_post_meta( $post->ID, '_ds_survey_id', true );
-		$user_id       = get_post_meta( $post->ID, '_ds_user_id', true );
-		$ip_address    = get_post_meta( $post->ID, '_ds_ip_address', true );
-		$response_data = get_post_meta( $post->ID, '_ds_response_data', true );
+		$survey_id     = get_post_meta( $post->ID, '_formera_survey_id', true );
+		$user_id       = get_post_meta( $post->ID, '_formera_user_id', true );
+		$ip_address    = get_post_meta( $post->ID, '_formera_ip_address', true );
+		$response_data = get_post_meta( $post->ID, '_formera_response_data', true );
 		
 		return array(
 			'id'            => $post->ID,
@@ -448,9 +448,9 @@ class DearSurvey_DB {
 			return false;
 		}
 
-		update_post_meta( $post_id, '_ds_message', $data['message'] );
-		update_post_meta( $post_id, '_ds_recipients', $data['recipients'] );
-		update_post_meta( $post_id, '_ds_sent_at', $data['sent_at'] );
+		update_post_meta( $post_id, '_formera_message', $data['message'] );
+		update_post_meta( $post_id, '_formera_recipients', $data['recipients'] );
+		update_post_meta( $post_id, '_formera_sent_at', $data['sent_at'] );
 
 		return $post_id;
 	}
@@ -462,9 +462,9 @@ class DearSurvey_DB {
 	 * @return array Broadcast data array.
 	 */
 	private function format_broadcast_from_post( $post ) {
-		$message    = get_post_meta( $post->ID, '_ds_message', true );
-		$recipients = get_post_meta( $post->ID, '_ds_recipients', true );
-		$sent_at    = get_post_meta( $post->ID, '_ds_sent_at', true );
+		$message    = get_post_meta( $post->ID, '_formera_message', true );
+		$recipients = get_post_meta( $post->ID, '_formera_recipients', true );
+		$sent_at    = get_post_meta( $post->ID, '_formera_sent_at', true );
 		
 		return array(
 			'id'         => $post->ID,
@@ -546,9 +546,9 @@ class DearSurvey_DB {
 			}
 		}
 
-		update_post_meta( $post_id, '_ds_subject', $data['subject'] );
-		update_post_meta( $post_id, '_ds_content', $data['content'] );
-		update_post_meta( $post_id, '_ds_updated_at', current_time( 'mysql' ) );
+		update_post_meta( $post_id, '_formera_subject', $data['subject'] );
+		update_post_meta( $post_id, '_formera_content', $data['content'] );
+		update_post_meta( $post_id, '_formera_updated_at', current_time( 'mysql' ) );
 
 		return $post_id;
 	}
@@ -560,9 +560,9 @@ class DearSurvey_DB {
 	 * @return array Template data array.
 	 */
 	private function format_template_from_post( $post ) {
-		$subject    = get_post_meta( $post->ID, '_ds_subject', true );
-		$content    = get_post_meta( $post->ID, '_ds_content', true );
-		$updated_at = get_post_meta( $post->ID, '_ds_updated_at', true );
+		$subject    = get_post_meta( $post->ID, '_formera_subject', true );
+		$content    = get_post_meta( $post->ID, '_formera_content', true );
+		$updated_at = get_post_meta( $post->ID, '_formera_updated_at', true );
 		
 		return array(
 			'id'         => $post->ID,
@@ -613,7 +613,7 @@ class DearSurvey_DB {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required to check for duplicate email addresses.
 			'meta_query'     => array(
 				array(
-					'key'   => '_ds_email',
+					'key'   => '_formera_email',
 					'value' => $email,
 				),
 			),
@@ -628,7 +628,7 @@ class DearSurvey_DB {
 					'ID'         => $post_id,
 					'post_title' => $name ?: $email,
 				) );
-				update_post_meta( $post_id, '_ds_name', $name );
+				update_post_meta( $post_id, '_formera_name', $name );
 			}
 			return $post_id;
 		}
@@ -645,8 +645,8 @@ class DearSurvey_DB {
 			return false;
 		}
 
-		update_post_meta( $post_id, '_ds_email', $email );
-		update_post_meta( $post_id, '_ds_name', $name );
+		update_post_meta( $post_id, '_formera_email', $email );
+		update_post_meta( $post_id, '_formera_name', $name );
 
 		return $post_id;
 	}
@@ -669,8 +669,8 @@ class DearSurvey_DB {
 	 * @return array Subscriber data array.
 	 */
 	private function format_subscriber_from_post( $post ) {
-		$email = get_post_meta( $post->ID, '_ds_email', true );
-		$name  = get_post_meta( $post->ID, '_ds_name', true );
+		$email = get_post_meta( $post->ID, '_formera_email', true );
+		$name  = get_post_meta( $post->ID, '_formera_name', true );
 		
 		return array(
 			'id'         => $post->ID,

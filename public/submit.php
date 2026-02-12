@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_Submit {
+class Formera_Submit {
 
 	private $db;
 
@@ -14,15 +14,15 @@ class DearSurvey_Submit {
 
 	public function ajax_handle_submit() {
 		// Verify nonce for security
-		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'ds_submit_survey_nonce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'dear-survey' ) ) );
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security'] ) ), 'formera_submit_survey_nonce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Security check failed.', 'formera' ) ) );
 		}
 
 		$survey_id = isset( $_POST['survey_id'] ) ? intval( $_POST['survey_id'] ) : 0;
 		$response_data_raw = isset( $_POST['response_data'] ) ? sanitize_text_field( wp_unslash( $_POST['response_data'] ) ) : '';
 
 		if ( ! $survey_id || ! $response_data_raw ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid data', 'dear-survey' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid data', 'formera' ) ) );
 		}
 
 		$data = array(
@@ -47,8 +47,8 @@ class DearSurvey_Submit {
 				
 				// Identify responder email (from dedicated field or scan)
 				$responder_email = '';
-				if ( ! empty( $response_data['ds_responder_email'] ) ) {
-					$responder_email = sanitize_email( $response_data['ds_responder_email'] );
+				if ( ! empty( $response_data['formera_responder_email'] ) ) {
+					$responder_email = sanitize_email( $response_data['formera_responder_email'] );
 				}
 
 				// 1. Admin Notification

@@ -1,3 +1,7 @@
+/**
+ * Formera Admin Styles
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap');
 
 :root {
@@ -661,4 +665,9 @@
     .ds-stat-value {
         font-size: 28px;
     }
+}
+
+/* Chevron rotation for settings toggle */
+.gf-chevron.gf-rotated {
+    transform: rotate(180deg) !important;
 }

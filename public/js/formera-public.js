@@ -1,5 +1,5 @@
 /**
- * Dear Survey Public JS
+ * Formera Public JS
  * Modern & Attractive Interactions
  */
 
@@ -79,13 +79,13 @@ jQuery(document).ready(function ($) {
 
         // AJAX submission
         $.ajax({
-            url: dearsurvey_obj.ajax_url,
+            url: formera_obj.ajax_url,
             type: 'POST',
             data: {
-                action: 'ds_submit_survey',
+                action: 'formera_submit_survey',
                 survey_id: surveyId,
                 response_data: JSON.stringify(responseData),
-                security: dearsurvey_obj.nonce
+                security: formera_obj.nonce
             },
             success: function (response) {
                 $btn.removeClass('is-loading').prop('disabled', false);

@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_Results {
+class Formera_Results {
 
 	private $db;
 
@@ -26,7 +26,7 @@ class DearSurvey_Results {
 		$questions = json_decode( $survey['questions'], true );
 
 		require_once dirname( __FILE__ ) . '/menu.php';
-		$menu = new DearSurvey_Menu( $this->db );
+		$menu = new Formera_Menu( $this->db );
 		?>
 		<div class="ds-app-container ds-animate">
 			<?php $menu->get_sidebar('surveys'); ?>
@@ -39,11 +39,11 @@ class DearSurvey_Results {
 						<h1 class="ds-title"><?php echo esc_html( $survey['title'] ); ?></h1>
 					</div>
 					<div style="display: flex; gap: 12px;">
-						<a href="<?php echo esc_url( admin_url('admin-ajax.php?action=ds_export_csv&survey_id=' . $survey_id) ); ?>" class="ds-btn ds-btn-secondary">
+						<a href="<?php echo esc_url( admin_url('admin-ajax.php?action=formera_export_csv&survey_id=' . $survey_id) ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
 							Export CSV
 						</a>
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder&id=' . $survey_id) ); ?>" class="ds-btn ds-btn-primary">Edit Survey</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder&id=' . $survey_id) ); ?>" class="ds-btn ds-btn-primary">Edit Survey</a>
 					</div>
 				</div>
 
@@ -87,7 +87,7 @@ class DearSurvey_Results {
 								<?php else : ?>
 									<?php foreach ( $responses as $resp ) : 
 										$data = json_decode( $resp['response_data'], true );
-										$email = $data['ds_responder_email'] ?? 'Anonymous';
+										$email = (string) ( $data['formera_responder_email'] ?? 'Anonymous' );
 										?>
 										<tr>
 											<td style="color: var(--ds-text-light); font-size: 13px;"><?php echo esc_html( date_i18n( 'M j, Y H:i', strtotime( $resp['created_at'] ) ) ); ?></td>

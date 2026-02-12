@@ -4,12 +4,12 @@
  * Markup Overhaul for Premium UI/UX Refactor
  */
 
-class DearSurvey_Settings {
+class Formera_Settings {
 
 	public function render_settings() {
 		require_once dirname( __FILE__ ) . '/menu.php';
-		global $dearsurvey_db;
-		$menu = new DearSurvey_Menu( $dearsurvey_db );
+		global $formera_db;
+		$menu = new Formera_Menu( $formera_db );
 		?>
 		<div class="ds-app-container ds-animate">
 			<?php $menu->get_sidebar('settings'); ?>
@@ -24,7 +24,7 @@ class DearSurvey_Settings {
 				</div>
 
 				<form method="post" action="options.php">
-					<?php settings_fields( 'ds_settings_group' ); ?>
+					<?php settings_fields( 'formera_settings_group' ); ?>
 					
 					<div class="ds-card">
 						<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
@@ -43,7 +43,7 @@ class DearSurvey_Settings {
 								<p style="margin: 0; font-size: 13px; color: var(--ds-text-light);">Anonymize IP addresses and add consent checkboxes.</p>
 							</div>
 							<label class="ds-toggle">
-								<input type="checkbox" name="ds_gdpr_mode" value="1" <?php checked( get_option('ds_gdpr_mode'), 1 ); ?>>
+								<input type="checkbox" name="formera_gdpr_mode" value="1" <?php checked( get_option('formera_gdpr_mode'), 1 ); ?>>
 								<span class="ds-toggle-slider"></span>
 							</label>
 						</div>
@@ -54,13 +54,13 @@ class DearSurvey_Settings {
 								<div>
 									<label class="ds-label">Primary Brand Color</label>
 									<div style="display: flex; gap: 12px;">
-										<input type="text" name="ds_brand_color" class="ds-input-field" value="<?php echo esc_attr( get_option('ds_brand_color', '#1F7A5A') ); ?>" placeholder="#1F7A5A">
-										<div style="width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--ds-border); background: <?php echo esc_attr( get_option('ds_brand_color', '#1F7A5A') ); ?>;"></div>
+										<input type="text" name="formera_brand_color" class="ds-input-field" value="<?php echo esc_attr( get_option('formera_brand_color', '#1F7A5A') ); ?>" placeholder="#1F7A5A">
+										<div style="width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--ds-border); background: <?php echo esc_attr( get_option('formera_brand_color', '#1F7A5A') ); ?>;"></div>
 									</div>
 								</div>
 								<div>
 									<label class="ds-label">Container Max-Width (px)</label>
-									<input type="number" name="ds_container_width" class="ds-input-field" value="<?php echo esc_attr( get_option('ds_container_width', '800') ); ?>" placeholder="800">
+									<input type="number" name="formera_container_width" class="ds-input-field" value="<?php echo esc_attr( get_option('formera_container_width', '800') ); ?>" placeholder="800">
 								</div>
 							</div>
 						</div>

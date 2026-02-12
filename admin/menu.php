@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_Menu {
+class Formera_Menu {
 
 	private $db;
 
@@ -18,27 +18,30 @@ class DearSurvey_Menu {
 	public function register_menus() {
 		// Handle Delete Action with nonce verification
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['id'] ) ) {
-			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'ds_delete_survey_' . intval( $_GET['id'] ) ) ) {
-				wp_die( esc_html__( 'Security check failed.', 'dear-survey' ) );
+			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'formera_delete_survey_' . intval( $_GET['id'] ) ) ) {
+				wp_die( esc_html__( 'Security check failed.', 'formera' ) );
 			}
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( esc_html__( 'Unauthorized access.', 'dear-survey' ) );
+				wp_die( esc_html__( 'Unauthorized access.', 'formera' ) );
 			}
 			$this->db->delete_survey( intval( $_GET['id'] ) );
-			wp_safe_redirect( admin_url( 'admin.php?page=dear-survey-list&deleted=true' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=formera-list&deleted=true' ) );
 			exit;
 		}
 
 		// Root: Homepage
-		add_menu_page( 'Dear Survey', 'Dear Survey', 'manage_options', 'dear-survey', array( $this, 'render_homepage' ), 'dashicons-clipboard', 25 );
+		add_menu_page( 'Formera', 'Formera', 'manage_options', 'formera', array( $this, 'render_homepage' ), 'dashicons-feedback', 6 );
+		
+		// Add to Plugins menu for easy access
+		add_submenu_page( 'plugins.php', 'Formera Surveys', 'Formera Surveys', 'manage_options', 'formera', array( $this, 'render_homepage' ) );
 		
 		// Submenus
-		add_submenu_page( 'dear-survey', 'Home', 'Home', 'manage_options', 'dear-survey', array( $this, 'render_homepage' ) );
-		add_submenu_page( 'dear-survey', 'Surveys', 'Surveys List', 'manage_options', 'dear-survey-list', array( $this, 'render_dashboard' ) );
-		add_submenu_page( 'dear-survey', 'Contact List', 'Contact List', 'manage_options', 'dear-survey-contacts', array( $this, 'render_contacts' ) );
-		add_submenu_page( 'dear-survey', 'Add New', 'Add New', 'manage_options', 'dear-survey-builder', array( $this, 'render_builder' ) );
+		add_submenu_page( 'formera', 'Home', 'Home', 'manage_options', 'formera', array( $this, 'render_homepage' ) );
+		add_submenu_page( 'formera', 'Surveys', 'Surveys List', 'manage_options', 'formera-list', array( $this, 'render_dashboard' ) );
+		add_submenu_page( 'formera', 'Contact List', 'Contact List', 'manage_options', 'formera-contacts', array( $this, 'render_contacts' ) );
+		add_submenu_page( 'formera', 'Add New', 'Add New', 'manage_options', 'formera-builder', array( $this, 'render_builder' ) );
 		// Hidden page for viewing survey submissions
-		add_submenu_page( null, 'Survey Results', 'Results', 'manage_options', 'dear-survey-results', array( $this, 'render_survey_results' ) );
+		add_submenu_page( null, 'Survey Results', 'Results', 'manage_options', 'formera-results', array( $this, 'render_survey_results' ) );
 	}
 
 	public function get_sidebar( $active_page = 'home' ) {
@@ -49,22 +52,22 @@ class DearSurvey_Menu {
 					<path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0118 9.375v9.375a3 3 0 003-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 00-.673-.05A3 3 0 0015 1.5h-1.5a3 3 0 00-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6zM13.5 3A1.5 1.5 0 0012 4.5h4.5A1.5 1.5 0 0015 3h-1.5z" clip-rule="evenodd" />
 					<path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 013 20.625V9.375zm9.586 4.594a.75.75 0 00-1.172-.938l-2.476 3.096-.908-.907a.75.75 0 00-1.06 1.06l1.5 1.5a.75.75 0 001.116-.062l3-3.75z" clip-rule="evenodd" />
 				</svg>
-				Dear Survey
+				Formera
 			</div>
 			<nav>
-				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'home' ? 'active' : '' ); ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=formera') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'home' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
 					Home
 				</a>
-				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-list') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'surveys' ? 'active' : '' ); ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-list') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'surveys' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>
 					Surveys
 				</a>
-				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-contacts') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'contacts' ? 'active' : '' ); ?>">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-contacts') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'contacts' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
 					Contacts
 				</a>
-				<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-nav-item" style="margin-top: 16px; background: var(--ds-primary); color: white; border-radius: 4px; margin-left: 0; padding-left: 16px;">
+				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-nav-item" style="margin-top: 16px; background: var(--ds-primary); color: white; border-radius: 4px; margin-left: 0; padding-left: 16px;">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 					New Survey
 				</a>
@@ -85,9 +88,9 @@ class DearSurvey_Menu {
 				<div class="ds-top-bar">
 					<div>
 						<div style="font-size: 12px; font-weight: 500; color: var(--ds-primary); margin-bottom: 4px; letter-spacing: 0.5px;">DASHBOARD</div>
-						<h1 class="ds-title">Dear Survey</h1>
+						<h1 class="ds-title">Formera</h1>
 					</div>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-btn ds-btn-primary">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px; height:18px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 						Create Survey
 					</a>
@@ -110,15 +113,15 @@ class DearSurvey_Menu {
 				<div class="ds-card" style="border-top: 4px solid var(--ds-primary);">
 					<h3 style="margin: 0 0 20px; font-size: 16px; font-weight: 500; color: var(--ds-secondary);">Quick Actions</h3>
 					<div style="display: flex; gap: 12px; flex-wrap: wrap;">
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-btn ds-btn-primary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 							New Survey
 						</a>
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-contacts') ); ?>" class="ds-btn ds-btn-secondary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-contacts') ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
 							Contacts
 						</a>
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-list') ); ?>" class="ds-btn ds-btn-secondary">
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-list') ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
 							All Surveys
 						</a>
@@ -137,6 +140,7 @@ class DearSurvey_Menu {
 								<tr>
 									<th>Name</th>
 									<th>Responses</th>
+									<th>Shortcode</th>
 									<th style="text-align:right;">Action</th>
 								</tr>
 							</thead>
@@ -155,8 +159,25 @@ class DearSurvey_Menu {
 										<td>
 											<span class="ds-badge ds-badge-indigo"><?php echo esc_html( $response_count ); ?> responses</span>
 										</td>
+										<td>
+											<div class="ds-shortcode" onclick="copyShortcode(this)" title="Click to copy">
+												<code>[formera id="<?php echo esc_attr( $survey['id'] ); ?>"]</code>
+												<svg class="ds-copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
+											</div>
+										</td>
 										<td style="text-align: right;">
-											<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 6px 16px;">Edit</a>
+											<div style="display: flex; gap: 8px; justify-content: flex-end;">
+												<a href="<?php echo esc_url( admin_url( 'admin.php?page=formera-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 6px 16px;">Edit</a>
+												<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=formera&action=delete&id=' . $survey['id'] ), 'formera_delete_survey_' . $survey['id'] ) ); ?>" 
+												   class="ds-btn ds-btn-danger" 
+												   style="padding: 6px 16px; background: #dc2626; color: white; border-color: #dc2626;" 
+												   onclick="return confirm('Are you sure you want to delete this survey? This action cannot be undone.');" 
+												   title="Delete Survey">
+													<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;">
+														<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+													</svg>
+												</a>
+											</div>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -178,7 +199,7 @@ class DearSurvey_Menu {
 			<div class="ds-main-content">
 				<div class="ds-top-bar">
 					<h1 class="ds-title">Surveys</h1>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-btn ds-btn-primary">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
 						New Survey
 					</a>
@@ -191,7 +212,7 @@ class DearSurvey_Menu {
 							</svg>
 							<h3>No surveys yet</h3>
 							<p>Create your first survey to start collecting responses.</p>
-							<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-btn ds-btn-primary" style="margin-top: 16px;">Create Survey</a>
+							<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-btn ds-btn-primary" style="margin-top: 16px;">Create Survey</a>
 						</div>
 					</div>
 				<?php else : ?>
@@ -217,20 +238,21 @@ class DearSurvey_Menu {
 											<div style="font-size: 12px; color: var(--ds-text-light); margin-top: 2px;"><?php echo esc_html( date_i18n( 'M j, Y', strtotime($survey['created_at']) ) ); ?></div>
 										</td>
 										<td>
-											<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-results&id=' . $survey['id'] ) ); ?>" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ds-primary); font-weight: 500;">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=formera-results&id=' . $survey['id'] ) ); ?>" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ds-primary); font-weight: 500;">
 												<span class="ds-badge ds-badge-indigo"><?php echo esc_html( $response_count ); ?></span>
 												View
 											</a>
 										</td>
 										<td>
-											<div class="ds-shortcode">
-												<code style="font-size: 13px;">[dearsurvey id="<?php echo esc_attr( $survey['id'] ); ?>"]</code>
+											<div class="ds-shortcode" onclick="copyShortcode(this)" title="Click to copy">
+												<code>[formera id="<?php echo esc_attr( $survey['id'] ); ?>"]</code>
+												<svg class="ds-copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
 											</div>
 										</td>
 										<td style="text-align:right;">
 											<div style="display: flex; gap: 8px; justify-content: flex-end;">
-												<a href="<?php echo esc_url( admin_url( 'admin.php?page=dear-survey-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 8px 16px;">Edit</a>
-												<button class="ds-btn ds-btn-outlined ds-delete-trigger" data-href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=dear-survey&action=delete&id=' . $survey['id'] ), 'ds_delete_survey_' . $survey['id'] ) ); ?>" style="padding: 8px 16px; color: var(--ds-error); border-color: var(--ds-error);">Delete</button>
+												<a href="<?php echo esc_url( admin_url( 'admin.php?page=formera-builder&id=' . $survey['id'] ) ); ?>" class="ds-btn ds-btn-secondary" style="padding: 8px 16px;">Edit</a>
+												<button class="ds-btn ds-btn-outlined ds-delete-trigger" data-href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=formera&action=delete&id=' . $survey['id'] ), 'formera_delete_survey_' . $survey['id'] ) ); ?>" style="padding: 8px 16px; color: var(--ds-error); border-color: var(--ds-error);">Delete</button>
 											</div>
 										</td>
 									</tr>
@@ -258,18 +280,19 @@ class DearSurvey_Menu {
 				</div>
 			</div>
 		</div>
-		<script>
-		jQuery(document).ready(function($) {
-			$(document).on('click', '.ds-delete-trigger', function() {
-				const href = $(this).data('href');
-				$('#ds-confirm-delete-btn').data('href', href);
-				$('#ds-delete-modal').css('display', 'flex');
-			});
-			$('#ds-cancel-delete-btn').on('click', function() { $('#ds-delete-modal').hide(); });
-			$('#ds-confirm-delete-btn').on('click', function() { window.location.href = $(this).data('href'); });
-		});
-		</script>
 		<?php
+		// Add inline script to formera-admin-js handle
+		wp_add_inline_script( 'formera-admin-js', "
+			jQuery(document).ready(function($) {
+				$(document).on('click', '.ds-delete-trigger', function() {
+					var href = $(this).data('href');
+					$('#ds-confirm-delete-btn').data('href', href);
+					$('#ds-delete-modal').css('display', 'flex');
+				});
+				$('#ds-cancel-delete-btn').on('click', function() { $('#ds-delete-modal').hide(); });
+				$('#ds-confirm-delete-btn').on('click', function() { window.location.href = $(this).data('href'); });
+			});
+		" );
 	}
 
 	public function render_contacts() {
@@ -277,8 +300,8 @@ class DearSurvey_Menu {
 		$contacts = [];
 		foreach ($all_responses as $resp) {
 			$data = json_decode($resp['response_data'], true);
-			if (!empty($data['ds_responder_email'])) {
-				$email = strtolower(trim($data['ds_responder_email']));
+			if (!empty($data['formera_responder_email'])) {
+				$email = strtolower( trim( (string) $data['formera_responder_email'] ) );
 				if (!isset($contacts[$email])) {
 					$contacts[$email] = [
 						'email' => $email,
@@ -328,7 +351,7 @@ class DearSurvey_Menu {
 										<td>
 											<div style="display: flex; align-items: center; gap: 12px;">
 												<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--ds-primary-soft); color: var(--ds-primary); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 14px;">
-													<?php echo esc_html( strtoupper( substr( $contact['email'], 0, 1 ) ) ); ?>
+													<?php echo esc_html( strtoupper( substr( (string) ( $contact['email'] ?? '' ), 0, 1 ) ) ); ?>
 												</div>
 												<span style="font-weight: 500;"><?php echo esc_html($contact['email']); ?></span>
 											</div>
@@ -355,13 +378,13 @@ class DearSurvey_Menu {
 
 	public function render_builder() {
 		require_once dirname( __FILE__ ) . '/survey-builder.php';
-		$builder = new DearSurvey_Builder( $this->db );
+		$builder = new Formera_Builder( $this->db );
 		$builder->render();
 	}
 
 	public function render_survey_results() {
 		require_once dirname( __FILE__ ) . '/results.php';
-		$results = new DearSurvey_Results( $this->db );
+		$results = new Formera_Results( $this->db );
 		$results->render_results();
 	}
 }

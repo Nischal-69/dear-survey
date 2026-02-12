@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_Activator {
+class Formera_Activator {
 
 	/**
 	 * Plugin activation handler
@@ -21,7 +21,7 @@ class DearSurvey_Activator {
 		flush_rewrite_rules();
 		
 		// Store plugin version
-		update_option( 'dearsurvey_db_version', DEAR_SURVEY_DB_VERSION );
+		update_option( 'formera_db_version', FORMERA_DB_VERSION );
 	}
 
 	/**
@@ -29,34 +29,34 @@ class DearSurvey_Activator {
 	 */
 	private static function register_post_types() {
 		$post_types = array(
-			'ds_survey' => array(
+			'formera_survey' => array(
 				'labels' => array(
-					'name'          => __( 'Surveys', 'dear-survey' ),
-					'singular_name' => __( 'Survey', 'dear-survey' ),
+					'name'          => __( 'Surveys', 'formera' ),
+					'singular_name' => __( 'Survey', 'formera' ),
 				),
 			),
-			'ds_response' => array(
+			'formera_response' => array(
 				'labels' => array(
-					'name'          => __( 'Survey Responses', 'dear-survey' ),
-					'singular_name' => __( 'Response', 'dear-survey' ),
+					'name'          => __( 'Survey Responses', 'formera' ),
+					'singular_name' => __( 'Response', 'formera' ),
 				),
 			),
-			'ds_broadcast' => array(
+			'formera_broadcast' => array(
 				'labels' => array(
-					'name'          => __( 'Broadcasts', 'dear-survey' ),
-					'singular_name' => __( 'Broadcast', 'dear-survey' ),
+					'name'          => __( 'Broadcasts', 'formera' ),
+					'singular_name' => __( 'Broadcast', 'formera' ),
 				),
 			),
-			'ds_template' => array(
+			'formera_template' => array(
 				'labels' => array(
-					'name'          => __( 'Email Templates', 'dear-survey' ),
-					'singular_name' => __( 'Template', 'dear-survey' ),
+					'name'          => __( 'Email Templates', 'formera' ),
+					'singular_name' => __( 'Template', 'formera' ),
 				),
 			),
-			'ds_subscriber' => array(
+			'formera_subscriber' => array(
 				'labels' => array(
-					'name'          => __( 'Subscribers', 'dear-survey' ),
-					'singular_name' => __( 'Subscriber', 'dear-survey' ),
+					'name'          => __( 'Subscribers', 'formera' ),
+					'singular_name' => __( 'Subscriber', 'formera' ),
 				),
 			),
 		);
@@ -84,7 +84,7 @@ class DearSurvey_Activator {
 	private static function seed_initial_templates() {
 		// Check if templates already exist
 		$existing = get_posts( array(
-			'post_type'      => 'ds_template',
+			'post_type'      => 'formera_template',
 			'posts_per_page' => 1,
 			'fields'         => 'ids',
 		) );
@@ -110,14 +110,14 @@ class DearSurvey_Activator {
 		foreach ( $templates as $template ) {
 			$post_id = wp_insert_post( array(
 				'post_title'  => $template['name'],
-				'post_type'   => 'ds_template',
+				'post_type'   => 'formera_template',
 				'post_status' => 'publish',
 			) );
 
 			if ( ! is_wp_error( $post_id ) ) {
-				update_post_meta( $post_id, '_ds_subject', $template['subject'] );
-				update_post_meta( $post_id, '_ds_content', $template['content'] );
-				update_post_meta( $post_id, '_ds_updated_at', current_time( 'mysql' ) );
+				update_post_meta( $post_id, '_formera_subject', $template['subject'] );
+				update_post_meta( $post_id, '_formera_content', $template['content'] );
+				update_post_meta( $post_id, '_formera_updated_at', current_time( 'mysql' ) );
 			}
 		}
 	}

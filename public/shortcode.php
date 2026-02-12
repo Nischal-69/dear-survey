@@ -8,14 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class DearSurvey_Shortcode {
+class Formera_Shortcode {
 
 	private $db;
 
 	public function __construct( $db ) { $this->db = $db; }
 
 	public function render( $atts ) {
-		$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'dearsurvey' );
+		$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'formera' );
 		$survey_id = intval( $atts['id'] );
 
 		if ( ! $survey_id ) return '<p class="ds-error-msg">Survey ID is missing.</p>';
@@ -62,7 +62,7 @@ class DearSurvey_Shortcode {
 						<label class="gf-q-label">
 							Email address <span class="gf-required">*</span>
 						</label>
-						<input type="email" name="ds_responder_email" class="gf-text-input" placeholder="your.email@example.com" required autocomplete="email">
+						<input type="email" name="formera_responder_email" class="gf-text-input" placeholder="your.email@example.com" required autocomplete="email">
 						<p class="gf-helper-text">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" /></svg>
 							We'll send a confirmation to this email
@@ -92,8 +92,8 @@ class DearSurvey_Shortcode {
 						
 						<?php elseif ( $q['type'] === 'radio' ) : ?>
 							<div class="gf-options-list" role="radiogroup" aria-label="<?php echo esc_attr( $q['title'] ); ?>">
-								<?php $options = explode( ',', $q['options'] ); ?>
-								<?php foreach ( $options as $optIndex => $opt ) : $opt = trim($opt); if(!$opt) continue; ?>
+								<?php $options = explode( ',', $q['options'] ?? '' ); ?>
+								<?php foreach ( $options as $optIndex => $opt ) : $opt = trim( (string) $opt ); if(!$opt) continue; ?>
 									<label class="gf-option-item gf-radio-option">
 										<input type="radio" name="q_<?php echo esc_attr( $index ); ?>" value="<?php echo esc_attr( $opt ); ?>" <?php echo $is_required ? 'required' : ''; ?>>
 										<span class="gf-radio-circle">
@@ -106,8 +106,8 @@ class DearSurvey_Shortcode {
 
 						<?php elseif ( $q['type'] === 'checkbox' ) : ?>
 							<div class="gf-options-list" role="group" aria-label="<?php echo esc_attr( $q['title'] ); ?>">
-								<?php $options = explode( ',', $q['options'] ); ?>
-								<?php foreach ( $options as $optIndex => $opt ) : $opt = trim($opt); if(!$opt) continue; ?>
+								<?php $options = explode( ',', $q['options'] ?? '' ); ?>
+								<?php foreach ( $options as $optIndex => $opt ) : $opt = trim( (string) $opt ); if(!$opt) continue; ?>
 									<label class="gf-option-item gf-checkbox-option">
 										<input type="checkbox" name="q_<?php echo esc_attr( $index ); ?>[]" value="<?php echo esc_attr( $opt ); ?>">
 										<span class="gf-checkbox-box">

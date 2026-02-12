@@ -3,7 +3,7 @@
  * Email Management Class for Broadcasts, Templates, and Mailing Lists
  */
 
-class DearSurvey_Email {
+class Formera_Email {
 
 	private $db;
 
@@ -14,6 +14,28 @@ class DearSurvey_Email {
 	public function render_page() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- View parameter is only used for display routing
 		$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'broadcast';
+		
+		// Enqueue email scripts
+		wp_enqueue_script(
+			'formera-email',
+			FORMERA_URL . 'admin/js/formera-email.js',
+			array( 'jquery' ),
+			FORMERA_VERSION,
+			true
+		);
+		
+		wp_localize_script(
+			'formera-email',
+			'formera_email',
+			array(
+				'broadcast_nonce'   => wp_create_nonce( 'formera_broadcast' ),
+				'template_nonce'    => wp_create_nonce( 'formera_template' ),
+				'subscriber_nonce'  => wp_create_nonce( 'formera_subscriber' ),
+				'email_page_url'    => admin_url( 'admin.php?page=formera-email' ),
+				'template_page_url' => admin_url( 'admin.php?page=formera-email&view=template' ),
+				'new_broadcast_url' => admin_url( 'admin.php?page=formera-email&view=new_broadcast&recipients=' ),
+			)
+		);
 		?>
 		<div class="ds-app-container ds-animate">
 			<!-- Sidebar -->
@@ -22,27 +44,27 @@ class DearSurvey_Email {
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width:28px; height:28px;">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.745 3.745 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
 					</svg>
-					Dear Survey
+					Formera
 				</div>
 				<nav>
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin-bottom: 12px;">Navigations</div>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey') ); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
 						Surveys List
 					</a>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-builder') ); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
 						Create New Survey
 					</a>
 					
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Outreach</div>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email') ); ?>" class="ds-nav-item active">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email') ); ?>" class="ds-nav-item active">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 20 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
 						Email Broadcast
 					</a>
 
 					<div style="font-size: 11px; font-weight: 700; color: var(--ds-text-light); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 16px; margin: 32px 0 12px;">Preferences</div>
-					<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-settings') ); ?>" class="ds-nav-item">
+					<a href="<?php echo esc_url( admin_url('admin.php?page=formera-settings') ); ?>" class="ds-nav-item">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"/><path d="M12 9v6m-3-3h6"/></svg>
 						Global Settings
 					</a>
@@ -57,9 +79,9 @@ class DearSurvey_Email {
 						<h1 class="ds-title">Email Broadcast</h1>
 					</div>
 					<div style="display:flex; gap:10px;">
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=subscribers') ); ?>" class="ds-btn ds-btn-secondary">Contacts</a>
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=template') ); ?>" class="ds-btn ds-btn-secondary">Templates</a>
-						<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast') ); ?>" class="ds-btn ds-btn-primary">Send Survey</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=subscribers') ); ?>" class="ds-btn ds-btn-secondary">Contacts</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=template') ); ?>" class="ds-btn ds-btn-secondary">Templates</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=new_broadcast') ); ?>" class="ds-btn ds-btn-primary">Send Survey</a>
 					</div>
 				</div>
 
@@ -98,7 +120,7 @@ class DearSurvey_Email {
 						<?php foreach ( $broadcasts as $b ) : ?>
 							<tr>
 								<td style="font-weight:700;"><?php echo esc_html($b['subject']); ?></td>
-								<td><span class="ds-badge ds-badge-indigo"><?php echo esc_html( count(explode(',', $b['recipients'])) ); ?> People</span></td>
+								<td><span class="ds-badge ds-badge-indigo"><?php echo esc_html( count( explode( ',', (string) ( $b['recipients'] ?? '' ) ) ) ); ?> People</span></td>
 								<td><?php echo esc_html( date_i18n( 'M j, Y H:i', strtotime($b['sent_at']) ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -133,7 +155,7 @@ class DearSurvey_Email {
 							<?php
 							// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Recipients parameter is only used for pre-filling form
 							$url_recipients = isset( $_GET['recipients'] ) ? sanitize_text_field( wp_unslash( $_GET['recipients'] ) ) : '';
-							$url_recipients_array = $url_recipients ? explode( ',', $url_recipients ) : array();
+							$url_recipients_array = $url_recipients ? explode( ',', (string) $url_recipients ) : array();
 							?>
 							<div style="max-height:150px; overflow-y:auto; border:1px solid var(--ds-border); border-radius:10px; padding:15px; margin-bottom:10px;">
 								<?php if(empty($subscribers)): ?>
@@ -181,57 +203,6 @@ class DearSurvey_Email {
 				</div>
 			</div>
 		</div>
-
-		<script>
-		jQuery(document).ready(function($) {
-			$('.ds-sub-checkbox').change(function() {
-				let selected = [];
-				$('.ds-sub-checkbox:checked').each(function() { selected.push($(this).val()); });
-				$('#ds-broadcast-recipients').val(selected.join(', '));
-			});
-
-			$('#ds-template-selector').change(function() {
-				const opt = $(this).find('option:selected');
-				if(opt.val()) {
-					$('#ds-broadcast-subject').val(opt.data('subject'));
-					$('#ds-broadcast-message').val(opt.data('content'));
-				}
-			});
-
-			// Auto-load template if pre-selected via URL
-			if($('#ds-template-selector').val()) {
-				$('#ds-template-selector').trigger('change');
-			}
-
-			$('#ds-broadcast-form').submit(function(e) {
-				e.preventDefault();
-				const btn = $(this).find('button');
-				btn.prop('disabled', true).text('Sending...');
-				
-				let message = $('#ds-broadcast-message').val();
-				const surveyId = $('#ds-survey-selector').val();
-				
-				const data = {
-					action: 'ds_send_broadcast',
-					recipients: $('#ds-broadcast-recipients').val(),
-					subject: $('#ds-broadcast-subject').val(),
-					message: message,
-					survey_id: surveyId,
-					security: '<?php echo esc_js( wp_create_nonce("ds_broadcast") ); ?>'
-				};
-
-				$.post(ajaxurl, data, function(res) {
-					if(res.success) {
-						alert('Broadcast sent successfully!');
-						window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email") ); ?>';
-					} else {
-						alert('Error: ' + res.data);
-						btn.prop('disabled', false).text('Send Survey Link');
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 
@@ -257,8 +228,8 @@ class DearSurvey_Email {
 								<td><?php echo esc_html($t['subject']); ?></td>
 								<td style="text-align:right;">
 									<div style="display:flex; justify-content:flex-end; gap:8px;">
-											<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast&temp_id=' . $t['id']) ); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Use This</a>
-											<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=edit_template&id=' . $t['id']) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit</a>
+											<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=new_broadcast&temp_id=' . $t['id']) ); ?>" class="ds-btn ds-btn-primary" style="padding:8px 14px; font-size:12px;">Use This</a>
+											<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=edit_template&id=' . $t['id']) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px 14px; font-size:12px;">Edit</a>
 									</div>
 								</td>
 							</tr>
@@ -268,7 +239,7 @@ class DearSurvey_Email {
 			</table>
 		</div>
 		<div style="margin-top:20px; text-align:right;">
-			<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_template') ); ?>" class="ds-btn ds-btn-secondary">+ Create Template</a>
+			<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=new_template') ); ?>" class="ds-btn ds-btn-secondary">+ Create Template</a>
 		</div>
 		<?php
 	}
@@ -296,33 +267,6 @@ class DearSurvey_Email {
 				<button type="submit" class="ds-btn ds-btn-primary" style="width:100%; justify-content:center;">Save Template</button>
 			</form>
 		</div>
-		<script>
-		jQuery(document).ready(function($) {
-			$('#ds-template-form').submit(function(e) {
-				e.preventDefault();
-				const btn = $(this).find('button');
-				btn.prop('disabled', true).text('Saving...');
-				
-				const data = {
-					action: 'ds_save_template',
-					id: $('#template_id').val(),
-					name: $('#template_name').val(),
-					subject: $('#template_subject').val(),
-					content: $('#template_content').val(),
-					security: '<?php echo esc_js( wp_create_nonce("ds_template") ); ?>'
-				};
-
-				$.post(ajaxurl, data, function(res) {
-					if(res.success) {
-						window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email&view=template") ); ?>';
-					} else {
-						alert('Save failed.');
-						btn.prop('disabled', false).text('Save Template');
-					}
-				});
-			});
-		});
-		</script>
 		<?php
 	}
 
@@ -359,7 +303,7 @@ class DearSurvey_Email {
 										<td><?php echo esc_html( date_i18n( 'M j, Y', strtotime($s['created_at']) ) ); ?></td>
 										<td style="text-align:right;">
 											<div style="display:flex; justify-content:flex-end; gap:8px;">
-												<a href="<?php echo esc_url( admin_url('admin.php?page=dear-survey-email&view=new_broadcast&recipients=' . urlencode($s['email'])) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px; border:none;" title="Send Message">
+												<a href="<?php echo esc_url( admin_url('admin.php?page=formera-email&view=new_broadcast&recipients=' . urlencode($s['email'])) ); ?>" class="ds-btn ds-btn-secondary" style="padding:8px; border:none;" title="Send Message">
 													<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px; height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
 												</a>
 												<button type="button" class="ds-btn ds-btn-secondary ds-delete-sub" data-id="<?php echo esc_attr( $s['id'] ); ?>" style="padding:8px; color:#EF4444; border:none;">
@@ -391,50 +335,11 @@ class DearSurvey_Email {
 				</div>
 			</div>
 		</div>
-		<script>
-		jQuery(document).ready(function($) {
-			$('#ds-add-sub-form').submit(function(e) {
-				e.preventDefault();
-				const btn = $(this).find('button');
-				btn.prop('disabled', true).text('Saving...');
-				$.post(ajaxurl, {
-					action: 'ds_add_subscriber',
-					name: $('#ds-sub-name').val(),
-					email: $('#ds-sub-email').val(),
-					security: '<?php echo esc_js( wp_create_nonce("ds_subscriber") ); ?>'
-				}, function(res) {
-					if(res.success) window.location.reload();
-					else { alert(res.data); btn.prop('disabled', false).text('Add Contact'); }
-				});
-			});
-
-			$('#ds-select-all-subs').change(function() {
-				$('.ds-sub-item-check').prop('checked', $(this).prop('checked'));
-			});
-
-			$('#ds-bulk-send').click(function() {
-				const selected = [];
-				$('.ds-sub-item-check:checked').each(function() { selected.push($(this).val()); });
-				if(selected.length === 0) { alert('Select contacts first.'); return; }
-				window.location.href = '<?php echo esc_js( admin_url("admin.php?page=dear-survey-email&view=new_broadcast&recipients=") ); ?>' + encodeURIComponent(selected.join(','));
-			});
-
-			$('.ds-delete-sub').click(function() {
-				if(!confirm('Remove this contact?')) return;
-				const id = $(this).data('id');
-				$.post(ajaxurl, {
-					action: 'ds_remove_subscriber',
-					id: id,
-					security: '<?php echo esc_js( wp_create_nonce("ds_subscriber") ); ?>'
-				}, function() { $('#sub-row-'+id).fadeOut(); });
-			});
-		});
-		</script>
 		<?php
 	}
 
 	public function ajax_add_subscriber() {
-		check_ajax_referer( 'ds_subscriber', 'security' );
+		check_ajax_referer( 'formera_subscriber', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Forbidden' );
 		}
@@ -448,7 +353,7 @@ class DearSurvey_Email {
 	}
 
 	public function ajax_remove_subscriber() {
-		check_ajax_referer( 'ds_subscriber', 'security' );
+		check_ajax_referer( 'formera_subscriber', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Forbidden' );
 		}
@@ -461,24 +366,24 @@ class DearSurvey_Email {
 	}
 
 	public function ajax_send_broadcast() {
-		check_ajax_referer( 'ds_broadcast', 'security' );
+		check_ajax_referer( 'formera_broadcast', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Forbidden' );
 		}
 
 		$recipients_raw = isset( $_POST['recipients'] ) ? sanitize_text_field( wp_unslash( $_POST['recipients'] ) ) : '';
-		$recipients = explode( ',', $recipients_raw );
+		$recipients = explode( ',', (string) $recipients_raw );
 		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		$message = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : '';
 		$survey_id = isset( $_POST['survey_id'] ) ? intval( $_POST['survey_id'] ) : 0;
 
 		// Auto-append survey link if survey_id is provided
 		if ($survey_id) {
-			$survey_url = home_url('/?ds_survey=' . $survey_id); // Assuming we have a way to view it or just use shortcode page
+			$survey_url = home_url('/?formera_survey=' . $survey_id); // Assuming we have a way to view it or just use shortcode page
 			// Better: generate a link based on the page where the shortcode is, but let's just use home_url with param for now
 			$link = "View Survey: " . $survey_url;
-			if (strpos($message, '{survey_link}') !== false) {
-				$message = str_replace('{survey_link}', $survey_url, $message);
+			if ( strpos( (string) $message, '{survey_link}' ) !== false ) {
+				$message = str_replace( '{survey_link}', $survey_url, (string) $message );
 			} else {
 				$message .= "\n\n" . $link;
 			}
@@ -486,7 +391,7 @@ class DearSurvey_Email {
 
 		$sent_to = [];
 		foreach($recipients as $email) {
-			$email = trim($email);
+			$email = trim( (string) $email );
 			if(is_email($email)) {
 				wp_mail($email, $subject, $message);
 				$sent_to[] = $email;
@@ -506,7 +411,7 @@ class DearSurvey_Email {
 	}
 
 	public function ajax_save_template() {
-		check_ajax_referer( 'ds_template', 'security' );
+		check_ajax_referer( 'formera_template', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'Forbidden' );
 		}

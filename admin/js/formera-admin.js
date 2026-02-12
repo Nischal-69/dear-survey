@@ -1,5 +1,5 @@
 /**
- * Dear Survey Admin JS
+ * Formera Admin JS
  * Visual Only Interactions: Modal Handlers & UI Elements
  */
 
