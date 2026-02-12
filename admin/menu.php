@@ -32,8 +32,6 @@ class Formera_Menu {
 		// Root: Homepage
 		add_menu_page( 'Formera', 'Formera', 'manage_options', 'formera', array( $this, 'render_homepage' ), 'dashicons-feedback', 6 );
 		
-		// Add to Plugins menu for easy access
-		add_submenu_page( 'plugins.php', 'Formera Surveys', 'Formera Surveys', 'manage_options', 'formera', array( $this, 'render_homepage' ) );
 		
 		// Submenus
 		add_submenu_page( 'formera', 'Home', 'Home', 'manage_options', 'formera', array( $this, 'render_homepage' ) );
