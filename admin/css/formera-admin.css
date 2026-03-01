@@ -697,3 +697,378 @@
 .gf-chevron.gf-rotated {
     transform: rotate(180deg) !important;
 }
+
+/* =============================================
+   TEMPLATES PAGE STYLES
+   ============================================= */
+
+/* Search Bar */
+.formera-tpl-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--ds-white);
+    border: 1.5px solid var(--ds-border);
+    border-radius: var(--ds-radius-md);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formera-tpl-search-bar:focus-within {
+    border-color: var(--ds-primary);
+    box-shadow: 0 0 0 3px var(--ds-primary-glow);
+}
+
+.formera-tpl-search-bar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    font-family: var(--ds-font-family);
+    color: var(--ds-text);
+    width: 100%;
+}
+
+.formera-tpl-search-bar input::placeholder {
+    color: var(--ds-text-light);
+}
+
+/* Category Tabs */
+.formera-tpl-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.formera-tpl-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--ds-border);
+    border-radius: 100px;
+    background: var(--ds-white);
+    color: var(--ds-text-light);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--ds-font-family);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.formera-tpl-tab svg {
+    width: 16px;
+    height: 16px;
+}
+
+.formera-tpl-tab:hover {
+    border-color: var(--ds-primary);
+    color: var(--ds-primary);
+    background: var(--ds-primary-soft);
+}
+
+.formera-tpl-tab.active {
+    background: var(--ds-primary);
+    color: white;
+    border-color: var(--ds-primary);
+}
+
+.formera-tpl-tab.active svg {
+    color: white;
+}
+
+/* Templates Grid */
+.formera-tpl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Template Card */
+.formera-tpl-card {
+    background: var(--ds-white);
+    border-radius: var(--ds-radius-md);
+    border: 1.5px solid var(--ds-border);
+    overflow: hidden;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.formera-tpl-card:hover {
+    border-color: var(--ds-primary);
+    box-shadow: var(--ds-shadow);
+    transform: translateY(-2px);
+}
+
+.formera-tpl-card-header {
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.formera-tpl-card-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.formera-tpl-card-icon svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.formera-tpl-card-count {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 100px;
+    backdrop-filter: blur(4px);
+}
+
+.formera-tpl-card-body {
+    padding: 20px;
+    flex: 1;
+}
+
+.formera-tpl-card-title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ds-secondary);
+}
+
+.formera-tpl-card-desc {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: var(--ds-text-light);
+    line-height: 1.5;
+}
+
+.formera-tpl-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.formera-tpl-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--ds-primary-soft);
+    color: var(--ds-primary);
+}
+
+.formera-tpl-card-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--ds-divider);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+/* Click hint text in card footer */
+.formera-tpl-click-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--ds-text-light);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.formera-tpl-card:hover .formera-tpl-click-hint {
+    opacity: 1;
+}
+
+.formera-tpl-card-footer .ds-btn-primary {
+    padding: 7px 16px;
+    font-size: 13px;
+}
+
+/* Template Preview Modal - dedicated overlay (avoids stacking context issues) */
+.formera-tpl-overlay {
+    display: none;
+    position: fixed;
+    z-index: 9999999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+/* Template Preview Modal */
+.formera-tpl-modal-content {
+    background: var(--ds-white);
+    max-width: 600px;
+    width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-radius: var(--ds-radius-lg);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    animation: dsFadeUp 0.25s ease-out;
+}
+
+.formera-tpl-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--ds-divider);
+    flex-shrink: 0;
+}
+
+.formera-tpl-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.formera-tpl-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--ds-divider);
+    flex-shrink: 0;
+}
+
+/* Preview question items */
+.formera-tpl-preview-q {
+    padding: 16px;
+    background: var(--ds-bg);
+    border-radius: var(--ds-radius-sm);
+    margin-bottom: 12px;
+}
+
+.formera-tpl-preview-q:last-child {
+    margin-bottom: 0;
+}
+
+.formera-tpl-preview-q-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ds-secondary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.formera-tpl-preview-q-title .formera-tpl-required {
+    color: var(--ds-error);
+    font-weight: 600;
+}
+
+.formera-tpl-preview-q-type {
+    font-size: 12px;
+    color: var(--ds-text-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.formera-tpl-preview-opts {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.formera-tpl-preview-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ds-text);
+}
+
+.formera-tpl-preview-opt-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--ds-border);
+    flex-shrink: 0;
+}
+
+.formera-tpl-preview-opt-icon.checkbox {
+    border-radius: 3px;
+}
+
+.formera-tpl-preview-field {
+    height: 36px;
+    border-bottom: 1.5px solid var(--ds-border);
+    width: 60%;
+}
+
+.formera-tpl-preview-field.textarea {
+    height: 64px;
+    width: 100%;
+    border: 1.5px solid var(--ds-border);
+    border-radius: var(--ds-radius-sm);
+}
+
+/* Empty state for filtered templates */
+.formera-tpl-empty {
+    text-align: center;
+    padding: 48px 24px;
+}
+
+/* Animation for cards */
+.formera-tpl-card {
+    animation: dsFadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.formera-tpl-card:nth-child(2) { animation-delay: 0.05s; }
+.formera-tpl-card:nth-child(3) { animation-delay: 0.1s; }
+.formera-tpl-card:nth-child(4) { animation-delay: 0.15s; }
+.formera-tpl-card:nth-child(5) { animation-delay: 0.2s; }
+.formera-tpl-card:nth-child(6) { animation-delay: 0.25s; }
+.formera-tpl-card:nth-child(7) { animation-delay: 0.3s; }
+.formera-tpl-card:nth-child(8) { animation-delay: 0.35s; }
+.formera-tpl-card:nth-child(9) { animation-delay: 0.4s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formera-tpl-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .formera-tpl-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+    
+    .formera-tpl-modal-content {
+        width: 95vw;
+        max-height: 90vh;
+    }
+}

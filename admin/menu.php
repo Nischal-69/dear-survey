@@ -37,6 +37,7 @@ class Formera_Menu {
 		add_submenu_page( 'formera', 'Home', 'Home', 'manage_options', 'formera', array( $this, 'render_homepage' ) );
 		add_submenu_page( 'formera', 'Forms', 'Forms List', 'manage_options', 'formera-list', array( $this, 'render_dashboard' ) );
 		add_submenu_page( 'formera', 'Contact List', 'Contact List', 'manage_options', 'formera-contacts', array( $this, 'render_contacts' ) );
+		add_submenu_page( 'formera', 'Templates', 'Templates', 'manage_options', 'formera-templates', array( $this, 'render_templates' ) );
 		add_submenu_page( 'formera', 'Add New', 'Add New', 'manage_options', 'formera-builder', array( $this, 'render_builder' ) );
 		// Hidden page for viewing survey submissions
 		add_submenu_page( null, 'Form Results', 'Results', 'manage_options', 'formera-results', array( $this, 'render_survey_results' ) );
@@ -64,6 +65,10 @@ class Formera_Menu {
 				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-contacts') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'contacts' ? 'active' : '' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
 					Contacts
+				</a>
+				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-templates') ); ?>" class="ds-nav-item <?php echo esc_attr( $active_page == 'templates' ? 'active' : '' ); ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+					Templates
 				</a>
 				<a href="<?php echo esc_url( admin_url('admin.php?page=formera-builder') ); ?>" class="ds-nav-item" style="margin-top: 16px; background: var(--ds-primary); color: white; border-radius: 4px; margin-left: 0; padding-left: 16px;">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 4.5v15m7.5-7.5h-15"/></svg>
@@ -122,6 +127,10 @@ class Formera_Menu {
 						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-list') ); ?>" class="ds-btn ds-btn-secondary">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg>
 							All Forms
+						</a>
+						<a href="<?php echo esc_url( admin_url('admin.php?page=formera-templates') ); ?>" class="ds-btn ds-btn-secondary">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px; height:16px;"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+							Templates
 						</a>
 					</div>
 				</div>
@@ -388,5 +397,20 @@ class Formera_Menu {
 		require_once dirname( __FILE__ ) . '/results.php';
 		$results = new Formera_Results( $this->db );
 		$results->render_results();
+	}
+
+	public function render_templates() {
+		require_once dirname( __FILE__ ) . '/templates.php';
+		$templates = new Formera_Templates( $this->db );
+
+		// Enqueue templates JS and pass data
+		wp_enqueue_script( 'formera-templates-js', FORMERA_URL . 'admin/js/formera-templates.js', array( 'jquery' ), FORMERA_VERSION, true );
+		wp_localize_script( 'formera-templates-js', 'formera_templates', array(
+			'ajax_url'  => admin_url( 'admin-ajax.php' ),
+			'nonce'     => wp_create_nonce( 'formera_templates_nonce' ),
+			'templates' => Formera_Templates::get_templates(),
+		) );
+
+		$templates->render();
 	}
 }

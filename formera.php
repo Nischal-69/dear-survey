@@ -73,6 +73,9 @@ class Formera {
 			$builder = new Formera_Builder( $this->db );
 			add_action( 'wp_ajax_formera_save_survey', array( $builder, 'ajax_save_survey' ) );
 			add_action( 'wp_ajax_formera_send_outreach', array( $builder, 'ajax_send_outreach' ) );
+
+			$templates = new Formera_Templates( $this->db );
+			add_action( 'wp_ajax_formera_use_template', array( $templates, 'ajax_use_template' ) );
 		}
 	}
 
@@ -89,6 +92,7 @@ class Formera {
 			require_once FORMERA_PATH . 'admin/survey-builder.php';
 			require_once FORMERA_PATH . 'admin/results.php';
 			require_once FORMERA_PATH . 'admin/settings.php';
+			require_once FORMERA_PATH . 'admin/templates.php';
 		}
 
 		// Public
