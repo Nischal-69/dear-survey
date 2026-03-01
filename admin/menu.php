@@ -403,6 +403,9 @@ class Formera_Menu {
 		require_once dirname( __FILE__ ) . '/templates.php';
 		$templates = new Formera_Templates( $this->db );
 
+		// Enqueue public CSS so the form preview looks like the real frontend
+		wp_enqueue_style( 'formera-public-preview', FORMERA_URL . 'public/css/formera-public.css', array(), FORMERA_VERSION );
+
 		// Enqueue templates JS and pass data
 		wp_enqueue_script( 'formera-templates-js', FORMERA_URL . 'admin/js/formera-templates.js', array( 'jquery' ), FORMERA_VERSION, true );
 		wp_localize_script( 'formera-templates-js', 'formera_templates', array(

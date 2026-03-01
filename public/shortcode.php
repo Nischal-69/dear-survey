@@ -29,9 +29,55 @@ class Formera_Shortcode {
 		$settings = json_decode( $survey['settings'], true );
 		$total_questions = count( $questions );
 
+		// Build appearance CSS variable overrides
+		$appearance_style = '';
+		if ( ! empty( $settings['appearance'] ) ) {
+			$app = $settings['appearance'];
+			if ( ! empty( $app['color'] ) ) {
+				$color = $app['color'];
+				$appearance_style .= sprintf(
+					'--ds-primary:%1$s;--ds-primary-hover:%2$s;--ds-primary-dark:%3$s;--ds-primary-light:%4$s;--ds-primary-rgb:%5$s;--ds-gradient:linear-gradient(135deg,%1$s 0%%,%6$s 100%%);--ds-shadow-glow:0 0 30px rgba(%5$s,0.2);',
+					$color,
+					self::darken_color( $color, 10 ),
+					self::darken_color( $color, 30 ),
+					self::lighten_color( $color, 85 ),
+					self::hex_to_rgb( $color ),
+					self::lighten_color( $color, 15 )
+				);
+				if ( isset( $app['bg'] ) ) {
+					if ( 'white' === $app['bg'] ) {
+						$appearance_style .= '--ds-gradient-bg:#ffffff;';
+					} elseif ( 'light' === $app['bg'] ) {
+						$appearance_style .= '--ds-gradient-bg:#f5f5f5;';
+					} else {
+						$appearance_style .= sprintf(
+							'--ds-gradient-bg:linear-gradient(135deg,%s 0%%,%s 50%%,#f0f9ff 100%%);',
+							self::lighten_color( $color, 95 ),
+							self::lighten_color( $color, 92 )
+						);
+					}
+				}
+			}
+			if ( ! empty( $app['font'] ) ) {
+				$font = $app['font'];
+				if ( 'System Default' === $font ) {
+					$appearance_style .= "--ds-font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;";
+				} else {
+					$appearance_style .= "--ds-font:'" . esc_attr( $font ) . "',-apple-system,BlinkMacSystemFont,sans-serif;";
+					// Enqueue the selected Google Font
+					$font_slug = str_replace( ' ', '+', $font );
+					wp_enqueue_style( 'formera-gfont-' . sanitize_title( $font ), 'https://fonts.googleapis.com/css2?family=' . $font_slug . ':wght@400;500;600;700&display=swap', array(), null );
+				}
+			}
+			if ( isset( $app['radius'] ) ) {
+				$r = intval( $app['radius'] );
+				$appearance_style .= sprintf( '--ds-radius:%dpx;--ds-radius-md:%dpx;--ds-radius-sm:%dpx;', $r, round( $r * 0.7 ), round( $r * 0.5 ) );
+			}
+		}
+
 		ob_start();
 		?>
-		<div class="gf-survey-wrap" id="ds-survey-<?php echo esc_attr( $survey_id ); ?>">
+		<div class="gf-survey-wrap" id="ds-survey-<?php echo esc_attr( $survey_id ); ?>"<?php echo $appearance_style ? ' style="' . esc_attr( $appearance_style ) . '"' : ''; ?>>
 			<!-- Header Card with Title -->
 			<div class="gf-header-card">
 				<div class="gf-header-accent"></div>
@@ -172,5 +218,41 @@ class Formera_Shortcode {
 		</div>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Color utility: Convert hex to "R,G,B" string.
+	 */
+	private static function hex_to_rgb( $hex ) {
+		$hex = ltrim( $hex, '#' );
+		return hexdec( substr( $hex, 0, 2 ) ) . ',' . hexdec( substr( $hex, 2, 2 ) ) . ',' . hexdec( substr( $hex, 4, 2 ) );
+	}
+
+	/**
+	 * Color utility: Lighten a hex color by mixing with white.
+	 */
+	private static function lighten_color( $hex, $percent ) {
+		$hex = ltrim( $hex, '#' );
+		$r = hexdec( substr( $hex, 0, 2 ) );
+		$g = hexdec( substr( $hex, 2, 2 ) );
+		$b = hexdec( substr( $hex, 4, 2 ) );
+		$r = round( $r + ( 255 - $r ) * ( $percent / 100 ) );
+		$g = round( $g + ( 255 - $g ) * ( $percent / 100 ) );
+		$b = round( $b + ( 255 - $b ) * ( $percent / 100 ) );
+		return sprintf( '#%02x%02x%02x', $r, $g, $b );
+	}
+
+	/**
+	 * Color utility: Darken a hex color by mixing with black.
+	 */
+	private static function darken_color( $hex, $percent ) {
+		$hex = ltrim( $hex, '#' );
+		$r = hexdec( substr( $hex, 0, 2 ) );
+		$g = hexdec( substr( $hex, 2, 2 ) );
+		$b = hexdec( substr( $hex, 4, 2 ) );
+		$r = round( $r * ( 1 - $percent / 100 ) );
+		$g = round( $g * ( 1 - $percent / 100 ) );
+		$b = round( $b * ( 1 - $percent / 100 ) );
+		return sprintf( '#%02x%02x%02x', $r, $g, $b );
 	}
 }

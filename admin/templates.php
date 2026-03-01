@@ -323,11 +323,90 @@ class Formera_Templates {
 			wp_send_json_error( 'Template not found' );
 		}
 
+		// Use custom title/questions from editor if provided, otherwise use template defaults
+		$form_title     = $template['title'];
+		$form_questions = $template['questions'];
+
+		if ( ! empty( $_POST['custom_title'] ) ) {
+			$form_title = sanitize_text_field( wp_unslash( $_POST['custom_title'] ) );
+		}
+
+		if ( ! empty( $_POST['custom_questions'] ) ) {
+			$raw_json = wp_unslash( $_POST['custom_questions'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$raw_questions = json_decode( $raw_json, true );
+			if ( is_array( $raw_questions ) && count( $raw_questions ) > 0 ) {
+				$allowed_types = array( 'text', 'textarea', 'radio', 'checkbox' );
+				$sanitized_qs  = array();
+				foreach ( $raw_questions as $rq ) {
+					$q_type = isset( $rq['type'] ) && in_array( $rq['type'], $allowed_types, true ) ? $rq['type'] : 'text';
+					$sanitized_qs[] = array(
+						'title'    => isset( $rq['title'] ) ? sanitize_text_field( $rq['title'] ) : '',
+						'type'     => $q_type,
+						'options'  => isset( $rq['options'] ) ? sanitize_text_field( $rq['options'] ) : '',
+						'required' => ! empty( $rq['required'] ),
+					);
+				}
+				if ( ! empty( $sanitized_qs ) ) {
+					$form_questions = $sanitized_qs;
+				}
+			}
+		}
+
+		// Process appearance settings from the customizer
+		$settings = $template['settings'];
+		$appearance_raw = isset( $_POST['appearance'] ) ? sanitize_text_field( wp_unslash( $_POST['appearance'] ) ) : '';
+		if ( ! empty( $appearance_raw ) ) {
+			$appearance = json_decode( $appearance_raw, true );
+			if ( is_array( $appearance ) ) {
+				$allowed_fonts = array( 'Plus Jakarta Sans', 'Inter', 'Roboto', 'Poppins', 'Open Sans', 'System Default' );
+				$allowed_bgs   = array( 'gradient', 'white', 'light' );
+				$allowed_btn_sizes = array( 'small', 'medium', 'large' );
+				$allowed_btn_styles = array( 'filled', 'outline', 'ghost' );
+				$allowed_btn_widths = array( 'auto', 'full', 'fixed' );
+				$allowed_form_widths = array( 'narrow', 'normal', 'wide', 'full' );
+				$allowed_spacing = array( 'compact', 'comfortable', 'spacious' );
+				$allowed_gaps = array( 'small', 'medium', 'large' );
+				$allowed_entrance = array( 'none', 'fade', 'slide', 'scale' );
+				$allowed_hover = array( 'none', 'lift', 'glow', 'scale' );
+				$allowed_font_sizes = array( 'small', 'medium', 'large' );
+				$allowed_line_heights = array( 'tight', 'normal', 'relaxed' );
+				$allowed_shadows = array( 'none', 'soft', 'medium', 'strong' );
+				$allowed_borders = array( 'none', 'clean', 'defined', 'bold' );
+
+				$settings['appearance'] = array(
+					'color'  => isset( $appearance['color'] ) ? sanitize_hex_color( $appearance['color'] ) : '#0d9488',
+					'font'   => isset( $appearance['font'] ) && in_array( $appearance['font'], $allowed_fonts, true ) ? $appearance['font'] : 'Plus Jakarta Sans',
+					'radius' => isset( $appearance['radius'] ) ? intval( $appearance['radius'] ) : 20,
+					'bg'     => isset( $appearance['bg'] ) && in_array( $appearance['bg'], $allowed_bgs, true ) ? $appearance['bg'] : 'gradient',
+					// Button styling
+					'btnSize' => isset( $appearance['btnSize'] ) && in_array( $appearance['btnSize'], $allowed_btn_sizes, true ) ? $appearance['btnSize'] : 'medium',
+					'btnStyle' => isset( $appearance['btnStyle'] ) && in_array( $appearance['btnStyle'], $allowed_btn_styles, true ) ? $appearance['btnStyle'] : 'filled',
+					'btnWidth' => isset( $appearance['btnWidth'] ) && in_array( $appearance['btnWidth'], $allowed_btn_widths, true ) ? $appearance['btnWidth'] : 'auto',
+					// Layout & spacing
+					'formWidth' => isset( $appearance['formWidth'] ) && in_array( $appearance['formWidth'], $allowed_form_widths, true ) ? $appearance['formWidth'] : 'normal',
+					'spacing' => isset( $appearance['spacing'] ) && in_array( $appearance['spacing'], $allowed_spacing, true ) ? $appearance['spacing'] : 'comfortable',
+					'questionGap' => isset( $appearance['questionGap'] ) && in_array( $appearance['questionGap'], $allowed_gaps, true ) ? $appearance['questionGap'] : 'medium',
+					// Effects
+					'entrance' => isset( $appearance['entrance'] ) && in_array( $appearance['entrance'], $allowed_entrance, true ) ? $appearance['entrance'] : 'fade',
+					'hover' => isset( $appearance['hover'] ) && in_array( $appearance['hover'], $allowed_hover, true ) ? $appearance['hover'] : 'lift',
+					// Advanced
+					'fontSize' => isset( $appearance['fontSize'] ) && in_array( $appearance['fontSize'], $allowed_font_sizes, true ) ? $appearance['fontSize'] : 'medium',
+					'lineHeight' => isset( $appearance['lineHeight'] ) && in_array( $appearance['lineHeight'], $allowed_line_heights, true ) ? $appearance['lineHeight'] : 'normal',
+					'shadow' => isset( $appearance['shadow'] ) && in_array( $appearance['shadow'], $allowed_shadows, true ) ? $appearance['shadow'] : 'soft',
+					'borders' => isset( $appearance['borders'] ) && in_array( $appearance['borders'], $allowed_borders, true ) ? $appearance['borders'] : 'clean',
+					// Extended colors (coming soon)
+					'textColor' => 'auto',
+					'borderColor' => 'auto',
+					'accentColor' => 'auto',
+				);
+			}
+		}
+
 		// Create a new form from the template
 		$data = array(
-			'title'     => $template['title'],
-			'questions' => wp_json_encode( $template['questions'] ),
-			'settings'  => wp_json_encode( $template['settings'] ),
+			'title'     => $form_title,
+			'questions' => wp_json_encode( $form_questions ),
+			'settings'  => wp_json_encode( $settings ),
 			'status'    => 'active',
 		);
 
